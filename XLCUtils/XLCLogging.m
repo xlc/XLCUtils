@@ -8,6 +8,13 @@
 
 #import "XLCLogging.h"
 
+static const char * const XLCLogLevelNames[] = {
+    "Debug",
+    "Info",
+    "Warn",
+    "Error",
+};
+
 static NSMutableDictionary *loggerDict;
 
 @implementation XLCLogger
@@ -18,13 +25,15 @@ static NSMutableDictionary *loggerDict;
     }
 }
 
-+ (void)addLogger:(void (^)(XLCLoggingLevel, NSString *))logger {
++ (void)addLogger:(XLCLoggerBlock)logger {
+    logger = [logger copy];
     @synchronized(loggerDict) {
         loggerDict[(id)logger] = logger;
     }
 }
 
-+ (void)setLogger:(void (^)(XLCLoggingLevel, NSString *))logger forKey:(id<NSCopying>)key {
++ (void)setLogger:(XLCLoggerBlock)logger forKey:(id<NSCopying>)key {
+    logger = [logger copy];
     @synchronized(loggerDict) {
         loggerDict[key] = logger;
     }
@@ -44,15 +53,15 @@ static NSMutableDictionary *loggerDict;
     
     va_end(ap);
     
-    NSLog(@"%@", message);
+    NSLog(@" %s\t %s:%d\t- %@", XLCLogLevelNames[level], function, line, message);
 
     NSArray *allLoggers;
     @synchronized(loggerDict) {
         allLoggers = [[loggerDict allValues] copy];
     }
     
-    for (void (^logger)(XLCLoggingLevel, NSString *)  in allLoggers) {
-        logger(level, message);
+    for (XLCLoggerBlock logger in allLoggers) {
+        logger(level, function, line, message);
     }
 }
 

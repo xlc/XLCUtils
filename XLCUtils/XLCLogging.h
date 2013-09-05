@@ -20,28 +20,36 @@ typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
 
 #ifdef DEBUG
 // debug log
-#define XDLOG(...) XLCLOG(XLCLoggingLevelDebug, __VA_ARGS__)
+#define XLCDLOG(...) XLCLOG(XLCLoggingLevelDebug, __VA_ARGS__)
 #else
 // which removed completely in release build
-#define XDLOG(...) ((void)0)
+#define XLCDLOG(...) ((void)0)
 #endif
 
 // info log
-#define XILOG(...) XLCLOG(XLCLoggingLevelInfo, __VA_ARGS__)
+#define XLCILOG(...) XLCLOG(XLCLoggingLevelInfo, __VA_ARGS__)
 
 // warn log
-#define XWLOG(...) XLCLOG(XLCLoggingLevelWarnning, __VA_ARGS__)
+#define XLCWLOG(...) XLCLOG(XLCLoggingLevelWarnning, __VA_ARGS__)
 
 // error log
-#define XELOG(...) XLCLOG(XLCLoggingLevelError, __VA_ARGS__)
+#define XLCELOG(...) XLCLOG(XLCLoggingLevelError, __VA_ARGS__)
 
 // condition log
-#define XCLOG(condition, msg, ...) if (condition) { XILOG(msg, ##__VA_ARGS__) }
+#define XLCCLOG(condition, msg, ...) if (condition) { XLCILOG(msg, ##__VA_ARGS__) }
+
+// save some typing
+#define XILOG XLCILOG
+#define XWLOG XLCWLOG
+#define XELOG XLCELOG
+#define XCLOG XLCCLOG
+
+typedef void (^XLCLoggerBlock) (XLCLoggingLevel, const char *, int, NSString *);
 
 @interface XLCLogger : NSObject
 
-+ (void)addLogger:(void (^)(XLCLoggingLevel, NSString *))logger;
-+ (void)setLogger:(void (^)(XLCLoggingLevel, NSString *))logger forKey:(id<NSCopying>)key;
++ (void)addLogger:(XLCLoggerBlock)logger;
++ (void)setLogger:(XLCLoggerBlock)logger forKey:(id<NSCopying>)key;
 + (void)removeLoggerForKey:(id<NSCopying>)key;
 
 + (void)logWithLevel:(XLCLoggingLevel)level function:(const char *)function line:(int)line message:(NSString *)format, ... NS_FORMAT_FUNCTION(4,5);

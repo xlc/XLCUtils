@@ -19,6 +19,8 @@
 		0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC4917D87851009BFC18 /* XLCAssertion.m */; };
 		0692BC5217D897FE009BFC18 /* XLCNoCopyMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC5017D897FE009BFC18 /* XLCNoCopyMutableDictionary.h */; };
 		0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */; };
+		0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */; };
+		0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		0692BC4917D87851009BFC18 /* XLCAssertion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAssertion.m; sourceTree = "<group>"; };
 		0692BC5017D897FE009BFC18 /* XLCNoCopyMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCNoCopyMutableDictionary.h; sourceTree = "<group>"; };
 		0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCNoCopyMutableDictionary.m; sourceTree = "<group>"; };
+		0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+XLCDelayedPerform.h"; sourceTree = "<group>"; };
+		0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XLCDelayedPerform.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +176,8 @@
 			children = (
 				0692BC5017D897FE009BFC18 /* XLCNoCopyMutableDictionary.h */,
 				0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */,
+				0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */,
+				0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -186,6 +192,7 @@
 				0692BC4517D873CF009BFC18 /* XLCLogging.h in Headers */,
 				0692BC4A17D87851009BFC18 /* XLCAssertion.h in Headers */,
 				0692BC5217D897FE009BFC18 /* XLCNoCopyMutableDictionary.h in Headers */,
+				0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */,
 				0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
 				0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */,

@@ -14,6 +14,10 @@
 		0692BC3117D75723009BFC18 /* libXLCUtils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1817D75723009BFC18 /* libXLCUtils.a */; };
 		0692BC3717D75723009BFC18 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0692BC3517D75723009BFC18 /* InfoPlist.strings */; };
 		0692BC3917D75723009BFC18 /* XLCUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC3817D75723009BFC18 /* XLCUtilsTests.m */; };
+		0692BC4517D873CF009BFC18 /* XLCLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC4317D873CF009BFC18 /* XLCLogging.h */; };
+		0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC4417D873CF009BFC18 /* XLCLogging.m */; };
+		0692BC4A17D87851009BFC18 /* XLCAssertion.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC4817D87851009BFC18 /* XLCAssertion.h */; };
+		0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC4917D87851009BFC18 /* XLCAssertion.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,10 @@
 		0692BC3417D75723009BFC18 /* XLCUtilsTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XLCUtilsTests-Info.plist"; sourceTree = "<group>"; };
 		0692BC3617D75723009BFC18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0692BC3817D75723009BFC18 /* XLCUtilsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLCUtilsTests.m; sourceTree = "<group>"; };
+		0692BC4317D873CF009BFC18 /* XLCLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCLogging.h; sourceTree = "<group>"; };
+		0692BC4417D873CF009BFC18 /* XLCLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCLogging.m; sourceTree = "<group>"; };
+		0692BC4817D87851009BFC18 /* XLCAssertion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCAssertion.h; sourceTree = "<group>"; };
+		0692BC4917D87851009BFC18 /* XLCAssertion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAssertion.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +114,8 @@
 		0692BC2117D75723009BFC18 /* XLCUtils */ = {
 			isa = PBXGroup;
 			children = (
+				0692BC4717D87825009BFC18 /* Assertion */,
+				0692BC4217D87399009BFC18 /* Logging */,
 				0692BC2417D75723009BFC18 /* XLCUtils.h */,
 				0692BC2517D75723009BFC18 /* XLCUtils.m */,
 				0692BC2217D75723009BFC18 /* Supporting Files */,
@@ -139,6 +149,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0692BC4217D87399009BFC18 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				0692BC4317D873CF009BFC18 /* XLCLogging.h */,
+				0692BC4417D873CF009BFC18 /* XLCLogging.m */,
+			);
+			name = Logging;
+			sourceTree = "<group>";
+		};
+		0692BC4717D87825009BFC18 /* Assertion */ = {
+			isa = PBXGroup;
+			children = (
+				0692BC4817D87851009BFC18 /* XLCAssertion.h */,
+				0692BC4917D87851009BFC18 /* XLCAssertion.m */,
+			);
+			name = Assertion;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -146,6 +174,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0692BC4517D873CF009BFC18 /* XLCLogging.h in Headers */,
+				0692BC4A17D87851009BFC18 /* XLCAssertion.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +260,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
 				0692BC2617D75723009BFC18 /* XLCUtils.m in Sources */,
+				0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +372,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.8;
 			};
 			name = Debug;
 		};
@@ -349,6 +382,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.8;
 			};
 			name = Release;
 		};
@@ -368,6 +402,7 @@
 				);
 				INFOPLIST_FILE = "XLCUtilsTests/XLCUtilsTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.8;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -384,6 +419,7 @@
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				INFOPLIST_FILE = "XLCUtilsTests/XLCUtilsTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.8;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
@@ -407,6 +443,7 @@
 				0692BC3E17D75723009BFC18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0692BC3F17D75723009BFC18 /* Build configuration list for PBXNativeTarget "XLCUtilsTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +452,7 @@
 				0692BC4117D75723009BFC18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

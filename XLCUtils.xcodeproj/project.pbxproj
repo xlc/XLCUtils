@@ -17,6 +17,8 @@
 		0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC4417D873CF009BFC18 /* XLCLogging.m */; };
 		0692BC4A17D87851009BFC18 /* XLCAssertion.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC4817D87851009BFC18 /* XLCAssertion.h */; };
 		0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC4917D87851009BFC18 /* XLCAssertion.m */; };
+		0692BC5217D897FE009BFC18 /* XLCNoCopyMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC5017D897FE009BFC18 /* XLCNoCopyMutableDictionary.h */; };
+		0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +47,8 @@
 		0692BC4417D873CF009BFC18 /* XLCLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCLogging.m; sourceTree = "<group>"; };
 		0692BC4817D87851009BFC18 /* XLCAssertion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCAssertion.h; sourceTree = "<group>"; };
 		0692BC4917D87851009BFC18 /* XLCAssertion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAssertion.m; sourceTree = "<group>"; };
+		0692BC5017D897FE009BFC18 /* XLCNoCopyMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCNoCopyMutableDictionary.h; sourceTree = "<group>"; };
+		0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCNoCopyMutableDictionary.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,7 @@
 		0692BC2117D75723009BFC18 /* XLCUtils */ = {
 			isa = PBXGroup;
 			children = (
+				0692BC4F17D897E3009BFC18 /* Utils */,
 				0692BC4717D87825009BFC18 /* Assertion */,
 				0692BC4217D87399009BFC18 /* Logging */,
 				0692BC2217D75723009BFC18 /* Supporting Files */,
@@ -162,6 +167,15 @@
 			name = Assertion;
 			sourceTree = "<group>";
 		};
+		0692BC4F17D897E3009BFC18 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				0692BC5017D897FE009BFC18 /* XLCNoCopyMutableDictionary.h */,
+				0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -171,6 +185,7 @@
 			files = (
 				0692BC4517D873CF009BFC18 /* XLCLogging.h in Headers */,
 				0692BC4A17D87851009BFC18 /* XLCAssertion.h in Headers */,
+				0692BC5217D897FE009BFC18 /* XLCNoCopyMutableDictionary.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
 				0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */,
 			);

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0692BC1C17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
-		0692BC2617D75723009BFC18 /* XLCUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC2517D75723009BFC18 /* XLCUtils.m */; };
 		0692BC2D17D75723009BFC18 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC2C17D75723009BFC18 /* XCTest.framework */; };
 		0692BC2E17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
 		0692BC3117D75723009BFC18 /* libXLCUtils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1817D75723009BFC18 /* libXLCUtils.a */; };
@@ -37,8 +36,6 @@
 		0692BC1F17D75723009BFC18 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		0692BC2017D75723009BFC18 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		0692BC2317D75723009BFC18 /* XLCUtils-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XLCUtils-Prefix.pch"; sourceTree = "<group>"; };
-		0692BC2417D75723009BFC18 /* XLCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
-		0692BC2517D75723009BFC18 /* XLCUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLCUtils.m; sourceTree = "<group>"; };
 		0692BC2B17D75723009BFC18 /* XLCUtilsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XLCUtilsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0692BC2C17D75723009BFC18 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0692BC3417D75723009BFC18 /* XLCUtilsTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XLCUtilsTests-Info.plist"; sourceTree = "<group>"; };
@@ -116,8 +113,6 @@
 			children = (
 				0692BC4717D87825009BFC18 /* Assertion */,
 				0692BC4217D87399009BFC18 /* Logging */,
-				0692BC2417D75723009BFC18 /* XLCUtils.h */,
-				0692BC2517D75723009BFC18 /* XLCUtils.m */,
 				0692BC2217D75723009BFC18 /* Supporting Files */,
 			);
 			path = XLCUtils;
@@ -261,7 +256,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
-				0692BC2617D75723009BFC18 /* XLCUtils.m in Sources */,
 				0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

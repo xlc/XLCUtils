@@ -20,7 +20,7 @@ static NSMutableDictionary *loggerDict;
 @implementation XLCLogger
 
 + (void)initialize {
-    if ([self class] == [XLCLogger class]) {
+    if (self == [XLCLogger class]) {
         loggerDict = [NSMutableDictionary dictionary];
     }
 }

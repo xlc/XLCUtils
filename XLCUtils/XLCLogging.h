@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
     XLCLoggingLevelCount
 };
 
-#define XLCLOG(level, ...) [XLCLogger logWithLevel:level function:__PRETTY_FUNCTION__ line:line message:__VA_ARGS__]
+#define XLCLOG(level, ...) [XLCLogger logWithLevel:level function:__PRETTY_FUNCTION__ line:__LINE__ message:__VA_ARGS__]
 
 #ifdef DEBUG
 // debug log

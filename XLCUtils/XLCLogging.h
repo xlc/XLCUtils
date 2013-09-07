@@ -39,6 +39,7 @@ typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
 #define XLCCLOG(condition, msg, ...) if (condition) { XLCILOG(msg, ##__VA_ARGS__) }
 
 // save some typing
+#define XDLOG XLCDLOG
 #define XILOG XLCILOG
 #define XWLOG XLCWLOG
 #define XELOG XLCELOG

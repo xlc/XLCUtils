@@ -56,7 +56,7 @@ do { \
 #define XLCASSERT_NOTNIL(obj) \
 do { \
     id __obj = (obj); \
-    if (!__obj)) { \
+    if (!__obj) { \
         XLCELOG(@"failed assertion: '%s != nil'", #obj); \
         _XLCBreakIfInDebugger(); \
     }   \

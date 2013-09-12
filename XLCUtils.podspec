@@ -6,7 +6,8 @@ Pod::Spec.new do |s|
   s.license      = 'MIT'
   s.author       = { "Xiliang Chen" => "xlchen1291@gmail.com" }
   s.source       = { :git => "https://github.com/xlc/XLCUtils.git", :commit => "fb9216ee32adc9e668dc9d06dbda3cf05416f596" }
-  s.source_files  = 'XLCUtils'
+  s.source_files = 'XLCUtils'
+  s.exclude_files = 'XLCUtils/NSObject+XLCUtilsMemoryDebug.m'
   s.requires_arc = true
 
   s.ios.deployment_target = '6.0'

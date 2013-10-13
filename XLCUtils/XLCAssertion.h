@@ -57,17 +57,9 @@ do { \
     }   \
 } while (0)
 
-#define XLCASSERT_NOTNIL(obj) \
-do { \
-    id __obj = (obj); \
-    if (!__obj) { \
-        XLCFAIL(@"failed assertion: '%s != nil'", #obj); \
-    }   \
-} while (0) \
-
 #define XLCASSERT_NOTNULL(ptr) \
 do { \
-    void *__ptr = (ptr); \
+    __typeof__(ptr) __ptr = (ptr); \
     if (!__ptr) { \
         XLCFAIL(@"failed assertion: '%s != NULL'", #ptr); \
     }   \
@@ -80,5 +72,4 @@ do { \
 #define XASSERT_SOFT(e)         XLCASSERT_SOFT(e)
 #define XASSERT_KERN(e)         XLCASSERT_KERN(e)
 #define XASSERT_CLASS(obj, cls) XLCASSERT_CLASS(obj, cls)
-#define XASSERT_NOTNIL(obj)     XLCASSERT_NOTNIL(obj)
 #define XASSERT_NOTNULL(ptr)    XLCASSERT_NOTNULL(ptr)

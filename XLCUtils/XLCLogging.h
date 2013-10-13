@@ -16,34 +16,34 @@ typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
     XLCLoggingLevelCount
 };
 
-#define XLCLOG(level, ...) [XLCLogger logWithLevel:level function:__PRETTY_FUNCTION__ line:__LINE__ message:__VA_ARGS__]
+#define XLCLOG(level, format...) [XLCLogger logWithLevel:level function:__PRETTY_FUNCTION__ line:__LINE__ message:@"" format]
 
 #ifdef DEBUG
 // debug log
-#define XLCDLOG(...) XLCLOG(XLCLoggingLevelDebug, __VA_ARGS__)
+#define XLCDLOG(format...) XLCLOG(XLCLoggingLevelDebug, format)
 #else
 // which removed completely in release build
-#define XLCDLOG(...) ((void)0)
+#define XLCDLOG(format...) ((void)0)
 #endif
 
 // info log
-#define XLCILOG(...) XLCLOG(XLCLoggingLevelInfo, __VA_ARGS__)
+#define XLCILOG(format...) XLCLOG(XLCLoggingLevelInfo, format)
 
 // warn log
-#define XLCWLOG(...) XLCLOG(XLCLoggingLevelWarnning, __VA_ARGS__)
+#define XLCWLOG(format...) XLCLOG(XLCLoggingLevelWarnning, format)
 
 // error log
-#define XLCELOG(...) XLCLOG(XLCLoggingLevelError, __VA_ARGS__)
+#define XLCELOG(format...) XLCLOG(XLCLoggingLevelError, format)
 
 // condition log
-#define XLCCLOG(condition, msg, ...) if (condition) { XLCILOG(msg, ##__VA_ARGS__) }
+#define XLCCLOG(condition, format...) if (condition) { XLCILOG(format); }
 
 // save some typing
-#define XDLOG XLCDLOG
-#define XILOG XLCILOG
-#define XWLOG XLCWLOG
-#define XELOG XLCELOG
-#define XCLOG XLCCLOG
+#define XDLOG(format...) XLCDLOG(format)
+#define XILOG(format...) XLCILOG(format)
+#define XWLOG(format...) XLCWLOG(format)
+#define XELOG(format...) XLCELOG(format)
+#define XCLOG(condition, format...) XLCCLOG(condition, format)
 
 typedef void (^XLCLoggerBlock) (XLCLoggingLevel, const char *, int, NSString *);
 

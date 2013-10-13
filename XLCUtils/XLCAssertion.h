@@ -10,21 +10,26 @@
 #import "XLCLogging.h"
 
 __BEGIN_DECLS
-void _XLCBreakIfInDebugger();
+
+#ifdef DEBUG
+void _XLCBreakIfInDebugger(void);
+#else
+static inline void _XLCBreakIfInDebugger(void) {}
+#endif
+
 __END_DECLS
 
-#define XLCASSERT(e, ...) \
+#define XLCFAIL(format...) \
 do { \
-    if (!(e)) { \
-    XLCELOG(@"failed assertion: '%s', %@", #e, [NSString stringWithFormat:__VA_ARGS__]); \
-        _XLCBreakIfInDebugger(); \
-    }   \
+    XLCELOG(format); \
+    _XLCBreakIfInDebugger(); \
 } while (0)
 
-#define XLCFAIL(...) \
+#define XLCASSERT(e, format...) \
 do { \
-    XLCELOG(__VA_ARGS__); \
-    _XLCBreakIfInDebugger(); \
+    if (!(e)) { \
+        XLCFAIL(@"failed assertion: '%s', %@", #e, [NSString stringWithFormat:@"" format]); \
+    }   \
 } while (0)
 
 #define XLCASSERT_SOFT(e)\
@@ -47,9 +52,8 @@ do { \
     id __obj = (obj); \
     Class __cls = (cls); \
     if (!([__obj isKindOfClass:[__cls class]])) { \
-        XLCELOG(@"failed assertion: '[%s isKindOfClass:[%s class]]', expected class: %@, actual class: %@, object: %@",\
+        XLCFAIL(@"failed assertion: '[%s isKindOfClass:[%s class]]', expected class: %@, actual class: %@, object: %@",\
             #obj, #cls, __cls, [__obj class], __obj); \
-        _XLCBreakIfInDebugger(); \
     }   \
 } while (0)
 
@@ -57,16 +61,24 @@ do { \
 do { \
     id __obj = (obj); \
     if (!__obj) { \
-        XLCELOG(@"failed assertion: '%s != nil'", #obj); \
-        _XLCBreakIfInDebugger(); \
+        XLCFAIL(@"failed assertion: '%s != nil'", #obj); \
+    }   \
+} while (0) \
+
+#define XLCASSERT_NOTNULL(ptr) \
+do { \
+    void *__ptr = (ptr); \
+    if (!__ptr) { \
+        XLCFAIL(@"failed assertion: '%s != NULL'", #ptr); \
     }   \
 } while (0) \
 
 
 // save some typing
-#define XASSERT XLCASSERT
-#define XFAIL XLCFAIL
-#define XASSERT_SOFT XLCASSERT_SOFT
-#define XASSERT_KERN XLCASSERT_KERN
-#define XASSERT_CLASS XLCASSERT_CLASS
-#define XASSERT_NOTNIL XLCASSERT_NOTNIL
+#define XASSERT(e, format...)   XLCASSERT(e, format)
+#define XFAIL(format...)        XLCFAIL(format)
+#define XASSERT_SOFT(e)         XLCASSERT_SOFT(e)
+#define XASSERT_KERN(e)         XLCASSERT_KERN(e)
+#define XASSERT_CLASS(obj, cls) XLCASSERT_CLASS(obj, cls)
+#define XASSERT_NOTNIL(obj)     XLCASSERT_NOTNIL(obj)
+#define XASSERT_NOTNULL(ptr)    XLCASSERT_NOTNULL(ptr)

@@ -54,10 +54,4 @@ void _XLCBreakIfInDebugger() {
     }
 }
 
-#else
-
-void _XLCBreakIfInDebugger() {
-    // do nothing
-}
-
 #endif

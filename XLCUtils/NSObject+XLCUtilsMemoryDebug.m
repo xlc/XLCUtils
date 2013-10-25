@@ -60,6 +60,8 @@ static NSString * const classSuffix = @"_XLCTestUtilsMemoryDebug";
                         @selector(dealloc),
                         [NSObject instanceMethodForSelector:@selector(xlc_dealloc)],
                         "v@:");
+        
+        objc_registerClassPair(newcls);
     }
     
     object_setClass(self, newcls);

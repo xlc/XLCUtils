@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
 #define XLCELOG(format...) XLCLOG(XLCLoggingLevelError, format)
 
 // condition log
-#define XLCCLOG(condition, format...) if (condition) { XLCILOG(format); }
+#define XLCCLOG(condition, format...) do { if (condition) XLCILOG(format); } while (0)
 
 // save some typing
 #define XDLOG(format...) XLCDLOG(format)
@@ -45,7 +45,9 @@ typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
 #define XELOG(format...) XLCELOG(format)
 #define XCLOG(condition, format...) XLCCLOG(condition, format)
 
-typedef void (^XLCLoggerBlock) (XLCLoggingLevel, const char *, int, NSString *);
+extern const char * const XLCLogLevelNames[];
+
+typedef void (^XLCLoggerBlock) (XLCLoggingLevel level, const char *function, int lineno, NSString *message);
 
 @interface XLCLogger : NSObject
 

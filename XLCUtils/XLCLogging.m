@@ -8,7 +8,7 @@
 
 #import "XLCLogging.h"
 
-static const char * const XLCLogLevelNames[] = {
+const char * const XLCLogLevelNames[] = {
     "Debug",
     "Info",
     "Warn",

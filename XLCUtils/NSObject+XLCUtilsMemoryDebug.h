@@ -22,7 +22,7 @@
 
 /**
  * Count of autorelease called.
- * This is can be useful to calculate "real" retain count given no
+ * This can be useful to calculate "real" retain count given no
  * autorelease pool was drain (which is the typical case when unit testing).
  */
 - (NSUInteger)xlc_autoreleaseCount;

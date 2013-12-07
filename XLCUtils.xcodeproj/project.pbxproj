@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		06208BD117E1C4EC00F60D39 /* XLCUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 06208BCF17E1C4EC00F60D39 /* XLCUtils.h */; };
-		06208BD217E1C4EC00F60D39 /* XLCUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 06208BD017E1C4EC00F60D39 /* XLCUtils.m */; };
+		06208BD117E1C4EC00F60D39 /* XLCRunloop.h in Headers */ = {isa = PBXBuildFile; fileRef = 06208BCF17E1C4EC00F60D39 /* XLCRunloop.h */; };
+		06208BD217E1C4EC00F60D39 /* XLCRunloop.m in Sources */ = {isa = PBXBuildFile; fileRef = 06208BD017E1C4EC00F60D39 /* XLCRunloop.m */; };
 		06208BD517E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 06208BD317E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.h */; };
 		06208BD617E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 06208BD417E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0692BC1C17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
@@ -38,10 +38,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		06208BCF17E1C4EC00F60D39 /* XLCUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
-		06208BD017E1C4EC00F60D39 /* XLCUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCUtils.m; sourceTree = "<group>"; };
+		06208BCF17E1C4EC00F60D39 /* XLCRunloop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCRunloop.h; sourceTree = "<group>"; };
+		06208BD017E1C4EC00F60D39 /* XLCRunloop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCRunloop.m; sourceTree = "<group>"; };
 		06208BD317E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+XLCUtilsMemoryDebug.h"; sourceTree = "<group>"; };
 		06208BD417E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XLCUtilsMemoryDebug.m"; sourceTree = "<group>"; };
+		0674ACDB1852CDA0004491AD /* XLCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
 		0692BC1817D75723009BFC18 /* libXLCUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXLCUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0692BC1B17D75723009BFC18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0692BC1E17D75723009BFC18 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -127,8 +128,7 @@
 		0692BC2117D75723009BFC18 /* XLCUtils */ = {
 			isa = PBXGroup;
 			children = (
-				06208BCF17E1C4EC00F60D39 /* XLCUtils.h */,
-				06208BD017E1C4EC00F60D39 /* XLCUtils.m */,
+				0674ACDB1852CDA0004491AD /* XLCUtils.h */,
 				0692BC4F17D897E3009BFC18 /* Utils */,
 				0692BC4717D87825009BFC18 /* Assertion */,
 				0692BC4217D87399009BFC18 /* Logging */,
@@ -184,6 +184,8 @@
 		0692BC4F17D897E3009BFC18 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				06208BCF17E1C4EC00F60D39 /* XLCRunloop.h */,
+				06208BD017E1C4EC00F60D39 /* XLCRunloop.m */,
 				0692BC5017D897FE009BFC18 /* XLCNoCopyMutableDictionary.h */,
 				0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */,
 				0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */,
@@ -203,7 +205,7 @@
 			files = (
 				0692BC4517D873CF009BFC18 /* XLCLogging.h in Headers */,
 				0692BC4A17D87851009BFC18 /* XLCAssertion.h in Headers */,
-				06208BD117E1C4EC00F60D39 /* XLCUtils.h in Headers */,
+				06208BD117E1C4EC00F60D39 /* XLCRunloop.h in Headers */,
 				06208BD517E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.h in Headers */,
 				0692BC5217D897FE009BFC18 /* XLCNoCopyMutableDictionary.h in Headers */,
 				0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */,
@@ -293,7 +295,7 @@
 			files = (
 				0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */,
 				0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */,
-				06208BD217E1C4EC00F60D39 /* XLCUtils.m in Sources */,
+				06208BD217E1C4EC00F60D39 /* XLCRunloop.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
 				06208BD617E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m in Sources */,
 				0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */,

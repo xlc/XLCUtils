@@ -11,7 +11,7 @@
 typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
     XLCLoggingLevelDebug = 0,
     XLCLoggingLevelInfo,
-    XLCLoggingLevelWarnning,
+    XLCLoggingLevelWarning,
     XLCLoggingLevelError,
     XLCLoggingLevelCount
 };
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
 #define XLCILOG(format...) XLCLOG(XLCLoggingLevelInfo, format)
 
 // warn log
-#define XLCWLOG(format...) XLCLOG(XLCLoggingLevelWarnning, format)
+#define XLCWLOG(format...) XLCLOG(XLCLoggingLevelWarning, format)
 
 // error log
 #define XLCELOG(format...) XLCLOG(XLCLoggingLevelError, format)

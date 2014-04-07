@@ -16,7 +16,13 @@
 + (instancetype)objectWithXMLString:(NSString *)str error:(NSError **)error;
 + (instancetype)objectWithXMLParser:(NSXMLParser *)parser error:(NSError **)error;
 
-- (NSArray *)create;
-- (NSArray *)createWithOutputDictionary:(NSDictionary **)dict;
+- (id)create;
+- (id)createWithOutputDictionary:(NSDictionary **)dict;
+
+@end
+
+@protocol XLCXMLCreation <NSObject>
+
++ (instancetype)xlc_createWithProperties:(NSDictionary *)props contents:(NSArray *)contents;
 
 @end

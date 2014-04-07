@@ -110,4 +110,77 @@
     
 }
 
+- (void)testParseXMLMergeAttribute
+{
+    NSString *xml = @(R"(
+    <test attr='42'>
+        <test.value>
+            <object />
+            <object.attr> <!-- second element ignored -->
+                <test/>
+            </object.attr>
+        </test.value>
+        <test.empty /> <!-- empty element ignored -->
+        <test.otherValue>
+            some string
+        </test.otherValue>
+        <abc />
+        <obj string='text string'>
+            <obj.text>string text</obj.text>
+            <obj.someValue>
+                <obj>
+                    <obj.someValue>
+                        <test test='42'/>
+                    </obj.someValue>
+                </obj>
+            </obj.someValue>
+        </obj>
+    </test>
+    )");
+    
+    NSDictionary *expected =
+    @{
+      @"#name" : @"test",
+      @"#namespace" : @"",
+      @"attr" : @"42",
+      @"value" : @{
+              @"#name" : @"object",
+              @"#namespace" : @""
+              },
+      @"otherValue" : @"some string",
+      @"#contents" :
+          @[
+              @{
+                  @"#name" : @"abc",
+                  @"#namespace" : @""
+                  },
+              @{
+                  @"#name" : @"obj",
+                  @"#namespace" : @"",
+                  @"string" : @"text string",
+                  @"text" : @"string text",
+                  @"someValue" :
+                      @{
+                          @"#name" : @"obj",
+                          @"#namespace" : @"",
+                          @"someValue" :
+                              @{
+                                  @"#name" : @"test",
+                                  @"#namespace" : @"",
+                                  @"test" : @"42"
+                                  }
+                          }
+                  }
+              ]
+      };
+    
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+    XCTAssertEqualObjects(obj.root, expected);
+    
+}
+
 @end

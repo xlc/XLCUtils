@@ -9,6 +9,7 @@
 #import "XLCXMLObject.h"
 
 #import "XLCLogging.h"
+#import "XLCAssertion.h"
 
 #include <unordered_map>
 #include <stack>
@@ -82,14 +83,18 @@ struct XLCNSStringCompare {
 
 #pragma mark -
 
-- (NSArray *)create
+- (id)create
 {
     return [self createWithOutputDictionary:NULL];
 }
 
-- (NSArray *)createWithOutputDictionary:(NSDictionary **)dict
+- (id)createWithOutputDictionary:(NSDictionary **)outputDict
 {
-    return nil;
+    XASSERT_NOTNULL(_root);
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    return dict;
 }
 
 #pragma mark - NSXMLParserDelegate
@@ -99,10 +104,54 @@ struct XLCNSStringCompare {
     _parent.push([NSMutableArray array]);
 }
 
+static void mergeAttribute(NSMutableDictionary *dict)
+{
+    if (!dict) return;
+    
+    NSMutableArray *array = dict[@"#contents"];
+    NSString *name = dict[@"#name"];
+    NSString *prefix = [name stringByAppendingString:@"."];
+    NSString *ns = dict[@"#namespace"];
+    
+    for (id obj in [array copy]) {
+        if ([obj isKindOfClass:[NSMutableDictionary class]]) {
+            NSMutableDictionary *child = obj;
+            
+            mergeAttribute(child); // post-order
+            
+            NSString *childName = child[@"#name"];
+            NSString *childNs = child[@"#namespace"];
+            if ([childName hasPrefix:prefix] && [ns isEqualToString:childNs]) {
+                NSString *attName = [childName substringFromIndex:prefix.length];
+                NSMutableArray *contents = child[@"#contents"];
+                switch (contents.count) {
+                    case 0:
+                        XILOG(@"Empty element property. %@", child);
+                        break;
+                        
+                    default:
+                        XILOG(@"Element property contains more than one object, only first one used. %@", child);
+                        // no break
+                    case 1:
+                        dict[attName] = [contents objectAtIndex:0];
+                        break;
+                }
+                [array removeObject:child];
+            }
+        }
+    }
+    
+    if (array.count == 0) {
+        [dict removeObjectForKey:@"#contents"];
+    }
+}
+
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
     _root = _parent.top()[0];
     _parent.pop();
+    
+    mergeAttribute(_root);
 }
 
 - (void)parser:(NSXMLParser *)parser didStartMappingPrefix:(NSString *)prefix toURI:(NSString *)namespaceURI

@@ -8,11 +8,12 @@
 
 #import "XLCXMLObject.h"
 
-#import "XLCLogging.h"
-#import "XLCAssertion.h"
-
 #include <unordered_map>
 #include <stack>
+
+#import "XLCLogging.h"
+#import "XLCAssertion.h"
+#import "XLCXMLCreation.h"
 
 static NSString * const XLCNamespaceURI = @"https://github.com/xlc/XLCUtils";
 
@@ -28,15 +29,13 @@ struct XLCNSStringCompare {
     }
 };
 
-@interface XLCXMLObject () <NSXMLParserDelegate>
+static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary *outputDict);
 
-- (instancetype)initWithXMLParser:(NSXMLParser *)parser;
+@interface XLCXMLObject () <NSXMLParserDelegate>
 
 @end
 
 @implementation XLCXMLObject {
-    NSXMLParser *_parser;
-    
     NSMutableDictionary *_root;
     std::unordered_map<NSString *, std::stack<NSString *>, XLCNSStringHash, XLCNSStringCompare> _namespaces;
     std::stack<NSMutableDictionary *> _current;
@@ -57,8 +56,9 @@ struct XLCNSStringCompare {
 
 + (instancetype)objectWithXMLParser:(NSXMLParser *)parser error:(NSError **)error
 {
-    XLCXMLObject *obj = [[self alloc] initWithXMLParser:parser];
+    XLCXMLObject *obj = [[self alloc] init];
     
+    parser.delegate = obj;
     parser.shouldProcessNamespaces = YES;
     parser.shouldReportNamespacePrefixes = YES;
     
@@ -71,14 +71,12 @@ struct XLCNSStringCompare {
     return nil;
 }
 
-- (instancetype)initWithXMLParser:(NSXMLParser *)parser
++ (instancetype)objectWithDictionary:(NSDictionary *)dict
 {
-    self = [super init];
-    if (self) {
-        _parser = parser;
-        _parser.delegate = self;
-    }
-    return self;
+    XLCXMLObject *obj = [[self alloc] init];
+    obj->_root = [dict copy] ?: [NSDictionary dictionary];
+    
+    return obj;
 }
 
 #pragma mark -
@@ -93,8 +91,11 @@ struct XLCNSStringCompare {
     XASSERT_NOTNULL(_root);
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    if (outputDict) {
+        *outputDict = dict;
+    }
     
-    return dict;
+    return XLCCreateObjectFromDictionary(_root, dict);
 }
 
 #pragma mark - NSXMLParserDelegate
@@ -126,7 +127,7 @@ static void mergeAttribute(NSMutableDictionary *dict)
                 NSMutableArray *contents = child[@"#contents"];
                 switch (contents.count) {
                     case 0:
-                        XILOG(@"Empty element property. %@", child);
+                        dict[attName] = [NSNull null];
                         break;
                         
                     default:
@@ -219,3 +220,173 @@ static void mergeAttribute(NSMutableDictionary *dict)
 }
 
 @end
+
+#pragma mark - NSObject XLCXMLCreation
+
+static NSString * const XLCXMLAttributeName = @"https://github.com/xlc/XLCUtils:name";
+
+extern NSString *NSUnknownUserInfoKey;
+
+static void XLCSetValueForKey(id obj, id value, id key)
+{
+    @try {
+        [obj setValue:value forKeyPath:key];
+    }
+    @catch (NSException *exception) {
+        BOOL handled = NO;
+        
+        if ([[exception name] isEqualToString:NSUndefinedKeyException]) {
+            
+            NSDictionary *info = [exception userInfo];
+            NSString *key = info[NSUnknownUserInfoKey];
+            
+            XILOG(@"Unable to set value '%@' for key path '%@' on object '%@'", value, key, obj);
+            
+            handled = YES;
+            
+        } else if ([[exception name] isEqualToString:NSInvalidArgumentException] &&
+                   [value isKindOfClass:[NSString class]]) {
+            static NSRegularExpression *regex;
+            
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                regex = [NSRegularExpression
+                         regularExpressionWithPattern:@" (\\S+)Value\\]: unrecognized selector sent to instance 0x(\\S+)"
+                         options:0
+                         error:NULL];
+            });
+            
+            NSString *reason = [exception reason];
+            NSTextCheckingResult *match = [regex firstMatchInString:reason options:0 range:NSMakeRange(0, [reason length])];
+            if (match) {
+                // may be caused by unable to convert NSString to primitive type
+                
+                NSString *type = [reason substringWithRange:[match rangeAtIndex:1]];
+                NSString *addressStr = [reason substringWithRange:[match rangeAtIndex:2]];
+                unsigned long long address = 0;
+                [[NSScanner scannerWithString:addressStr] scanHexLongLong:&address];
+                if (address == (unsigned long long)value) { // make sure it is not something unrelated
+                    NSString *str = value;
+                    if ([type isEqualToString:@"char"]) {
+                        if (str.length == 1) { // assume is char
+                            value = @([str characterAtIndex:0]);
+                        } else {    // assume is BOOL
+                            value = @([str boolValue]);
+                        }
+                    } else {
+                        if ([type isEqualToString:@"double"] || [type isEqualToString:@"float"]) {
+                            value = @([str doubleValue]);
+                        } else if ([type isEqualToString:@"CGPoint"] || [type isEqualToString:@"point"]) {
+#if TARGET_OS_IPHONE
+                            value = [NSValue valueWithCGPoint:CGPointFromString(str)];
+#else
+                            value = [NSValue valueWithPoint:NSPointFromString(str)];
+#endif
+                        } else if ([type isEqualToString:@"CGSize"] || [type isEqualToString:@"size"]) {
+#if TARGET_OS_IPHONE
+                            value = [NSValue valueWithCGSize:CGSizeFromString(str)];
+#else
+                            value = [NSValue valueWithSize:NSSizeFromString(str)];
+#endif
+                        } else if ([type isEqualToString:@"CGRect"] || [type isEqualToString:@"rect"]) {
+#if TARGET_OS_IPHONE
+                            value = [NSValue valueWithCGRect:CGRectFromString(str)];
+#else
+                            value = [NSValue valueWithRect:NSRectFromString(str)];
+#endif
+                        } else {
+                            value = @([str longLongValue]);
+                        }
+                    }
+                    
+                    [obj setValue:value forKeyPath:key];
+                    
+                    handled = YES;
+                }
+            }
+            
+        }
+        
+        if (!handled) { // not expecting it, rethrow
+            @throw;
+        }
+    }
+}
+
+static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary *outputDict)
+{
+    if ([dict count] == 0) {
+        return nil;
+    }
+    
+    id obj = dict;
+    
+    NSMutableDictionary *props = [dict mutableCopy];
+    
+    NSString *name = props[@"#name"];
+    NSString *namespace_ = props[@"#namespace"];
+    NSArray *contents = props[@"#contents"];
+    
+    if ([namespace_ length] == 0) { // empty namespace
+        
+        Class cls = NSClassFromString(name);
+        if (cls) {
+            if ([cls respondsToSelector:@selector(xlc_createWithXMLDictionary:)]) {
+                obj = [cls xlc_createWithXMLDictionary:props];
+            } else {
+                NSMutableArray *objectContents = [NSMutableArray array];
+                for (id child in contents) {
+                    id childObj = child;
+                    if ([child isKindOfClass:[NSDictionary class]]) {
+                        childObj = XLCCreateObjectFromDictionary(child, outputDict);
+                    }
+                    [objectContents addObject:childObj ?: [NSNull null]];
+                }
+                
+                NSMutableDictionary *objectProps = [props mutableCopy];
+                [objectProps removeObjectForKey:@"#name"];
+                [objectProps removeObjectForKey:@"#namespace"];
+                [objectProps removeObjectForKey:@"#contents"];
+                
+                [props enumerateKeysAndObjectsUsingBlock:^(id key, id child, BOOL *stop) {
+                    if ([child isKindOfClass:[NSDictionary class]]) {
+                        objectProps[key] = XLCCreateObjectFromDictionary(child, outputDict) ?: [NSNull null];
+                    }
+                }];
+                
+                if ([cls respondsToSelector:@selector(xlc_createWithProperties:andContents:)]) {
+                    obj = [cls xlc_createWithProperties:objectProps andContents:objectContents];
+                } else {
+                    if (objectContents.count) {
+                        XILOG(@"Element '%@' contains contents but ignored. Contents: %@", name, contents);
+                    }
+                    
+                    obj = [[cls alloc] init];
+                    
+                    if (obj) {
+                        
+                        [objectProps enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+                            XLCSetValueForKey(obj, value, key);
+                        }];
+                        
+                    } else {
+                        XILOG(@"Unable to create object from class %@ with properties %@", cls, props);
+                    }
+                    
+                }
+            }
+
+        }
+    } else if ([namespace_ isEqualToString:XLCNamespaceURI]) {
+        // TODO handle elements
+    }
+    
+    NSString *outputName = props[XLCXMLAttributeName];
+    if (outputName && obj) {
+        outputDict[outputName] = obj;
+    }
+    
+    return obj;
+
+}
+

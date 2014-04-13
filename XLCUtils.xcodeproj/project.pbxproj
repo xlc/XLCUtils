@@ -14,6 +14,7 @@
 		0622A51E18E805B7008E2A93 /* XLCXMLObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 0622A51C18E805B7008E2A93 /* XLCXMLObject.h */; };
 		0622A51F18E805B7008E2A93 /* XLCXMLObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */; };
 		0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */; };
+		0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */; };
 		0692BC1C17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
 		0692BC2D17D75723009BFC18 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC2C17D75723009BFC18 /* XCTest.framework */; };
 		0692BC2E17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
@@ -47,6 +48,8 @@
 		0622A51C18E805B7008E2A93 /* XLCXMLObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCXMLObject.h; sourceTree = "<group>"; };
 		0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCXMLObject.mm; sourceTree = "<group>"; };
 		0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCXMLObjectTests.mm; sourceTree = "<group>"; };
+		0622A54C18F3EBF4008E2A93 /* XLCXMLCreation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCXMLCreation.h; sourceTree = "<group>"; };
+		0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCXMLCreation.m; sourceTree = "<group>"; };
 		0674ACDB1852CDA0004491AD /* XLCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
 		0692BC1817D75723009BFC18 /* libXLCUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXLCUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0692BC1B17D75723009BFC18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -95,6 +98,8 @@
 			children = (
 				0622A51C18E805B7008E2A93 /* XLCXMLObject.h */,
 				0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */,
+				0622A54C18F3EBF4008E2A93 /* XLCXMLCreation.h */,
+				0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */,
 			);
 			name = XMLObject;
 			sourceTree = "<group>";
@@ -309,6 +314,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */,
+				0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */,
 				0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */,
 				06208BD217E1C4EC00F60D39 /* XLCRunloop.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
@@ -453,6 +459,12 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "XLCUtilsTests/XLCUtilsTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = xctest;
@@ -470,6 +482,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				INFOPLIST_FILE = "XLCUtilsTests/XLCUtilsTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = xctest;

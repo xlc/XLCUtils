@@ -15,14 +15,9 @@
 + (instancetype)objectWithContentsOfURL:(NSURL *)url error:(NSError **)error;
 + (instancetype)objectWithXMLString:(NSString *)str error:(NSError **)error;
 + (instancetype)objectWithXMLParser:(NSXMLParser *)parser error:(NSError **)error;
++ (instancetype)objectWithDictionary:(NSDictionary *)dict;
 
 - (id)create;
 - (id)createWithOutputDictionary:(NSDictionary **)dict;
-
-@end
-
-@protocol XLCXMLCreation <NSObject>
-
-+ (instancetype)xlc_createWithProperties:(NSDictionary *)props contents:(NSArray *)contents;
 
 @end

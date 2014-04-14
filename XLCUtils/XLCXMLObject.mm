@@ -15,7 +15,8 @@
 #import "XLCAssertion.h"
 #import "XLCXMLCreation.h"
 
-static NSString * const XLCNamespaceURI = @"https://github.com/xlc/XLCUtils";
+static NSString * const XLCNamespaceURI     = @"https://github.com/xlc/XLCUtils";
+static NSString * const XLCXMLAttributeName = @"https://github.com/xlc/XLCUtils:name";
 
 struct XLCNSStringHash {
     NSUInteger operator()(NSString *s1) const {
@@ -57,17 +58,17 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
 + (instancetype)objectWithXMLParser:(NSXMLParser *)parser error:(NSError **)error
 {
     XLCXMLObject *obj = [[self alloc] init];
-    
+
     parser.delegate = obj;
     parser.shouldProcessNamespaces = YES;
     parser.shouldReportNamespacePrefixes = YES;
-    
+
     if ([parser parse]) {
         return obj;
     }
-    
+
     *error = parser.parserError;
-    
+
     return nil;
 }
 
@@ -75,7 +76,7 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
 {
     XLCXMLObject *obj = [[self alloc] init];
     obj->_root = [dict copy] ?: [NSDictionary dictionary];
-    
+
     return obj;
 }
 
@@ -89,12 +90,12 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
 - (id)createWithOutputDictionary:(NSDictionary **)outputDict
 {
     XASSERT_NOTNULL(_root);
-    
+
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if (outputDict) {
         *outputDict = dict;
     }
-    
+
     return XLCCreateObjectFromDictionary(_root, dict);
 }
 
@@ -108,18 +109,18 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
 static void mergeAttribute(NSMutableDictionary *dict)
 {
     if (!dict) return;
-    
+
     NSMutableArray *array = dict[@"#contents"];
     NSString *name = dict[@"#name"];
     NSString *prefix = [name stringByAppendingString:@"."];
     NSString *ns = dict[@"#namespace"];
-    
+
     for (id obj in [array copy]) {
         if ([obj isKindOfClass:[NSMutableDictionary class]]) {
             NSMutableDictionary *child = obj;
-            
+
             mergeAttribute(child); // post-order
-            
+
             NSString *childName = child[@"#name"];
             NSString *childNs = child[@"#namespace"];
             if ([childName hasPrefix:prefix] && [ns isEqualToString:childNs]) {
@@ -129,7 +130,7 @@ static void mergeAttribute(NSMutableDictionary *dict)
                     case 0:
                         dict[attName] = [NSNull null];
                         break;
-                        
+
                     default:
                         XILOG(@"Element property contains more than one object, only first one used. %@", child);
                         // no break
@@ -141,7 +142,7 @@ static void mergeAttribute(NSMutableDictionary *dict)
             }
         }
     }
-    
+
     if (array.count == 0) {
         [dict removeObjectForKey:@"#contents"];
     }
@@ -151,7 +152,7 @@ static void mergeAttribute(NSMutableDictionary *dict)
 {
     _root = _parent.top()[0];
     _parent.pop();
-    
+
     mergeAttribute(_root);
 }
 
@@ -168,10 +169,10 @@ static void mergeAttribute(NSMutableDictionary *dict)
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    
+
     dict[@"#name"] = elementName;
     dict[@"#namespace"] = namespaceURI;
-    
+
     [attributeDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
         NSArray *arr = [key componentsSeparatedByString:@":"];
         if ([arr count] == 1) {
@@ -186,12 +187,12 @@ static void mergeAttribute(NSMutableDictionary *dict)
             }
         }
     }];
-    
+
     [_parent.top() addObject:dict];
-    
+
     _current.push(dict);
     _parent.push([NSMutableArray array]);
-    
+
     dict[@"#contents"] = _parent.top();
 }
 
@@ -216,38 +217,37 @@ static void mergeAttribute(NSMutableDictionary *dict)
         [_parent.top() removeLastObject];
     }
     [_parent.top() addObject:string];
-    
+
 }
 
 @end
 
 #pragma mark - NSObject XLCXMLCreation
 
-static NSString * const XLCXMLAttributeName = @"https://github.com/xlc/XLCUtils:name";
-
 extern NSString *NSUnknownUserInfoKey;
 
 static void XLCSetValueForKey(id obj, id value, id key)
 {
+    value = value == [NSNull null] ? nil : value;
     @try {
-        [obj setValue:value forKeyPath:key];
+        [obj setValue:value forKey:key];
     }
     @catch (NSException *exception) {
         BOOL handled = NO;
-        
+
         if ([[exception name] isEqualToString:NSUndefinedKeyException]) {
-            
+
             NSDictionary *info = [exception userInfo];
             NSString *key = info[NSUnknownUserInfoKey];
-            
+
             XILOG(@"Unable to set value '%@' for key path '%@' on object '%@'", value, key, obj);
-            
+
             handled = YES;
-            
+
         } else if ([[exception name] isEqualToString:NSInvalidArgumentException] &&
                    [value isKindOfClass:[NSString class]]) {
             static NSRegularExpression *regex;
-            
+
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
                 regex = [NSRegularExpression
@@ -255,12 +255,12 @@ static void XLCSetValueForKey(id obj, id value, id key)
                          options:0
                          error:NULL];
             });
-            
+
             NSString *reason = [exception reason];
             NSTextCheckingResult *match = [regex firstMatchInString:reason options:0 range:NSMakeRange(0, [reason length])];
             if (match) {
                 // may be caused by unable to convert NSString to primitive type
-                
+
                 NSString *type = [reason substringWithRange:[match rangeAtIndex:1]];
                 NSString *addressStr = [reason substringWithRange:[match rangeAtIndex:2]];
                 unsigned long long address = 0;
@@ -298,19 +298,67 @@ static void XLCSetValueForKey(id obj, id value, id key)
                             value = @([str longLongValue]);
                         }
                     }
-                    
+
                     [obj setValue:value forKeyPath:key];
-                    
+
                     handled = YES;
                 }
             }
-            
+
         }
-        
+
         if (!handled) { // not expecting it, rethrow
             @throw;
         }
     }
+}
+
+static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *outputDict)
+{
+    XASSERT([dict[@"#namespace"] isEqualToString:XLCNamespaceURI]);
+    
+    NSString *name = [dict[@"#name"] lowercaseString];
+    
+    using CommandBlock = id (^)(NSDictionary *dict, NSMutableDictionary *outputDict);
+    static std::unordered_map<NSString *, CommandBlock, XLCNSStringHash, XLCNSStringCompare> commands
+    {
+        {@"ref", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return outputDict[dict[@"name"] ?: @""];
+        }},
+        
+        {@"yes", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return @YES;
+        }},
+        
+        {@"true", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return @YES;
+        }},
+        
+        {@"no", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return @NO;
+        }},
+        
+        {@"false", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return @NO;
+        }},
+        
+        {@"null", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return nil;
+        }},
+        
+        {@"nil", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return nil;
+        }},
+    };
+
+    auto it = commands.find(name);
+    if (it != commands.end()) {
+        return it->second(dict, outputDict);
+    }
+    
+    XILOG(@"Unknown element %@. %@", name, dict);
+    
+    return nil;
 }
 
 static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary *outputDict)
@@ -318,21 +366,19 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
     if ([dict count] == 0) {
         return nil;
     }
-    
+
     id obj = dict;
-    
-    NSMutableDictionary *props = [dict mutableCopy];
-    
-    NSString *name = props[@"#name"];
-    NSString *namespace_ = props[@"#namespace"];
-    NSArray *contents = props[@"#contents"];
-    
+
+    NSString *name = dict[@"#name"];
+    NSString *namespace_ = dict[@"#namespace"];
+    NSArray *contents = dict[@"#contents"];
+
     if ([namespace_ length] == 0) { // empty namespace
-        
+
         Class cls = NSClassFromString(name);
         if (cls) {
             if ([cls respondsToSelector:@selector(xlc_createWithXMLDictionary:)]) {
-                obj = [cls xlc_createWithXMLDictionary:props];
+                obj = [cls xlc_createWithXMLDictionary:dict];
             } else {
                 NSMutableArray *objectContents = [NSMutableArray array];
                 for (id child in contents) {
@@ -342,50 +388,49 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                     }
                     [objectContents addObject:childObj ?: [NSNull null]];
                 }
-                
-                NSMutableDictionary *objectProps = [props mutableCopy];
-                [objectProps removeObjectForKey:@"#name"];
-                [objectProps removeObjectForKey:@"#namespace"];
-                [objectProps removeObjectForKey:@"#contents"];
-                
-                [props enumerateKeysAndObjectsUsingBlock:^(id key, id child, BOOL *stop) {
-                    if ([child isKindOfClass:[NSDictionary class]]) {
-                        objectProps[key] = XLCCreateObjectFromDictionary(child, outputDict) ?: [NSNull null];
+
+                NSMutableDictionary *props = [dict mutableCopy];
+
+                [dict enumerateKeysAndObjectsUsingBlock:^(id key, id child, BOOL *stop) {
+                    if ([key isKindOfClass:[NSString class]] && ([key hasPrefix:XLCNamespaceURI] || [key hasPrefix:@"#"])) {
+                        [props removeObjectForKey:key];
+                    } else if ([child isKindOfClass:[NSDictionary class]]) {
+                        props[key] = XLCCreateObjectFromDictionary(child, outputDict) ?: [NSNull null];
                     }
                 }];
-                
+
                 if ([cls respondsToSelector:@selector(xlc_createWithProperties:andContents:)]) {
-                    obj = [cls xlc_createWithProperties:objectProps andContents:objectContents];
+                    obj = [cls xlc_createWithProperties:props andContents:objectContents];
                 } else {
                     if (objectContents.count) {
                         XILOG(@"Element '%@' contains contents but ignored. Contents: %@", name, contents);
                     }
                     
                     obj = [[cls alloc] init];
-                    
+
                     if (obj) {
-                        
-                        [objectProps enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+
+                        [props enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
                             XLCSetValueForKey(obj, value, key);
                         }];
-                        
+
                     } else {
-                        XILOG(@"Unable to create object from class %@ with properties %@", cls, props);
+                        XILOG(@"Unable to create object from class %@ with properties %@", cls, dict);
                     }
-                    
+
                 }
             }
 
         }
     } else if ([namespace_ isEqualToString:XLCNamespaceURI]) {
-        // TODO handle elements
+        obj = XLCCreateNamespacedObject(dict, outputDict);
     }
     
-    NSString *outputName = props[XLCXMLAttributeName];
+    NSString *outputName = dict[XLCXMLAttributeName];
     if (outputName && obj) {
         outputDict[outputName] = obj;
     }
-    
+
     return obj;
 
 }

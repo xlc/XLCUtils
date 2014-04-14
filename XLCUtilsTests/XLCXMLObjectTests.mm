@@ -1,4 +1,4 @@
-//
+
 //  XLCXMLObjectTests.m
 //  XLCUtils
 //
@@ -68,7 +68,7 @@
     </test>
     <!-- comment -->
     )");
-    
+
     NSDictionary *expected =
     @{
       @"#name" : @"test",
@@ -118,14 +118,14 @@
               @"this is some string in xml file."
               ]
       };
-    
+
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
     XCTAssertEqualObjects(obj.root, expected);
-    
+
 }
 
 - (void)testParseXMLMergeAttribute
@@ -155,7 +155,7 @@
         </obj>
     </test>
     )");
-    
+
     NSDictionary *expected =
     @{
       @"#name" : @"test",
@@ -192,14 +192,14 @@
                   }
               ]
       };
-    
+
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
     XCTAssertEqualObjects(obj.root, expected);
-    
+
 }
 
 - (void)testCreateNSObject
@@ -207,26 +207,12 @@
     NSString *xml = @"<NSObject />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssert([result isMemberOfClass:[NSObject class]], "is NSObject");
-}
-
-- (void)testCreateWithString
-{
-    NSString *xml = @"<XLCXMLObjectTestDummy stringValue='some string' />";
-    NSError *error;
-    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
-    XCTAssertNil(error, "no error");
-    XCTAssertNotNil(obj, "have obj");
-    
-    XLCXMLObjectTestDummy *result = [obj create];
-    XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
-    XCTAssertEqualObjects(result.stringValue, @"some string");
 }
 
 - (void)testCreateArray
@@ -234,10 +220,10 @@
     NSString *xml = @"<NSArray> some string <NSString /> <NSNumber /> <NSNull /> 42 </NSArray>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, (@[@"some string", @"", @0, [NSNull null], @"42"]));
 }
@@ -251,10 +237,10 @@
     "</NSDictionary>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, (@{@"key":@"val", @"otherKey":@"val2", @"specialKey":@[], @"empty":[NSNull null]}));
 }
@@ -270,13 +256,13 @@
     "</XLCXMLObject>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObject *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObject class]]);
-    
+
     id result2 = [result create];
     XCTAssertEqualObjects(result2, (@{@"key":@"val", @"otherKey":@"val2", @"specialKey":@[], @"empty":[NSNull null]}));
 }
@@ -286,10 +272,10 @@
     NSString *xml = @"<NSNumber />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @0);
 }
@@ -299,10 +285,10 @@
     NSString *xml = @"<NSNumber>42.5</NSNumber>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @42.5);
 }
@@ -312,10 +298,10 @@
     NSString *xml = @"<NSNumber value='123'/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @123);
 }
@@ -325,10 +311,10 @@
     NSString *xml = @"<NSNumber value='YES'/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @YES);
 }
@@ -338,10 +324,10 @@
     NSString *xml = @"<NSNumber value='NO'/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @NO);
 }
@@ -351,10 +337,10 @@
     NSString *xml = @"<NSNumber value='true'/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @YES);
 }
@@ -364,10 +350,10 @@
     NSString *xml = @"<NSNumber value='false'/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @NO);
 }
@@ -377,12 +363,54 @@
     NSString *xml = @"<NSString value=' some string '/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     id result = [obj create];
     XCTAssertEqualObjects(result, @" some string ");
+}
+
+- (void)testCreateWithString
+{
+    NSString *xml = @"<XLCXMLObjectTestDummy stringValue='some string' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    XLCXMLObjectTestDummy *result = [obj create];
+    XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
+    XCTAssertEqualObjects(result.stringValue, @"some string");
+}
+
+- (void)testCreateWithObject
+{
+    NSString *xml = @"<XLCXMLObjectTestDummy><XLCXMLObjectTestDummy.objectValue><NSArray /></XLCXMLObjectTestDummy.objectValue></XLCXMLObjectTestDummy>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    XLCXMLObjectTestDummy *result = [obj create];
+    XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
+    XCTAssertEqualObjects(result.objectValue, @[]);
+}
+
+- (void)testCreateWithObjectNil
+{
+    NSString *xml = @"<XLCXMLObjectTestDummy><XLCXMLObjectTestDummy.objectValue><NSNull /></XLCXMLObjectTestDummy.objectValue></XLCXMLObjectTestDummy>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    XLCXMLObjectTestDummy *result = [obj create];
+    XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
+    XCTAssertNil(result.objectValue);
 }
 
 - (void)testCreateWithPrimitiveTypeBool
@@ -390,10 +418,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy boolValue='YES'/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.boolValue, YES);
@@ -404,10 +432,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy intValue='-23'/>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.intValue, -23);
@@ -418,10 +446,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy doubleValue='12.5' />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.doubleValue, 12.5);
@@ -432,10 +460,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy floatValue='22.5' />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.floatValue, 22.5);
@@ -446,10 +474,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy unsignedValue='42' />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.unsignedValue, 42);
@@ -460,10 +488,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy longlongValue='9223372036854775807' />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.longlongValue, 9223372036854775807LL);
@@ -474,10 +502,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy pointValue='{1.5, 2.25}' />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.pointValue.x, 1.5);
@@ -489,10 +517,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy sizeValue='{1.5, 2.25}' />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.sizeValue.width, 1.5);
@@ -504,10 +532,10 @@
     NSString *xml = @"<XLCXMLObjectTestDummy rectValue='{{1.5, 2.25}, {3, 4.5}}' />";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
-    
+
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
-    
+
     XLCXMLObjectTestDummy *result = [obj create];
     XCTAssert([result isKindOfClass:[XLCXMLObjectTestDummy class]]);
     XCTAssertEqual(result.rectValue.origin.x, 1.5);
@@ -515,5 +543,133 @@
     XCTAssertEqual(result.rectValue.size.width, 3);
     XCTAssertEqual(result.rectValue.size.height, 4.5);
 }
+
+- (void)testCreateWithOutput
+{
+    NSString *xml = @"<NSArray xmlns:x='https://github.com/xlc/XLCUtils' x:name='array'>"
+    "<NSString x:name='string' value='nsstring' /> <NSNumber /> <NSArray>  <NSNumber value='42.5' x:name='number' /> </NSArray>"
+    "</NSArray>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    NSDictionary *dict;
+    [obj createWithOutputDictionary:&dict];
+
+    XCTAssertEqualObjects(dict, (@{ @"string" : @"nsstring", @"number" : @42.5, @"array" : @[@"nsstring", @0, @[@42.5]] }));
+}
+
+- (void)testCreateWithRef
+{
+    NSString *xml =
+    @"<NSArray xmlns:x='https://github.com/xlc/XLCUtils'>"
+        "<NSNumber x:name='number' value='42' />"
+        "<XLCXMLObjectTestDummy>"
+            "<XLCXMLObjectTestDummy.objectValue>"
+                "<XLCXMLObjectTestDummy>"
+                    "<XLCXMLObjectTestDummy.stringValue>"
+                        "<NSString value='some string' x:name='str' />"
+                    "</XLCXMLObjectTestDummy.stringValue>"
+                    "<XLCXMLObjectTestDummy.objectValue>"
+                        "<x:Ref name='number' />"
+                    "</XLCXMLObjectTestDummy.objectValue>"
+                "</XLCXMLObjectTestDummy>"
+            "</XLCXMLObjectTestDummy.objectValue>"
+            "<XLCXMLObjectTestDummy.stringValue>"
+                "<x:Ref name='str' />"
+            "</XLCXMLObjectTestDummy.stringValue>"
+        "</XLCXMLObjectTestDummy>"
+    "</NSArray>";
+;
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    XCTAssertNil(error, "no error");
+
+    XLCXMLObjectTestDummy *result = [obj create][1];
+    XLCXMLObjectTestDummy *result2 = result.objectValue;
+    XCTAssertEqualObjects(result.stringValue, @"some string");
+    XCTAssertEqualObjects(result2.objectValue, @42);
+}
+
+- (void)testCreateYES
+{
+    NSString *xml = @"<x:YES xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    id result = [obj create];
+    XCTAssertEqualObjects(result, @YES);
+}
+
+- (void)testCreateNO
+{
+    NSString *xml = @"<x:NO xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    id result = [obj create];
+    XCTAssertEqualObjects(result, @NO);
+}
+
+- (void)testCreateTrue
+{
+    NSString *xml = @"<x:true xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    id result = [obj create];
+    XCTAssertEqualObjects(result, @YES);
+}
+
+- (void)testCreateFalse
+{
+    NSString *xml = @"<x:false xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    id result = [obj create];
+    XCTAssertEqualObjects(result, @NO);
+}
+
+- (void)testCreateNil
+{
+    NSString *xml = @"<x:nil xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    id result = [obj create];
+    XCTAssertNil(result);
+}
+
+- (void)testCreateNull
+{
+    NSString *xml = @"<x:null xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    id result = [obj create];
+    XCTAssertNil(result);
+}
+
 
 @end

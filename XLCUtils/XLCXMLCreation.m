@@ -16,7 +16,7 @@
 
 @implementation NSArray (XLCXMLCreation)
 
-+ (id)xlc_createWithProperties:(NSDictionary *)props andContents:(NSArray *)contents
++ (id)xlc_createWithProperties:(XLCXMLObjectProperties *)props andContents:(NSArray *)contents
 {
     return [contents copy] ?: [self new];
 }
@@ -29,9 +29,9 @@
 
 @implementation NSDictionary (XLCXMLCreation)
 
-+ (id)xlc_createWithProperties:(NSDictionary *)props andContents:(NSArray *)contents
++ (id)xlc_createWithProperties:(XLCXMLObjectProperties *)props andContents:(NSArray *)contents
 {
-    return [props copy] ?: [self new];
+    return [props consumeAll];
 }
 
 @end
@@ -63,16 +63,14 @@
 
 @implementation NSNumber (XLCXMLCreation)
 
-+ (id)xlc_createWithProperties:(NSDictionary *)props andContents:(NSArray *)contents
++ (id)xlc_createWithProperties:(XLCXMLObjectProperties *)props andContents:(NSArray *)contents
 {
     NSString *str;
     
     if ([contents count]) {
         str = contents[0];
     } else {
-        if ([props count] == 1) {
-            str = [[props allValues] lastObject];
-        }
+        str = [props consumeSingle];
     }
     
     if ([str isKindOfClass:[NSString class]]) {
@@ -102,15 +100,9 @@
 
 @implementation NSString (XLCXMLCreation)
 
-+ (id)xlc_createWithProperties:(NSDictionary *)props andContents:(NSArray *)contents
++ (id)xlc_createWithProperties:(XLCXMLObjectProperties *)props andContents:(NSArray *)contents
 {
-    if ([props count] == 1) {
-        id obj = [[props allValues] lastObject];
-        if ([obj isKindOfClass:self]) {
-            return obj;
-        }
-    }
-    return [contents componentsJoinedByString:@""] ?: [self new];
+    return [[props consumeSingle] description] ?: [contents componentsJoinedByString:@""] ?: [self new];
 }
 
 @end
@@ -124,6 +116,42 @@
 + (id)xlc_createWithXMLDictionary:(NSDictionary *)dict
 {
     return [self null];
+}
+
+@end
+
+#pragma mark -
+
+@implementation XLCXMLObjectProperties {
+    NSMutableDictionary *_dict;
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict
+{
+    self = [super init];
+    if (self) {
+        _dict = [dict mutableCopy];
+    }
+    return self;
+}
+
+- (id)consume:(id)key
+{
+    id obj = _dict[key];
+    [_dict removeObjectForKey:key];
+    return obj;
+}
+
+- (NSDictionary *)consumeAll
+{
+    NSDictionary *dict = _dict;
+    _dict = nil;
+    return dict;
+}
+
+- (id)consumeSingle
+{
+    return _dict.count == 1 ? _dict.allValues[0] : nil;
 }
 
 @end

@@ -398,27 +398,27 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                         props[key] = XLCCreateObjectFromDictionary(child, outputDict) ?: [NSNull null];
                     }
                 }];
-
+                
+                XLCXMLObjectProperties *objectProps = [[XLCXMLObjectProperties alloc] initWithDictionary:props];
                 if ([cls respondsToSelector:@selector(xlc_createWithProperties:andContents:)]) {
-                    obj = [cls xlc_createWithProperties:props andContents:objectContents];
+                    obj = [cls xlc_createWithProperties:objectProps andContents:objectContents];
                 } else {
                     if (objectContents.count) {
                         XILOG(@"Element '%@' contains contents but ignored. Contents: %@", name, contents);
                     }
                     
                     obj = [[cls alloc] init];
-
-                    if (obj) {
-
-                        [props enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-                            XLCSetValueForKey(obj, value, key);
-                        }];
-
-                    } else {
-                        XILOG(@"Unable to create object from class %@ with properties %@", cls, dict);
-                    }
-
                 }
+                
+                if (obj) {
+                    [[objectProps consumeAll] enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+                        XLCSetValueForKey(obj, value, key);
+                    }];
+                    
+                } else {
+                    XILOG(@"Unable to create object from class %@ with properties %@", cls, dict);
+                }
+                
             }
 
         }

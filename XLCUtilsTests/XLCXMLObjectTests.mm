@@ -725,6 +725,35 @@
     XCTAssertEqualObjects(result, (@[@{ @"dict2" : @{ @"key" : @42 }, @"str" : @"val" }]));
 }
 
+- (void)testGet {
+    NSString *xml =
+    @"<NSArray xmlns:x='https://github.com/xlc/XLCUtils'>"
+        "<x:void>"
+            "<NSDictionary x:name='dict' a='1' b='2'>"
+                "<NSDictionary.c>"
+                    "<NSDictionary d='3' />"
+                "</NSDictionary.c>"
+            "</NSDictionary>"
+        "</x:void>"
+        "<x:Get object='dict' key='a' />"
+        "<x:Get object='dict' key='b' />"
+        "<x:Get keyPath='c.d'>"
+            "<x:Get.object>"
+                "<x:Ref name='dict' />"
+            "</x:Get.object>"
+        "</x:Get>"
+    "</NSArray>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    NSDictionary *output;
+    id result = [obj createWithOutputDictionary:&output];
+    XCTAssertEqualObjects(result, (@[ @"1", @"2", @"3" ]));
+}
+
 - (void)testPostAction {
     NSString *xml =
     @"<NSDictionary xmlns:x='https://github.com/xlc/XLCUtils' x:name='dict'>"

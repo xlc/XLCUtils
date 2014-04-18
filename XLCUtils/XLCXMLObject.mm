@@ -427,6 +427,33 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
             return nil;
         }},
         
+        {@"get", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            dict = XLCEvaluateDictionary(dict, outputDict);
+            id obj = dict[@"object"];
+            if (!obj) {
+                obj = outputDict[@"#self"]; // in post action
+            } else if ([obj isKindOfClass:[NSString class]]) {
+                obj = outputDict[obj];
+            }
+            if (obj && obj != [NSNull null]) {
+                id value = dict[@"value"];
+                if (!value) {
+                    NSArray *content = dict[@"#contents"];
+                    if ([content count]) {
+                        value = content[0];
+                    }
+                }
+                NSString *key = dict[@"key"];
+                NSString *keyPath = dict[@"keyPath"];
+                if (key) {
+                    return [obj valueForKey:key];
+                } else if (keyPath) {
+                    return [obj valueForKeyPath:keyPath];
+                }
+            }
+            
+            return [NSNull null];
+        }},
     };
 
     auto it = commands.find(name);

@@ -647,7 +647,10 @@
 
 - (void)testCreateNil
 {
-    NSString *xml = @"<x:nil xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSString *xml =
+    @"<NSArray xmlns:x='https://github.com/xlc/XLCUtils'>"
+        "<x:nil />"
+    "</NSArray>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
 
@@ -655,12 +658,15 @@
     XCTAssertNotNil(obj, "have obj");
 
     id result = [obj create];
-    XCTAssertNil(result);
+    XCTAssertEqualObjects(result, @[[NSNull null]]);
 }
 
 - (void)testCreateNull
 {
-    NSString *xml = @"<x:null xmlns:x='https://github.com/xlc/XLCUtils' />";
+    NSString *xml =
+    @"<NSArray xmlns:x='https://github.com/xlc/XLCUtils'>"
+        "<x:null />"
+    "</NSArray>";
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
 
@@ -668,8 +674,84 @@
     XCTAssertNotNil(obj, "have obj");
 
     id result = [obj create];
-    XCTAssertNil(result);
+    XCTAssertEqualObjects(result, @[[NSNull null]]);
 }
 
+- (void)testVoid
+{
+    NSString *xml =
+    @"<NSArray xmlns:x='https://github.com/xlc/XLCUtils'>"
+        "<x:void>"
+            "<NSNumber value='42' x:name='num' />"
+        "</x:void>"
+    "</NSArray>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    NSDictionary *output;
+    id result = [obj createWithOutputDictionary:&output];
+    XCTAssertEqualObjects(result, @[], "should not add NSNull");
+    XCTAssertEqualObjects(output[@"num"], @42, "side effect should be evaluated");
+}
+
+- (void)testSet {
+    NSString *xml =
+    @"<NSArray xmlns:x='https://github.com/xlc/XLCUtils'>"
+        "<NSDictionary x:name='dict' />"
+        "<x:Set object='dict' key='dict2'>"
+            "<NSDictionary />"
+        "</x:Set>"
+        "<x:Set object='dict' key='str' value='val' />"
+        "<x:Set keyPath='dict2.key'>"
+            "<x:Set.object>"
+                "<x:Ref name='dict' />"
+            "</x:Set.object>"
+            "<x:Set.value>"
+                "<NSNumber value='42' />"
+            "</x:Set.value>"
+        "</x:Set>"
+    "</NSArray>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    NSDictionary *output;
+    id result = [obj createWithOutputDictionary:&output];
+    XCTAssertEqualObjects(result, (@[@{ @"dict2" : @{ @"key" : @42 }, @"str" : @"val" }]));
+}
+
+- (void)testPostAction {
+    NSString *xml =
+    @"<NSDictionary xmlns:x='https://github.com/xlc/XLCUtils' x:name='dict'>"
+        "<x:PostAction>"
+            "<x:Set key='dict2'>" // without object default to parent object
+                "<NSDictionary />"
+            "</x:Set>"
+            "<x:Set object='dict' key='str' value='val' />"
+            "<x:Set keyPath='dict2.key'>"
+                "<x:Set.object>"
+                    "<x:Ref name='dict' />"
+                "</x:Set.object>"
+                "<x:Set.value>"
+                    "<NSNumber value='42' />"
+                "</x:Set.value>"
+            "</x:Set>"
+        "</x:PostAction>"
+    "</NSDictionary>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+
+    NSDictionary *output;
+    id result = [obj createWithOutputDictionary:&output];
+    XCTAssertEqualObjects(result, (@{ @"dict2" : @{ @"key" : @42 }, @"str" : @"val" }));
+}
 
 @end

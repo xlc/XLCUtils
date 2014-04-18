@@ -96,7 +96,8 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
         *outputDict = dict;
     }
 
-    return XLCCreateObjectFromDictionary(_root, dict);
+    id result = XLCCreateObjectFromDictionary(_root, dict);
+    return result == [NSNull null] ? nil : result;
 }
 
 #pragma mark - NSXMLParserDelegate
@@ -226,11 +227,16 @@ static void mergeAttribute(NSMutableDictionary *dict)
 
 extern NSString *NSUnknownUserInfoKey;
 
-static void XLCSetValueForKey(id obj, id value, id key)
+static void XLCSetValueForKey(id obj, id value, id key, BOOL useKeyPath)
 {
     value = value == [NSNull null] ? nil : value;
     @try {
-        [obj setValue:value forKey:key];
+        if (useKeyPath) {
+            [obj setValue:value forKeyPath:key];
+        } else {
+            [obj setValue:value forKey:key];
+        }
+        
     }
     @catch (NSException *exception) {
         BOOL handled = NO;
@@ -299,7 +305,11 @@ static void XLCSetValueForKey(id obj, id value, id key)
                         }
                     }
 
-                    [obj setValue:value forKeyPath:key];
+                    if (useKeyPath) {
+                        [obj setValue:value forKeyPath:key];
+                    } else {
+                        [obj setValue:value forKey:key];
+                    }
 
                     handled = YES;
                 }
@@ -313,6 +323,39 @@ static void XLCSetValueForKey(id obj, id value, id key)
     }
 }
 
+static NSDictionary * XLCEvaluateDictionary(NSDictionary *dict, NSMutableDictionary *outputDict)
+{
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:dict.count];
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id child, BOOL *stop) {
+        id newchild = child;
+        if ([child isKindOfClass:[NSDictionary class]]) {
+            newchild = XLCCreateObjectFromDictionary(child, outputDict);
+        }
+        if (newchild) {
+            result[key] = newchild;
+        }
+    }];
+    
+    NSArray *contents = dict[@"#contents"];
+    NSMutableArray *newcontents = [NSMutableArray arrayWithCapacity:contents.count];
+    for (id child in contents) {
+        id newchild = child;
+        if ([child isKindOfClass:[NSDictionary class]]) {
+            newchild = XLCCreateObjectFromDictionary(child, outputDict);
+        }
+        if (newchild) {
+            [newcontents addObject:newchild];
+        }
+    }
+    if (newcontents.count) {
+        result[@"#contents"] = newcontents;
+    } else {
+        [result removeObjectForKey:@"#contents"];
+    }
+    
+    return result;
+}
+
 static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *outputDict)
 {
     XASSERT([dict[@"#namespace"] isEqualToString:XLCNamespaceURI]);
@@ -323,7 +366,7 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
     static std::unordered_map<NSString *, CommandBlock, XLCNSStringHash, XLCNSStringCompare> commands
     {
         {@"ref", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
-            return outputDict[dict[@"name"] ?: @""];
+            return outputDict[dict[@"name"] ?: @""] ?: [NSNull null];
         }},
         
         {@"yes", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
@@ -343,12 +386,47 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
         }},
         
         {@"null", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
-            return nil;
+            return [NSNull null];
         }},
         
         {@"nil", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            return [NSNull null];
+        }},
+        
+        {@"void", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            XLCEvaluateDictionary(dict, outputDict);
+            
             return nil;
         }},
+        
+        {@"set", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            dict = XLCEvaluateDictionary(dict, outputDict);
+            id obj = dict[@"object"];
+            if (!obj) {
+                obj = outputDict[@"#self"]; // in post action
+            } else if ([obj isKindOfClass:[NSString class]]) {
+                obj = outputDict[obj];
+            }
+            if (obj && obj != [NSNull null]) {
+                id value = dict[@"value"];
+                if (!value) {
+                    NSArray *content = dict[@"#contents"];
+                    if ([content count]) {
+                        value = content[0];
+                    }
+                }
+                NSString *key = dict[@"key"];
+                NSString *keyPath = dict[@"keyPath"];
+                if (key) {
+                    XLCSetValueForKey(obj, value, key, NO);
+                } else if (keyPath) {
+                    XLCSetValueForKey(obj, value, keyPath, YES);
+                }
+            }
+            
+            return nil;
+        }},
+        
     };
 
     auto it = commands.find(name);
@@ -356,7 +434,7 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
         return it->second(dict, outputDict);
     }
     
-    XILOG(@"Unknown element %@. %@", name, dict);
+    XILOG(@"Unknown element '%@'. %@", name, dict);
     
     return nil;
 }
@@ -367,7 +445,7 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
         return nil;
     }
 
-    id obj = dict;
+    id obj;
 
     NSString *name = dict[@"#name"];
     NSString *namespace_ = dict[@"#namespace"];
@@ -378,24 +456,37 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
         Class cls = NSClassFromString(name);
         if (cls) {
             if ([cls respondsToSelector:@selector(xlc_createWithXMLDictionary:)]) {
-                obj = [cls xlc_createWithXMLDictionary:dict];
+                obj = [cls xlc_createWithXMLDictionary:dict] ?: [NSNull null];
             } else {
+                
+                NSMutableArray *postactions = [NSMutableArray array];
+                
                 NSMutableArray *objectContents = [NSMutableArray array];
                 for (id child in contents) {
-                    id childObj = child;
+                    id newchild = child;
                     if ([child isKindOfClass:[NSDictionary class]]) {
-                        childObj = XLCCreateObjectFromDictionary(child, outputDict);
+                        if ([child[@"#name"] caseInsensitiveCompare:@"postaction"] == NSOrderedSame) {
+                            [postactions addObjectsFromArray:child[@"#contents"]];
+                        } else {
+                            newchild = XLCCreateObjectFromDictionary(child, outputDict);
+                        }
                     }
-                    [objectContents addObject:childObj ?: [NSNull null]];
+                    if (newchild) {
+                        [objectContents addObject:newchild];
+                    }
                 }
 
-                NSMutableDictionary *props = [dict mutableCopy];
-
+                NSMutableDictionary *props = [NSMutableDictionary dictionaryWithCapacity:dict.count];
+                
                 [dict enumerateKeysAndObjectsUsingBlock:^(id key, id child, BOOL *stop) {
+                    id newchild = child;
                     if ([key isKindOfClass:[NSString class]] && ([key hasPrefix:XLCNamespaceURI] || [key hasPrefix:@"#"])) {
-                        [props removeObjectForKey:key];
+                        newchild = nil;
                     } else if ([child isKindOfClass:[NSDictionary class]]) {
-                        props[key] = XLCCreateObjectFromDictionary(child, outputDict) ?: [NSNull null];
+                        newchild = XLCCreateObjectFromDictionary(child, outputDict) ?: [NSNull null];
+                    }
+                    if (newchild) {
+                        props[key] = newchild;
                     }
                 }];
                 
@@ -412,23 +503,44 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                 
                 if (obj) {
                     [[objectProps consumeAll] enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-                        XLCSetValueForKey(obj, value, key);
+                        XLCSetValueForKey(obj, value, key, YES);
                     }];
+                    
+                    NSString *outputName = dict[XLCXMLAttributeName];
+                    if (outputName && obj) {
+                        outputDict[outputName] = obj;
+                    }
+                    
+                    id oldself = outputDict[@"#self"];
+                    outputDict[@"#self"] = obj;
+                    for (id child in postactions) {
+                        if ([child isKindOfClass:[NSDictionary class]]) {
+                            XLCCreateObjectFromDictionary(child, outputDict);
+                        }
+                    }
+                    if (oldself) {
+                        outputDict[@"#self"] = oldself;
+                    } else {
+                        [outputDict removeObjectForKey:@"#self"];
+                    }
                     
                 } else {
                     XILOG(@"Unable to create object from class %@ with properties %@", cls, dict);
+                    obj = [NSNull null];
                 }
                 
             }
 
+        } else {
+            XILOG(@"Class '%@' not found", name);
         }
+        
     } else if ([namespace_ isEqualToString:XLCNamespaceURI]) {
         obj = XLCCreateNamespacedObject(dict, outputDict);
-    }
-    
-    NSString *outputName = dict[XLCXMLAttributeName];
-    if (outputName && obj) {
-        outputDict[outputName] = obj;
+        NSString *outputName = dict[XLCXMLAttributeName];
+        if (outputName && obj) {
+            outputDict[outputName] = obj;
+        }
     }
 
     return obj;

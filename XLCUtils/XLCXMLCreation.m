@@ -151,7 +151,12 @@
 
 - (id)consumeSingle
 {
-    return _dict.count == 1 ? _dict.allValues[0] : nil;
+    if (_dict.count == 1) {
+        id obj = _dict.allValues[0];
+        _dict = nil;
+        return obj;
+    }
+    return nil;
 }
 
 @end

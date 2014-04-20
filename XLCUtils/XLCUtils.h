@@ -6,8 +6,9 @@
 //  Copyright (c) 2013年 Xiliang Chen. All rights reserved.
 //
 
-#import "XLCRunloop.h"
-#import "XLCLogging.h"
-#import "XLCAssertion.h"
-#import "XLCNoCopyMutableDictionary.h"
-#import "NSObject+XLCDelayedPerform.h"
+#import <XLCUtils/XLCRunloop.h>
+#import <XLCUtils/XLCLogging.h>
+#import <XLCUtils/XLCAssertion.h>
+#import <XLCUtils/XLCNoCopyMutableDictionary.h>
+#import <XLCUtils/NSObject+XLCDelayedPerform.h>
+#import <XLCUtils/XLCXMLObject.h>

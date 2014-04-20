@@ -67,7 +67,9 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
         return obj;
     }
 
-    *error = parser.parserError;
+    if (error) {
+        *error = parser.parserError;
+    }
 
     return nil;
 }

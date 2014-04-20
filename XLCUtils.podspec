@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.author       = { "Xiliang Chen" => "xlchen1291@gmail.com" }
   s.source       = { :git => "https://github.com/xlc/XLCUtils.git", :commit => "3e8fbc5a4389e8bde0c9d570c62597d870181c31" }
  
-  s.source_files = 'XLCUtils'
+  s.source_files = 'XLCUtils/**/*.{h,hh,m,mm}'
   s.exclude_files = 'XLCUtils/NSObject+XLCUtilsMemoryDebug.{h,m}'
  
   s.ios.exclude_files = '**/osx/**'

@@ -21,7 +21,7 @@
     
     for (NSView *subview in contents) {
         if ([subview isKindOfClass:[NSView class]]) {
-            [view addSubview:view];
+            [view addSubview:subview];
         }
     }
     

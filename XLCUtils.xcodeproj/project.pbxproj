@@ -28,6 +28,7 @@
 		0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */; };
 		0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */; };
 		0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */; };
+		06B443A0190384A5006F7245 /* NSView+XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B4439E190384A5006F7245 /* NSView+XLCXMLCreation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCNoCopyMutableDictionary.m; sourceTree = "<group>"; };
 		0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+XLCDelayedPerform.h"; sourceTree = "<group>"; };
 		0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XLCDelayedPerform.m"; sourceTree = "<group>"; };
+		06B4439E190384A5006F7245 /* NSView+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSView+XLCXMLCreation.m"; path = "osx/NSView+XLCXMLCreation.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		0622A51B18E7F9AF008E2A93 /* XMLObject */ = {
 			isa = PBXGroup;
 			children = (
+				06B443941903821B006F7245 /* OSX */,
 				0622A51C18E805B7008E2A93 /* XLCXMLObject.h */,
 				0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */,
 				0622A54C18F3EBF4008E2A93 /* XLCXMLCreation.h */,
@@ -215,6 +218,14 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		06B443941903821B006F7245 /* OSX */ = {
+			isa = PBXGroup;
+			children = (
+				06B4439E190384A5006F7245 /* NSView+XLCXMLCreation.m */,
+			);
+			name = OSX;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -316,6 +327,7 @@
 				0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */,
 				0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */,
 				0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */,
+				06B443A0190384A5006F7245 /* NSView+XLCXMLCreation.m in Sources */,
 				06208BD217E1C4EC00F60D39 /* XLCRunloop.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
 				06208BD617E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m in Sources */,

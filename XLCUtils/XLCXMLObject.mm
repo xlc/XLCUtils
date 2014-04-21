@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <stack>
 
+#include <dlfcn.h>
+
 #import "XLCLogging.h"
 #import "XLCAssertion.h"
 #import "XLCXMLCreation.h"
@@ -455,6 +457,18 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
             }
             
             return [NSNull null];
+        }},
+        
+        {@"symbol", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
+            NSString *name = dict[@"name"];
+            if ([name length]) {
+                __strong id *ptr = (__strong id *)dlsym(RTLD_DEFAULT, [name UTF8String]);
+                if (ptr) {
+                    return *ptr;
+                }
+            }
+            
+            return nil;
         }},
     };
 

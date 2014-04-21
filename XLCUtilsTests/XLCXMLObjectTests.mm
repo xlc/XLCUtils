@@ -783,4 +783,20 @@
     XCTAssertEqualObjects(result, (@{ @"dict2" : @{ @"key" : @42 }, @"str" : @"val" }));
 }
 
+- (void)testSymbol
+{
+    NSString *xml =
+    @"<x:Symbol xmlns:x='https://github.com/xlc/XLCUtils' name='NSFontAttributeName' />";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+    
+    NSDictionary *output;
+    id result = [obj createWithOutputDictionary:&output];
+    XCTAssertEqualObjects(result, NSFontAttributeName);
+
+}
+
 @end

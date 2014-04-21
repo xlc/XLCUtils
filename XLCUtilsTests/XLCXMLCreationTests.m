@@ -30,6 +30,17 @@
     [super tearDown];
 }
 
+- (id)createFromXML:(NSString *)xml
+{
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+    
+    return [obj create];
+}
+
 - (void)testCreateNSView
 {
     NSString *xml =
@@ -56,7 +67,56 @@
     
     NSTextField *textField = result.subviews[1];
     XCTAssert([textField isKindOfClass:[NSTextField class]]);
+}
+
+- (void)testCreateNSFontDefaultFont
+{
+    NSString *xml = @"<NSFont />";
+    NSFont *font = [self createFromXML:xml];
+    XCTAssertEqualObjects(font, [NSFont systemFontOfSize:[NSFont systemFontSize]]);
+}
+
+- (void)testCreateNSFontWithName
+{
+    {
+        NSString *xml = @"<NSFont name='Menlo' />";
+        NSFont *font = [self createFromXML:xml];
+        XCTAssertEqualObjects(font, [NSFont fontWithName:@"Menlo" size:[NSFont systemFontSize]]);
+    }
     
+    {
+        NSString *xml = @"<NSFont family='Menlo' />";
+        NSFont *font = [self createFromXML:xml];
+        XCTAssertEqualObjects(font, [NSFont fontWithName:@"Menlo" size:[NSFont systemFontSize]]);
+    }
+}
+
+- (void)testCreateNSFontWithSize
+{
+    NSString *xml = @"<NSFont size='20.5' />";
+    NSFont *font = [self createFromXML:xml];
+    XCTAssertEqualObjects(font, [NSFont systemFontOfSize:20.5]);
+}
+
+- (void)testCreateNSFontWithWeight
+{
+    NSString *xml = @"<NSFont weight='15' />";
+    NSFont *font = [self createFromXML:xml];
+    XCTAssertEqualObjects(font, [[NSFontManager sharedFontManager] convertFont:[NSFont systemFontOfSize:[NSFont systemFontSize]] toHaveTrait:NSBoldFontMask]);
+}
+
+- (void)testCreateNSFontWithBold
+{
+    NSString *xml = @"<NSFont bold='YES' />";
+    NSFont *font = [self createFromXML:xml];
+    XCTAssertEqualObjects(font, [NSFont boldSystemFontOfSize:[NSFont systemFontSize]]);
+}
+
+- (void)testCreateNSFontWithItalic
+{
+    NSString *xml = @"<NSFont name='Menlo' italic='YES' />";
+    NSFont *font = [self createFromXML:xml];
+    XCTAssertEqualObjects(font, [[NSFontManager sharedFontManager] convertFont:[NSFont fontWithName:@"Menlo" size:[NSFont systemFontSize]] toHaveTrait:NSItalicFontMask]);
 }
 
 @end

@@ -28,7 +28,7 @@
 		0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */; };
 		0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */; };
 		0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */; };
-		06B443A0190384A5006F7245 /* NSView+XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B4439E190384A5006F7245 /* NSView+XLCXMLCreation.m */; };
+		06B443A0190384A5006F7245 /* AppKit+XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */; };
 		06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B443A219039932006F7245 /* XLCXMLCreationTests.m */; };
 /* End PBXBuildFile section */
 
@@ -71,7 +71,7 @@
 		0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCNoCopyMutableDictionary.m; sourceTree = "<group>"; };
 		0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+XLCDelayedPerform.h"; sourceTree = "<group>"; };
 		0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XLCDelayedPerform.m"; sourceTree = "<group>"; };
-		06B4439E190384A5006F7245 /* NSView+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSView+XLCXMLCreation.m"; path = "osx/NSView+XLCXMLCreation.m"; sourceTree = "<group>"; };
+		06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppKit+XLCXMLCreation.m"; path = "osx/AppKit+XLCXMLCreation.m"; sourceTree = "<group>"; };
 		06B443A219039932006F7245 /* XLCXMLCreationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCXMLCreationTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -224,7 +224,7 @@
 		06B443941903821B006F7245 /* OSX */ = {
 			isa = PBXGroup;
 			children = (
-				06B4439E190384A5006F7245 /* NSView+XLCXMLCreation.m */,
+				06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */,
 			);
 			name = OSX;
 			sourceTree = "<group>";
@@ -330,7 +330,7 @@
 				0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */,
 				0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */,
 				0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */,
-				06B443A0190384A5006F7245 /* NSView+XLCXMLCreation.m in Sources */,
+				06B443A0190384A5006F7245 /* AppKit+XLCXMLCreation.m in Sources */,
 				06208BD217E1C4EC00F60D39 /* XLCRunloop.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
 				06208BD617E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m in Sources */,

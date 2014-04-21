@@ -119,4 +119,68 @@
     XCTAssertEqualObjects(font, [[NSFontManager sharedFontManager] convertFont:[NSFont fontWithName:@"Menlo" size:[NSFont systemFontSize]] toHaveTrait:NSItalicFontMask]);
 }
 
+- (void)testCreateNSColorRGB
+{
+    {
+        NSString *xml = @"<NSColor red='0.5' />";
+        id color = [self createFromXML:xml];
+        XCTAssertEqualObjects(color, [NSColor colorWithCalibratedRed:0.5 green:0 blue:0 alpha:1]);
+    }
+    
+    {
+        NSString *xml = @"<NSColor green='0.4' />";
+        id color = [self createFromXML:xml];
+        XCTAssertEqualObjects(color, [NSColor colorWithCalibratedRed:0 green:0.4 blue:0 alpha:1]);
+    }
+    
+    {
+        NSString *xml = @"<NSColor blue='0.3' />";
+        id color = [self createFromXML:xml];
+        XCTAssertEqualObjects(color, [NSColor colorWithCalibratedRed:0 green:0 blue:0.3 alpha:1]);
+    }
+    
+    {
+        NSString *xml = @"<NSColor red='0.1' blue='1' green='0.2' alpha='0.7' />";
+        id color = [self createFromXML:xml];
+        XCTAssertEqualObjects(color, [NSColor colorWithCalibratedRed:0.1 green:0.2 blue:1 alpha:0.7]);
+    }
+}
+
+- (void)testCreateNSColorHSB
+{
+    NSString *xml = @"<NSColor hue='0.1' saturation='0.2' brightness='0.3' alpha='0.4' />";
+    id color = [self createFromXML:xml];
+    XCTAssertEqualObjects(color, [NSColor colorWithCalibratedHue:0.1f saturation:0.2f brightness:0.3f alpha:0.4f]);
+}
+
+- (void)testCreateNSColorWhite
+{
+    NSString *xml = @"<NSColor white='0.2' alpha='0.4' />";
+    id color = [self createFromXML:xml];
+    XCTAssertEqualObjects(color, [NSColor colorWithCalibratedWhite:0.2 alpha:0.4]);
+}
+
+- (void)testCreateNSColorName
+{
+    {
+        NSString *xml = @"<NSColor name='purple' />";
+        id color = [self createFromXML:xml];
+        XCTAssertEqualObjects(color, [NSColor purpleColor]);
+    }
+
+    {
+        NSString *xml = @"<NSColor name='text' />";
+        id color = [self createFromXML:xml];
+        XCTAssertEqualObjects(color, [NSColor textColor]);
+    }
+}
+
+- (void)testCreateNSColorValue
+{
+    NSString *xml = @"<NSColor value='#123456' />";
+    id color = [self createFromXML:xml];
+    float ff = 0xFF;
+    XCTAssertEqualObjects(color, [NSColor colorWithCalibratedRed:0x12/ff green:0x34/ff blue:0x56/ff alpha:1]);
+}
+
 @end

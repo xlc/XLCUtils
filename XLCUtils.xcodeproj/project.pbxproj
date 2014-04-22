@@ -30,6 +30,9 @@
 		0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */; };
 		06B443A0190384A5006F7245 /* AppKit+XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */; };
 		06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B443A219039932006F7245 /* XLCXMLCreationTests.m */; };
+		06F50AA619068C06000E5D58 /* NSString+XLCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */; };
+		06F50AA719068C06000E5D58 /* NSString+XLCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */; };
+		06F50AA919068D9B000E5D58 /* XLCAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AA819068D9B000E5D58 /* XLCAdditionsTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +76,9 @@
 		0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XLCDelayedPerform.m"; sourceTree = "<group>"; };
 		06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppKit+XLCXMLCreation.m"; path = "osx/AppKit+XLCXMLCreation.m"; sourceTree = "<group>"; };
 		06B443A219039932006F7245 /* XLCXMLCreationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCXMLCreationTests.m; sourceTree = "<group>"; };
+		06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XLCAdditions.h"; sourceTree = "<group>"; };
+		06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XLCAdditions.m"; sourceTree = "<group>"; };
+		06F50AA819068D9B000E5D58 /* XLCAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAdditionsTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +111,7 @@
 				0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */,
 				0622A54C18F3EBF4008E2A93 /* XLCXMLCreation.h */,
 				0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */,
+				06F50AA819068D9B000E5D58 /* XLCAdditionsTests.m */,
 			);
 			name = XMLObject;
 			sourceTree = "<group>";
@@ -217,6 +224,8 @@
 				0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */,
 				06208BD317E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.h */,
 				06208BD417E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m */,
+				06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */,
+				06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -242,6 +251,7 @@
 				06208BD117E1C4EC00F60D39 /* XLCRunloop.h in Headers */,
 				06208BD517E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.h in Headers */,
 				0692BC5217D897FE009BFC18 /* XLCNoCopyMutableDictionary.h in Headers */,
+				06F50AA619068C06000E5D58 /* NSString+XLCAdditions.h in Headers */,
 				0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,6 +340,7 @@
 				0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */,
 				0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */,
 				0692BC5317D897FE009BFC18 /* XLCNoCopyMutableDictionary.m in Sources */,
+				06F50AA719068C06000E5D58 /* NSString+XLCAdditions.m in Sources */,
 				06B443A0190384A5006F7245 /* AppKit+XLCXMLCreation.m in Sources */,
 				06208BD217E1C4EC00F60D39 /* XLCRunloop.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
@@ -343,6 +354,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06F50AA919068D9B000E5D58 /* XLCAdditionsTests.m in Sources */,
 				06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */,
 				0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */,
 			);

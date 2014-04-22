@@ -10,5 +10,7 @@
 #import <XLCUtils/XLCLogging.h>
 #import <XLCUtils/XLCAssertion.h>
 #import <XLCUtils/XLCNoCopyMutableDictionary.h>
-#import <XLCUtils/NSObject+XLCDelayedPerform.h>
 #import <XLCUtils/XLCXMLObject.h>
+
+#import <XLCUtils/NSObject+XLCDelayedPerform.h>
+#import <XLCUtils/NSString+XLCAdditions.h>

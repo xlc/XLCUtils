@@ -32,7 +32,7 @@
 		06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B443A219039932006F7245 /* XLCXMLCreationTests.m */; };
 		06F50AA619068C06000E5D58 /* NSString+XLCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */; };
 		06F50AA719068C06000E5D58 /* NSString+XLCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */; };
-		06F50AA919068D9B000E5D58 /* XLCAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AA819068D9B000E5D58 /* XLCAdditionsTests.m */; };
+		06F50AAB1907C167000E5D58 /* XLCAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,7 +78,7 @@
 		06B443A219039932006F7245 /* XLCXMLCreationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCXMLCreationTests.m; sourceTree = "<group>"; };
 		06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XLCAdditions.h"; sourceTree = "<group>"; };
 		06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XLCAdditions.m"; sourceTree = "<group>"; };
-		06F50AA819068D9B000E5D58 /* XLCAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAdditionsTests.m; sourceTree = "<group>"; };
+		06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAdditionsTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +111,6 @@
 				0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */,
 				0622A54C18F3EBF4008E2A93 /* XLCXMLCreation.h */,
 				0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */,
-				06F50AA819068D9B000E5D58 /* XLCAdditionsTests.m */,
 			);
 			name = XMLObject;
 			sourceTree = "<group>";
@@ -181,6 +180,7 @@
 			children = (
 				0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */,
 				06B443A219039932006F7245 /* XLCXMLCreationTests.m */,
+				06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */,
 				0692BC3317D75723009BFC18 /* Supporting Files */,
 			);
 			path = XLCUtilsTests;
@@ -354,7 +354,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06F50AA919068D9B000E5D58 /* XLCAdditionsTests.m in Sources */,
+				06F50AAB1907C167000E5D58 /* XLCAdditionsTests.m in Sources */,
 				06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */,
 				0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */,
 			);

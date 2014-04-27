@@ -33,6 +33,7 @@
 		06F50AA619068C06000E5D58 /* NSString+XLCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */; };
 		06F50AA719068C06000E5D58 /* NSString+XLCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */; };
 		06F50AAB1907C167000E5D58 /* XLCAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */; };
+		06F50AB1190A9D08000E5D58 /* XLCObjCppHelpersTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCXMLObjectTests.mm; sourceTree = "<group>"; };
 		0622A54C18F3EBF4008E2A93 /* XLCXMLCreation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCXMLCreation.h; sourceTree = "<group>"; };
 		0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCXMLCreation.m; sourceTree = "<group>"; };
+		062538ED190C925A007FD1C4 /* XLCObjCppHelpers.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XLCObjCppHelpers.hh; sourceTree = "<group>"; };
 		0674ACDB1852CDA0004491AD /* XLCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
 		0692BC1817D75723009BFC18 /* libXLCUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXLCUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0692BC1B17D75723009BFC18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -79,6 +81,7 @@
 		06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XLCAdditions.h"; sourceTree = "<group>"; };
 		06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XLCAdditions.m"; sourceTree = "<group>"; };
 		06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAdditionsTests.m; sourceTree = "<group>"; };
+		06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCObjCppHelpersTests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				0674ACDB1852CDA0004491AD /* XLCUtils.h */,
+				06F50AAC190A9B36000E5D58 /* C++ */,
 				0692BC4F17D897E3009BFC18 /* Utils */,
 				0692BC4717D87825009BFC18 /* Assertion */,
 				0692BC4217D87399009BFC18 /* Logging */,
@@ -181,6 +185,7 @@
 				0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */,
 				06B443A219039932006F7245 /* XLCXMLCreationTests.m */,
 				06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */,
+				06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */,
 				0692BC3317D75723009BFC18 /* Supporting Files */,
 			);
 			path = XLCUtilsTests;
@@ -236,6 +241,14 @@
 				06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */,
 			);
 			name = OSX;
+			sourceTree = "<group>";
+		};
+		06F50AAC190A9B36000E5D58 /* C++ */ = {
+			isa = PBXGroup;
+			children = (
+				062538ED190C925A007FD1C4 /* XLCObjCppHelpers.hh */,
+			);
+			name = "C++";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -357,6 +370,7 @@
 				06F50AAB1907C167000E5D58 /* XLCAdditionsTests.m in Sources */,
 				06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */,
 				0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */,
+				06F50AB1190A9D08000E5D58 /* XLCObjCppHelpersTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

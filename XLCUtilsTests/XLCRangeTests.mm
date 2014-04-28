@@ -726,6 +726,125 @@ namespace {
     XCTAssertEqual(count, 4);
 }
 
+- (void)testTakeEmpty
+{
+    xlc::from(std::deque<int>{})
+    .take(1)
+    .each([&](auto const &e) {
+        XCTFail("should not be called");
+    });
+}
+
+- (void)testTakeTooMuch
+{
+    int count = 0;
+    xlc::from({1,2})
+    .take(3)
+    .each([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+    });
+    XCTAssertEqual(count, 2);
+}
+
+- (void)testTakeWithFilter
+{
+    int count = 0;
+    xlc::from({1,2,3,4,5,6})
+    .filter([](auto const &e) {
+        return e % 2 == 0;
+    })
+    .take(2)
+    .each([&](auto const &e) {
+        XCTAssertEqual(e, count == 0 ? 2 : 4);
+        count++;
+    });
+    XCTAssertEqual(count, 2);
+}
+
+- (void)testTakeWithFilter2
+{
+    int count = 0;
+    xlc::from({1,2,3,4,5,6})
+    .take(3)
+    .filter([](auto const &e) {
+        return e % 2 == 0;
+    })
+    .each([&](auto const &e) {
+        XCTAssertEqual(e, 2);
+        count++;
+    });
+    XCTAssertEqual(count, 1);
+}
+
+- (void)testTakeWithConcat
+{
+    int count = 0;
+    xlc::from({1,2,3})
+    .concat({4,5})
+    .take(2)
+    .each([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+    });
+    XCTAssertEqual(count, 2);
+}
+
+- (void)testTakeWithConcat2
+{
+    int count = 0;
+    xlc::from({1,2,5,6})
+    .take(2)
+    .concat({3,4})
+    .each([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+    });
+    XCTAssertEqual(count, 4);
+}
+
+- (void)testTakeWithConcat3
+{
+    int count = 0;
+    xlc::from({1,2,4})  // {1,2,4}
+    .take(2)            // {1,2}
+    .concat({3,5})      // {1,2,3,5}
+    .take(3)            // {1,2,3}
+    .each([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+    });
+    XCTAssertEqual(count, 3);
+}
+
+- (void)testTakeWithFlattenConcat
+{
+    int count = 0;
+    xlc::from(std::deque<std::deque<int>> { { 1, 2 }, { 3, 8} })
+    .flatten()
+    .take(3)
+    .concat({4,5})
+    .take(4)
+    .each([&](auto const &e){
+        count++;
+        XCTAssertEqual(e, count);
+    })
+    ;
+    XCTAssertEqual(count, 4);
+}
+
+- (void)testSkipTake
+{
+    xlc::from({1,2,3,4,5,6,7,8})
+    .take(6)
+    .skip(2)
+    .take(2)
+    .skip(1)
+    .each([&](auto const &e){
+        XCTAssertEqual(e, 4);
+    });
+}
+
 @end
 
 namespace test_is_rangable {

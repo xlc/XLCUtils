@@ -296,6 +296,32 @@ namespace xlc {
                  });
             }
             
+            template <class = TElement> // without this line: "Debug information for auto is not yet supported"
+            auto take(std::size_t count)
+            {
+                return make_range<TElement>
+                ([XLC_MOVE_CAPTURE_THIS(me),
+                  count]
+                 (auto && outputFunc) mutable
+                 {
+                     auto continue_ = true;
+                     auto countCopy = count;
+                     me.each([XLC_FORWARD_CAPTURE(outputFunc),
+                              &countCopy,
+                              &continue_]
+                             (auto const & elem) mutable
+                             {
+                                 if (countCopy) {
+                                     countCopy--;
+                                     continue_ = outputFunc(elem);
+                                     return continue_;
+                                 }
+                                 return false;
+                             });
+                     return continue_;
+                 });
+            }
+            
             template <class TFunc, class TResult>
             auto fold(TResult first, TFunc && func) -> TResult
             {

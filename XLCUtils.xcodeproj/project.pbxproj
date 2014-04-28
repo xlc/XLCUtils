@@ -15,6 +15,7 @@
 		0622A51F18E805B7008E2A93 /* XLCXMLObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */; };
 		0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */; };
 		0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */; };
+		062538F0190CDB88007FD1C4 /* XLCRangeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 062538EF190CDB88007FD1C4 /* XLCRangeTests.mm */; };
 		0692BC1C17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
 		0692BC2D17D75723009BFC18 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC2C17D75723009BFC18 /* XCTest.framework */; };
 		0692BC2E17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
@@ -57,6 +58,8 @@
 		0622A54C18F3EBF4008E2A93 /* XLCXMLCreation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCXMLCreation.h; sourceTree = "<group>"; };
 		0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCXMLCreation.m; sourceTree = "<group>"; };
 		062538ED190C925A007FD1C4 /* XLCObjCppHelpers.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XLCObjCppHelpers.hh; sourceTree = "<group>"; };
+		062538EE190CDAEF007FD1C4 /* XLCRange.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XLCRange.hh; sourceTree = "<group>"; };
+		062538EF190CDB88007FD1C4 /* XLCRangeTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCRangeTests.mm; sourceTree = "<group>"; };
 		0674ACDB1852CDA0004491AD /* XLCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
 		0692BC1817D75723009BFC18 /* libXLCUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXLCUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0692BC1B17D75723009BFC18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -186,6 +189,7 @@
 				06B443A219039932006F7245 /* XLCXMLCreationTests.m */,
 				06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */,
 				06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */,
+				062538EF190CDB88007FD1C4 /* XLCRangeTests.mm */,
 				0692BC3317D75723009BFC18 /* Supporting Files */,
 			);
 			path = XLCUtilsTests;
@@ -247,6 +251,7 @@
 			isa = PBXGroup;
 			children = (
 				062538ED190C925A007FD1C4 /* XLCObjCppHelpers.hh */,
+				062538EE190CDAEF007FD1C4 /* XLCRange.hh */,
 			);
 			name = "C++";
 			sourceTree = "<group>";
@@ -371,6 +376,7 @@
 				06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */,
 				0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */,
 				06F50AB1190A9D08000E5D58 /* XLCObjCppHelpersTests.mm in Sources */,
+				062538F0190CDB88007FD1C4 /* XLCRangeTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +495,7 @@
 		0692BC4017D75723009BFC18 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -516,6 +523,7 @@
 		0692BC4117D75723009BFC18 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",

@@ -721,8 +721,8 @@ namespace {
     .each([&](auto const &e){
         XCTAssertEqual(e, count+3);
         count++;
-    })
-    ;
+    });
+    
     XCTAssertEqual(count, 4);
 }
 
@@ -828,8 +828,7 @@ namespace {
     .each([&](auto const &e){
         count++;
         XCTAssertEqual(e, count);
-    })
-    ;
+    });
     XCTAssertEqual(count, 4);
 }
 
@@ -843,6 +842,53 @@ namespace {
     .each([&](auto const &e){
         XCTAssertEqual(e, 4);
     });
+}
+
+- (void)testSkipWhile
+{
+    int count = 0, count2 = 0;
+    xlc::from({1,2,3,4,5})
+    .skip_while([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+        return e < 3;
+    })
+    .each([&](auto const &e){
+        XCTAssertEqual(e, count2 + 3);
+        count2++;
+    });
+    XCTAssertEqual(count, 3);
+    XCTAssertEqual(count2, 3);
+}
+
+- (void)testSkipWhileTrue
+{
+    int count = 0;
+    xlc::from({1,2,3,4,5})
+    .skip_while([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+        return true;
+    })
+    .each([&](auto const &e){
+        XCTFail("should not be called");
+    });
+    XCTAssertEqual(count, 5);
+}
+
+- (void)testSkipWhileFalse
+{
+    int count = 0;
+    xlc::from({1,2,3,4,5})
+    .skip_while([&](auto const &e) {
+        XCTAssertEqual(e, 1);
+        return false;
+    })
+    .each([&](auto const &e){
+        count++;
+        XCTAssertEqual(e, count);
+    });
+    XCTAssertEqual(count, 5);
 }
 
 @end

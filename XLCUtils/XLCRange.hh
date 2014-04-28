@@ -296,6 +296,29 @@ namespace xlc {
                  });
             }
             
+            template <class TFunc>
+            auto skip_while(TFunc && func)
+            {
+                return make_range<TElement>
+                ([XLC_FORWARD_CAPTURE(func),
+                  XLC_MOVE_CAPTURE_THIS(me)]
+                 (auto && outputFunc) mutable
+                {
+                    bool shouldSkip = true;
+                    return me.each([XLC_FORWARD_CAPTURE(outputFunc),
+                                    XLC_FORWARD_CAPTURE(func),
+                                    &shouldSkip]
+                                   (auto const & elem) mutable
+                                   {
+                                       shouldSkip = shouldSkip && func(elem);
+                                       if (shouldSkip) {
+                                           return true;
+                                       }
+                                       return outputFunc(elem);
+                                   });
+                });
+            }
+            
             template <class = TElement> // without this line: "Debug information for auto is not yet supported"
             auto take(std::size_t count)
             {

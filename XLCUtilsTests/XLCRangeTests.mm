@@ -985,6 +985,24 @@ namespace {
     XCTAssertEqual(arr[2], 0, "no overflow");
 }
 
+- (void)testToVector
+{
+    auto vec = xlc::from({1,2,3,4}).to_vector();
+    XCTAssertEqual(vec, (std::vector<int>{1,2,3,4}));
+}
+
+- (void)testToDeque
+{
+    auto vec = xlc::from({1,2,3,4}).to_deque();
+    XCTAssertEqual(vec, (std::deque<int>{1,2,3,4}));
+}
+
+- (void)testToSet
+{
+    auto vec = xlc::from({1,1,2,3,4}).to_set();
+    XCTAssertEqual(vec, (std::set<int>{1,2,3,4}));
+}
+
 @end
 
 namespace test_is_rangable {

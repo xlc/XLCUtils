@@ -18,12 +18,17 @@
 #include <utility>
 #include <iterator>
 #include <memory>
+#include <vector>
+#include <deque>
+#include <set>
 
 #include "XLCObjCppHelpers.hh"
 
 #define XLC_FORWARD_CAPTURE(var) var(std::forward<decltype(var)>(var))
 #define XLC_MOVE_CAPTURE(var) var(std::move(var))
 #define XLC_MOVE_CAPTURE_THIS(var) var(std::move(*this))
+
+#define XLC_COMPILER_ERROR_HACK template <class = void> // without this line: "Debug information for auto is not yet supported"
 
 namespace xlc {
     
@@ -274,7 +279,7 @@ namespace xlc {
                  });
             }
             
-            template <class = TElement> // without this line: "Debug information for auto is not yet supported"
+            XLC_COMPILER_ERROR_HACK
             auto skip(std::size_t count)
             {
                 return make_range<TElement>
@@ -319,7 +324,7 @@ namespace xlc {
                 });
             }
             
-            template <class = TElement> // without this line: "Debug information for auto is not yet supported"
+            XLC_COMPILER_ERROR_HACK
             auto take(std::size_t count)
             {
                 return make_range<TElement>
@@ -441,6 +446,29 @@ namespace xlc {
             void copy_to(TOutputIterator iter, std::size_t count)
             {
                 take(count).each([&iter](auto const &e){ *iter++ = e; });
+            }
+            
+            template <class TOutContainer>
+            auto to() -> TOutContainer
+            {
+                TOutContainer container;
+                copy_to(std::inserter(container, container.end()));
+                return container;
+            }
+            
+            auto to_vector() -> std::vector<TElement>
+            {
+                return to<std::vector<TElement>>();
+            }
+            
+            auto to_deque() -> std::deque<TElement>
+            {
+                return to<std::deque<TElement>>();
+            }
+            
+            auto to_set() -> std::set<TElement>
+            {
+                return to<std::set<TElement>>();
             }
         };
     }

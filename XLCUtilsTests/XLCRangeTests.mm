@@ -891,6 +891,74 @@ namespace {
     XCTAssertEqual(count, 5);
 }
 
+- (void)testTakeWhile
+{
+    int count = 0, count2 = 0;
+    xlc::from({1,2,3,4,5})
+    .take_while([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+        return e < 3;
+    })
+    .each([&](auto const &e){
+        count2++;
+        XCTAssertEqual(e, count2);
+    });
+    XCTAssertEqual(count, 3);
+    XCTAssertEqual(count2, 2);
+}
+
+- (void)testTakeWhileTrue
+{
+    int count = 0, count2 = 0;
+    xlc::from({1,2,3,4,5})
+    .take_while([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, count);
+        return true;
+    })
+    .each([&](auto const &e){
+        count2++;
+        XCTAssertEqual(e, count);
+    });
+    XCTAssertEqual(count, 5);
+    XCTAssertEqual(count2, 5);
+}
+
+- (void)testTakeWhileFalse
+{
+    int count = 0;
+    xlc::from({1,2,3,4,5})
+    .take_while([&](auto const &e) {
+        count++;
+        XCTAssertEqual(e, 1);
+        return false;
+    })
+    .each([&](auto const &e){
+        XCTFail("should not be called");
+    });
+    XCTAssertEqual(count, 1);
+}
+
+- (void)testTakeWhileWithFlattenConcat
+{
+    int count = 0;
+    xlc::from(std::deque<std::deque<int>> { { 1, 2 }, { 3, 8} })
+    .flatten()
+    .take_while([](auto const &e) {
+        return e <= 3;
+    })
+    .concat({4,5})
+    .take_while([](auto const &e) {
+        return e <= 4;
+    })
+    .each([&](auto const &e){
+        count++;
+        XCTAssertEqual(e, count);
+    });
+    XCTAssertEqual(count, 4);
+}
+
 @end
 
 namespace test_is_rangable {

@@ -345,6 +345,30 @@ namespace xlc {
                  });
             }
             
+            template <class TFunc>
+            auto take_while(TFunc && func)
+            {
+                return make_range<TElement>
+                ([XLC_FORWARD_CAPTURE(func),
+                  XLC_MOVE_CAPTURE_THIS(me)]
+                 (auto && outputFunc) mutable
+                 {
+                     auto continue_ = true;
+                     me.each([XLC_FORWARD_CAPTURE(outputFunc),
+                                     XLC_FORWARD_CAPTURE(func),
+                                     &continue_]
+                                    (auto const & elem) mutable
+                                    {
+                                        if (func(elem)) {
+                                            continue_ = outputFunc(elem);
+                                            return continue_;
+                                        }
+                                        return false;
+                                    });
+                     return continue_;
+                 });
+            }
+            
             template <class TFunc, class TResult>
             auto fold(TResult first, TFunc && func) -> TResult
             {

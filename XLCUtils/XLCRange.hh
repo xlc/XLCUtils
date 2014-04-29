@@ -404,13 +404,13 @@ namespace xlc {
                 return !empty();
             }
             
-            template<class TFunc>
+            template <class TFunc>
             auto any(TFunc && func) -> bool
             {
                 return filter(std::forward<TFunc>(func)).any();
             }
             
-            template<class TFunc>
+            template <class TFunc>
             auto all(TFunc && func) -> bool
             {
                 return !filter([XLC_FORWARD_CAPTURE(func)](auto const &e){ return !func(e); }).any();
@@ -429,6 +429,18 @@ namespace xlc {
                 each([&value](auto const &e){ value = std::make_unique<TElement>(e); return false; });
                 if (value) return *value;
                 return defaultValue;
+            }
+            
+            template <class TOutputIterator>
+            void copy_to(TOutputIterator iter)
+            {
+                each([&iter](auto const &e){ *iter++ = e; });
+            }
+            
+            template <class TOutputIterator>
+            void copy_to(TOutputIterator iter, std::size_t count)
+            {
+                take(count).each([&iter](auto const &e){ *iter++ = e; });
             }
         };
     }

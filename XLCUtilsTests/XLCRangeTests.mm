@@ -11,6 +11,7 @@
 #include <iostream>
 #include <deque>
 #include <vector>
+#include <set>
 
 #import "XLCRange.hh"
 
@@ -957,6 +958,31 @@ namespace {
         XCTAssertEqual(e, count);
     });
     XCTAssertEqual(count, 4);
+}
+
+- (void)testCopyToVector
+{
+    std::vector<int> vec;
+    xlc::from({1,2,3,4}).copy_to(std::back_inserter(vec));
+    
+    XCTAssertEqual(vec, (std::vector<int>{1,2,3,4}));
+}
+
+- (void)testCopyToSet
+{
+    std::set<int> set;
+    xlc::from({1,2,2,3,4,4}).copy_to(std::inserter(set, set.end()));
+    
+    XCTAssertEqual(set, (std::set<int>{1,2,3,4}));
+}
+
+- (void)testCopyWithCount
+{
+    int arr[3] = {0,0,0};
+    xlc::from({1,2,3,4}).copy_to(arr, 2);
+    XCTAssertEqual(arr[0], 1);
+    XCTAssertEqual(arr[1], 2);
+    XCTAssertEqual(arr[2], 0, "no overflow");
 }
 
 @end

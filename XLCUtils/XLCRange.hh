@@ -436,6 +436,19 @@ namespace xlc {
                 return defaultValue;
             }
             
+            auto count() -> std::size_t
+            {
+                std::size_t count = 0;
+                each([&count](auto const &){ ++count; });
+                return count;
+            }
+            
+            template <class TFunc>
+            auto count(TFunc && func) -> std::size_t
+            {
+                return filter(std::forward<TFunc>(func)).count();
+            }
+            
             template <class TOutputIterator>
             void copy_to(TOutputIterator iter)
             {

@@ -1003,6 +1003,23 @@ namespace {
     XCTAssertEqual(vec, (std::set<int>{1,2,3,4}));
 }
 
+- (void)testCount
+{
+    XCTAssertEqual(xlc::from(std::deque<int>{}).count(), 0);
+    XCTAssertEqual(xlc::from({1}).count(), 1);
+    XCTAssertEqual(xlc::from({1,1}).count(), 2);
+    XCTAssertEqual(xlc::from({1,1,2}).count(), 3);
+}
+
+- (void)testCount2
+{
+    auto result = xlc::from({1,2,3,4,5,6,7,0,5,0})
+    .count([](auto const &e) {
+        return e < 4;
+    });
+    XCTAssertEqual(result, 5);
+}
+
 @end
 
 namespace test_is_rangable {

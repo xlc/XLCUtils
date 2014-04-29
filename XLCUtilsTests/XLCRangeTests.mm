@@ -1020,6 +1020,32 @@ namespace {
     XCTAssertEqual(result, 5);
 }
 
+- (void)testMax
+{
+    auto result = xlc::from({1,2,0,6,2,3}).max();
+    XCTAssertEqual(*result, 6);
+}
+
+- (void)testMax2
+{
+    Foo vec[] = {1,2,0,6,2,3};
+    auto result = xlc::from(vec).max([](auto const &a, auto const &b){ return a.value < b.value; });
+    XCTAssertEqual(result->value, 6);
+}
+
+- (void)testMin
+{
+    auto result = xlc::from({1,2,0,6,2,3}).min();
+    XCTAssertEqual(*result, 0);
+}
+
+- (void)testMin2
+{
+    Foo vec[] = {1,2,0,6,2,3};
+    auto result = xlc::from(vec).min([](auto const &a, auto const &b){ return a.value < b.value; });
+    XCTAssertEqual(result->value, 0);
+}
+
 @end
 
 namespace test_is_rangable {

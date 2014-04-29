@@ -207,11 +207,7 @@ namespace xlc {
                  });
             }
             
-            template <
-            class U = TElement,
-            class = typename std::enable_if<std::is_same<U, TElement>::value>::type,
-            class = typename std::enable_if<is_rangable<U>::value>::type
-            >
+            XLC_COMPILER_ERROR_HACK
             auto flatten()
             {
                 using TNewElement = typename decltype(from(std::declval<TElement>()))::value_type;
@@ -418,7 +414,35 @@ namespace xlc {
             template <class TFunc>
             auto all(TFunc && func) -> bool
             {
-                return !filter([XLC_FORWARD_CAPTURE(func)](auto const &e){ return !func(e); }).any();
+                return filter([XLC_FORWARD_CAPTURE(func)](auto const &e){ return !func(e); }).empty();
+            }
+            
+            auto max() -> std::unique_ptr<TElement>
+            {
+                auto func = static_cast<TElement const & (*)(TElement const &, TElement const &)>(std::max<TElement>);
+                return fold(func);
+            }
+            
+            template <class TFunc>
+            auto max(TFunc && func) -> std::unique_ptr<TElement>
+            {
+                return fold([XLC_FORWARD_CAPTURE(func)](auto const &sum, auto const &e){
+                    return std::max(sum, e, func);
+                });
+            }
+            
+            auto min() -> std::unique_ptr<TElement>
+            {
+                auto func = static_cast<TElement const & (*)(TElement const &, TElement const &)>(std::min<TElement>);
+                return fold(func);
+            }
+            
+            template <class TFunc>
+            auto min(TFunc && func) -> std::unique_ptr<TElement>
+            {
+                return fold([XLC_FORWARD_CAPTURE(func)](auto const &sum, auto const &e){
+                    return std::min(sum, e, func);
+                });
             }
             
             auto first() -> std::unique_ptr<TElement>

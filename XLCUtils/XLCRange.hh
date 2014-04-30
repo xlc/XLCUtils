@@ -21,6 +21,7 @@
 #include <vector>
 #include <deque>
 #include <set>
+#include <list>
 
 #include "XLCObjCppHelpers.hh"
 
@@ -148,8 +149,8 @@ namespace xlc {
             
             template <class TFunc>
             typename std::enable_if_t<
-                std::is_void<decltype(std::declval<TFunc>()(std::declval<TElement>()))>::value, // TFunc return void
-                bool // method return type
+            std::is_void<decltype(std::declval<TFunc>()(std::declval<TElement>()))>::value, // TFunc return void
+            bool // method return type
             >
             each(TFunc && func)
             {
@@ -161,8 +162,8 @@ namespace xlc {
             
             template <class TFunc>
             typename std::enable_if_t<
-                std::is_same<decltype(std::declval<TFunc>()(std::declval<TElement>())), bool>::value, // TFunc return bool
-                bool // method return type
+            std::is_same<decltype(std::declval<TFunc>()(std::declval<TElement>())), bool>::value, // TFunc return bool
+            bool // method return type
             >
             each(TFunc && func)
             {
@@ -304,20 +305,20 @@ namespace xlc {
                 ([XLC_FORWARD_CAPTURE(func),
                   XLC_MOVE_CAPTURE_THIS(me)]
                  (auto && outputFunc) mutable
-                {
-                    bool shouldSkip = true;
-                    return me.each([XLC_FORWARD_CAPTURE(outputFunc),
-                                    XLC_FORWARD_CAPTURE(func),
-                                    &shouldSkip]
-                                   (auto const & elem) mutable
-                                   {
-                                       shouldSkip = shouldSkip && func(elem);
-                                       if (shouldSkip) {
-                                           return true;
-                                       }
-                                       return outputFunc(elem);
-                                   });
-                });
+                 {
+                     bool shouldSkip = true;
+                     return me.each([XLC_FORWARD_CAPTURE(outputFunc),
+                                     XLC_FORWARD_CAPTURE(func),
+                                     &shouldSkip]
+                                    (auto const & elem) mutable
+                                    {
+                                        shouldSkip = shouldSkip && func(elem);
+                                        if (shouldSkip) {
+                                            return true;
+                                        }
+                                        return outputFunc(elem);
+                                    });
+                 });
             }
             
             XLC_COMPILER_ERROR_HACK
@@ -356,16 +357,16 @@ namespace xlc {
                  {
                      auto continue_ = true;
                      me.each([XLC_FORWARD_CAPTURE(outputFunc),
-                                     XLC_FORWARD_CAPTURE(func),
-                                     &continue_]
-                                    (auto const & elem) mutable
-                                    {
-                                        if (func(elem)) {
-                                            continue_ = outputFunc(elem);
-                                            return continue_;
-                                        }
-                                        return false;
-                                    });
+                              XLC_FORWARD_CAPTURE(func),
+                              &continue_]
+                             (auto const & elem) mutable
+                             {
+                                 if (func(elem)) {
+                                     continue_ = outputFunc(elem);
+                                     return continue_;
+                                 }
+                                 return false;
+                             });
                      return continue_;
                  });
             }
@@ -506,6 +507,42 @@ namespace xlc {
             auto to_set() -> std::set<TElement>
             {
                 return to<std::set<TElement>>();
+            }
+            
+            auto to_list() -> std::list<TElement>
+            {
+                return to<std::list<TElement>>();
+            }
+
+            XLC_COMPILER_ERROR_HACK
+            auto repeat(std::size_t count)
+            {
+                return make_range<TElement>
+                ([XLC_MOVE_CAPTURE_THIS(me),
+                  count]
+                 (auto && outputFunc) mutable
+                 {
+                     switch (count) {
+                         case 0:
+                             return true;
+                             
+                         case 1:
+                             return me.each(std::forward<decltype(outputFunc)>(outputFunc));
+                             
+                         default:
+                         {
+                             auto buff = me.to_list();
+                             for (std::size_t i = 0; i < count; ++i)
+                             {
+                                 auto result = from(buff.begin(), buff.end()) // so it doesn't move/copy buff
+                                 .each(std::forward<decltype(outputFunc)>(outputFunc));
+                                 if (!result) return false;
+                             }
+                             break;
+                         }
+                     }
+                     return true;
+                 });
             }
         };
     }

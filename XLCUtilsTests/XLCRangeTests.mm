@@ -1003,6 +1003,18 @@ namespace {
     XCTAssertEqual(vec, (std::set<int>{1,2,3,4}));
 }
 
+- (void)testToList
+{
+    auto vec = xlc::from(std::deque<Foo>{1,2,3,4}).to_list();
+    int count = 1;
+    for (auto &e : vec)
+    {
+        e.assertValue(self, count++);
+        e.assertCopyCount(self, 2);
+        e.assertMoveCount(self, 0);
+    }
+}
+
 - (void)testCount
 {
     XCTAssertEqual(xlc::from(std::deque<int>{}).count(), 0);
@@ -1044,6 +1056,41 @@ namespace {
     Foo vec[] = {1,2,0,6,2,3};
     auto result = xlc::from(vec).min([](auto const &a, auto const &b){ return a.value < b.value; });
     XCTAssertEqual(result->value, 0);
+}
+
+- (void)testRepeat0
+{
+    XCTAssertEqual(xlc::from({1,2}).repeat(0).count(), 0);
+}
+
+- (void)testRepeat1
+{
+    Foo vec[] = {1,2,3};
+    int count = 0;
+    xlc::from(vec)
+    .repeat(1)
+    .each([&](auto const &e){
+        e.assertValue(self, ++count);
+        e.assertCopyCount(self, 0);
+        e.assertMoveCount(self, 0);
+    });
+    
+    XCTAssertEqual(count, 3);
+}
+
+- (void)testRepeat3
+{
+    Foo vec[] = {1,2,3};
+    int count = 0;
+    xlc::from(vec)
+    .repeat(3)
+    .each([&](auto const &e){
+        e.assertValue(self, count++ % 3 + 1);
+        e.assertCopyCount(self, 1);
+        e.assertMoveCount(self, 0);
+    });
+    
+    XCTAssertEqual(count, 9);
 }
 
 @end

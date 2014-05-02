@@ -1093,6 +1093,18 @@ namespace {
     XCTAssertEqual(count, 9);
 }
 
+- (void)testRange
+{
+    XCTAssertEqual(xlc::range(0).to_deque(), (std::deque<int>{}));
+    XCTAssertEqual(xlc::range(5).to_deque(), (std::deque<int>{0,1,2,3,4}));
+    XCTAssertEqual(xlc::range(3.3).to_deque(), (std::deque<double>{0,1,2,3}));
+    XCTAssertEqual(xlc::range(-3,3).to_deque(), (std::deque<int>{-3,-2,-1,0,1,2}));
+    XCTAssertEqual(xlc::range(5,20,5).to_deque(), (std::deque<int>{5,10,15}));
+    XCTAssertEqual(xlc::range(0.0,1.0,0.4).to_deque(), (std::deque<double>{0,0.4,0.8}));
+    auto result = xlc::range(1,50,[](int i){return i * 2; }).to_deque();
+    XCTAssertEqual(result, (std::deque<int>{1,2,4,8,16,32}));
+}
+
 @end
 
 namespace test_is_rangable {

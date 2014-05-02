@@ -55,31 +55,27 @@ namespace xlc {
             using std::begin;
             using TElement = typename std::iterator_traits<decltype(begin(std::declval<TContainer>()))>::value_type;
             
-            auto func =
-            [XLC_FORWARD_CAPTURE(container)]
-            (auto && outfunc)
-            {
-                for(auto const & item : container) {
-                    if (!outfunc(item)) return false;
-                }
-                return true;
-            };
-            return make_range<TElement>(std::move(func));
+            return make_range<TElement>([XLC_FORWARD_CAPTURE(container)]
+                                        (auto && outfunc)
+                                        {
+                                            for(auto const & item : container) {
+                                                if (!outfunc(item)) return false;
+                                            }
+                                            return true;
+                                        });
         }
         
         template <class TElement, std::size_t N>
         auto from(TElement (&array)[N])
         {
-            auto func =
-            [&array]
-            (auto && outfunc)
-            {
-                for(auto const & item : array) {
-                    if (!outfunc(item)) return false;
-                }
-                return true;
-            };
-            return make_range<TElement>(std::move(func));
+            return make_range<TElement>([&array]
+                                        (auto && outfunc)
+                                        {
+                                            for(auto const & item : array) {
+                                                if (!outfunc(item)) return false;
+                                            }
+                                            return true;
+                                        });
         }
         
         template <class TElement>
@@ -93,22 +89,67 @@ namespace xlc {
         {
             using TElement = typename std::iterator_traits<TIterator>::value_type;
             
-            auto func =
-            [first, last]
-            (auto && outfunc) mutable
-            {
-                for(; first != last; ++first) {
-                    if (!outfunc(*first)) return false;
-                }
-                return true;
-            };
-            return make_range<TElement>(std::move(func));
+            return make_range<TElement>([first, last]
+                                        (auto && outfunc) mutable
+                                        {
+                                            for(; first != last; ++first) {
+                                                if (!outfunc(*first)) return false;
+                                            }
+                                            return true;
+                                        });
         }
         
         template <class T, class U>
         auto from(Range<T, U> && r)
         {
             return std::move(r);
+        }
+        
+        // range
+        
+        template <class T>
+        auto range(T first, T last)
+        {
+            return make_range<T>([first, last]
+                                 (auto && outfunc) mutable
+                                 {
+                                     for(; first < last; ++first) {
+                                         if (!outfunc(first)) return false;
+                                     }
+                                     return true;
+                                 });
+        }
+        
+        template <class T>
+        auto range(T to)
+        {
+            return range(T{}, to);
+        }
+        
+        template <class T>
+        auto range(T first, T last, T step)
+        {
+            return make_range<T>([first, last, step]
+                                 (auto && outfunc) mutable
+                                 {
+                                     for(; first < last; first += step) {
+                                         if (!outfunc(first)) return false;
+                                     }
+                                     return true;
+                                 });
+        }
+        
+        template <class T, class TFunc>
+        auto range(T first, T last, TFunc && stepFunc)
+        {
+            return make_range<T>([first, last, XLC_FORWARD_CAPTURE(stepFunc)]
+                                 (auto && outfunc) mutable
+                                 {
+                                     for(; first < last; first = stepFunc(first)) {
+                                         if (!outfunc(first)) return false;
+                                     }
+                                     return true;
+                                 });
         }
         
         // is_rangable
@@ -513,7 +554,7 @@ namespace xlc {
             {
                 return to<std::list<TElement>>();
             }
-
+            
             XLC_COMPILER_ERROR_HACK
             auto repeat(std::size_t count)
             {
@@ -549,6 +590,7 @@ namespace xlc {
     
     using detail::make_range;
     using detail::from;
+    using detail::range;
 }
 
 

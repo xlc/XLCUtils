@@ -57,13 +57,13 @@ namespace {
         void assertMoveCount(id self, int count) const
         {
             assertValid(self);
-            XCTAssertEqual(moveCount, count);
+            XCTAssert(moveCount <= count, "moveCount actual: %d, expected: %d", moveCount, count);
         }
         
         void assertCopyCount(id self, int count) const
         {
             assertValid(self);
-            XCTAssertEqual(copyCount, count);
+            XCTAssert(copyCount <= count, "copyCount actual: %d, expected: %d", copyCount, count);
         }
         
         void assertValid(id self) const
@@ -833,6 +833,22 @@ namespace {
     XCTAssertEqual(count, 4);
 }
 
+- (void)testTake0
+{
+    xlc::make_stream<int>([&](auto &&){ XCTFail("should not be called"); return true; })
+    .take(0)
+    .each([&](auto const &){ XCTFail("should not be called"); });
+}
+
+- (void)testTake1
+{
+    bool called = false;
+    xlc::make_stream<int>([&](auto && outputFunc){ XCTAssertFalse(outputFunc(1), "should stop"); return false; })
+    .take(1)
+    .each([&](auto const &){ XCTAssertFalse(called, "should called only once"); called = true; });
+    XCTAssert(called);
+}
+
 - (void)testSkipTake
 {
     xlc::from({1,2,3,4,5,6,7,8})
@@ -1091,6 +1107,56 @@ namespace {
     });
     
     XCTAssertEqual(count, 9);
+}
+
+- (void)testRepeatInfnite
+{
+    Foo vec[] = {1,2,3};
+    int count = 0;
+    xlc::from(vec)
+    .repeat()
+    .take(10)
+    .each([&](auto const &e){
+        e.assertValue(self, count++ % 3 + 1);
+        e.assertCopyCount(self, 1);
+        e.assertMoveCount(self, 0);
+    });
+    
+    XCTAssertEqual(count, 10);
+}
+
+- (void)testRepeatWithTake
+{
+    bool called = false;
+    xlc::make_stream<int>([&](auto && outputFunc){
+        XCTAssertFalse(outputFunc(1), "should stop");
+        return true;
+    })
+    .repeat(3)
+    .take(1)
+    .each([&](auto const &e){
+        XCTAssertFalse(called, "called only once");
+        called = true;
+    });
+    
+    XCTAssertTrue(called);
+}
+
+- (void)testRepeatInfniteWithTake
+{
+    bool called = false;
+    xlc::make_stream<int>([&](auto && outputFunc){
+        XCTAssertFalse(outputFunc(1), "should stop");
+        return true;
+    })
+    .repeat()
+    .take(1)
+    .each([&](auto const &e){
+        XCTAssertFalse(called, "called only once");
+        called = true;
+    });
+    
+    XCTAssertTrue(called);
 }
 
 - (void)testRange

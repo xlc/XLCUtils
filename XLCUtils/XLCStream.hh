@@ -56,26 +56,26 @@ namespace xlc {
             using TElement = typename std::iterator_traits<decltype(begin(std::declval<TContainer>()))>::value_type;
             
             return make_stream<TElement>([XLC_FORWARD_CAPTURE(container)]
-                                        (auto && outfunc)
-                                        {
-                                            for(auto const & item : container) {
-                                                if (!outfunc(item)) return false;
-                                            }
-                                            return true;
-                                        });
+                                         (auto && outfunc)
+                                         {
+                                             for(auto const & item : container) {
+                                                 if (!outfunc(item)) return false;
+                                             }
+                                             return true;
+                                         });
         }
         
         template <class TElement, std::size_t N>
         auto from(TElement (&array)[N])
         {
             return make_stream<TElement>([&array]
-                                        (auto && outfunc)
-                                        {
-                                            for(auto const & item : array) {
-                                                if (!outfunc(item)) return false;
-                                            }
-                                            return true;
-                                        });
+                                         (auto && outfunc)
+                                         {
+                                             for(auto const & item : array) {
+                                                 if (!outfunc(item)) return false;
+                                             }
+                                             return true;
+                                         });
         }
         
         template <class TElement>
@@ -90,13 +90,13 @@ namespace xlc {
             using TElement = typename std::iterator_traits<TIterator>::value_type;
             
             return make_stream<TElement>([first, last]
-                                        (auto && outfunc) mutable
-                                        {
-                                            for(; first != last; ++first) {
-                                                if (!outfunc(*first)) return false;
-                                            }
-                                            return true;
-                                        });
+                                         (auto && outfunc) mutable
+                                         {
+                                             for(; first != last; ++first) {
+                                                 if (!outfunc(*first)) return false;
+                                             }
+                                             return true;
+                                         });
         }
         
         template <class T, class U>
@@ -111,13 +111,13 @@ namespace xlc {
         auto range(T first, T last)
         {
             return make_stream<T>([first, last]
-                                 (auto && outfunc) mutable
-                                 {
-                                     for(; first < last; ++first) {
-                                         if (!outfunc(first)) return false;
-                                     }
-                                     return true;
-                                 });
+                                  (auto && outfunc) mutable
+                                  {
+                                      for(; first < last; ++first) {
+                                          if (!outfunc(first)) return false;
+                                      }
+                                      return true;
+                                  });
         }
         
         template <class T>
@@ -130,26 +130,26 @@ namespace xlc {
         auto range(T first, T last, T step)
         {
             return make_stream<T>([first, last, step]
-                                 (auto && outfunc) mutable
-                                 {
-                                     for(; first < last; first += step) {
-                                         if (!outfunc(first)) return false;
-                                     }
-                                     return true;
-                                 });
+                                  (auto && outfunc) mutable
+                                  {
+                                      for(; first < last; first += step) {
+                                          if (!outfunc(first)) return false;
+                                      }
+                                      return true;
+                                  });
         }
         
         template <class T, class TFunc>
         auto range(T first, T last, TFunc && stepFunc)
         {
             return make_stream<T>([first, last, XLC_FORWARD_CAPTURE(stepFunc)]
-                                 (auto && outfunc) mutable
-                                 {
-                                     for(; first < last; first = stepFunc(first)) {
-                                         if (!outfunc(first)) return false;
-                                     }
-                                     return true;
-                                 });
+                                  (auto && outfunc) mutable
+                                  {
+                                      for(; first < last; first = stepFunc(first)) {
+                                          if (!outfunc(first)) return false;
+                                      }
+                                      return true;
+                                  });
         }
         
         // Stream
@@ -359,6 +359,10 @@ namespace xlc {
                   count]
                  (auto && outputFunc) mutable
                  {
+                     if (count == 0) {
+                         return true;
+                     }
+                     
                      auto continue_ = true;
                      auto countCopy = count;
                      me.each([XLC_FORWARD_CAPTURE(outputFunc),
@@ -369,7 +373,7 @@ namespace xlc {
                                  if (countCopy) {
                                      countCopy--;
                                      continue_ = outputFunc(elem);
-                                     return continue_;
+                                     return continue_ && countCopy;
                                  }
                                  return false;
                              });
@@ -561,10 +565,17 @@ namespace xlc {
                              
                          default:
                          {
-                             auto buff = me.to_list();
-                             for (std::size_t i = 0; i < count; ++i)
+                             std::list<TElement> buff;
+                             bool result = me.each([&outputFunc,
+                                                    &buff]
+                                                   (auto const &e) {
+                                                       buff.emplace_back(e);
+                                                       return outputFunc(e);
+                                                   });
+                             if (!result) return false;
+                             for (std::size_t i = 1; i < count; ++i)
                              {
-                                 auto result = from(buff.begin(), buff.end()) // so it doesn't move/copy buff
+                                 result = from(buff.begin(), buff.end()) // so it doesn't move/copy buff
                                  .each(std::forward<decltype(outputFunc)>(outputFunc));
                                  if (!result) return false;
                              }
@@ -572,6 +583,30 @@ namespace xlc {
                          }
                      }
                      return true;
+                 });
+            }
+            
+            XLC_COMPILER_ERROR_HACK
+            auto repeat()
+            {
+                return make_stream<TElement>
+                ([XLC_MOVE_CAPTURE_THIS(me)]
+                 (auto && outputFunc) mutable
+                 {
+                     std::list<TElement> buff;
+                     bool result = me.each([&outputFunc,
+                                            &buff]
+                                           (auto const &e) {
+                                               buff.emplace_back(e);
+                                               return outputFunc(e);
+                                           });
+                     if (!result) return false;
+                     while (result)
+                     {
+                         result = from(buff.begin(), buff.end()) // so it doesn't move/copy buff
+                         .each(std::forward<decltype(outputFunc)>(outputFunc));
+                     }
+                     return false;
                  });
             }
         };

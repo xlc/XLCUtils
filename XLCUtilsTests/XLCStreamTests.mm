@@ -1,5 +1,5 @@
 //
-//  XLCRangeTests.m
+//  XLCStreamTests.m
 //  XLCUtils
 //
 //  Created by Xiliang Chen on 14-4-27.
@@ -13,7 +13,7 @@
 #include <vector>
 #include <set>
 
-#import "XLCRange.hh"
+#import "XLCStream.hh"
 
 namespace {
     struct Foo
@@ -75,11 +75,11 @@ namespace {
     };
 }
 
-@interface XLCRangeTests : XCTestCase
+@interface XLCStreamTests : XCTestCase
 
 @end
 
-@implementation XLCRangeTests
+@implementation XLCStreamTests
 
 - (void)setUp
 {

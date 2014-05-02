@@ -1,13 +1,13 @@
 //
-//  XLCRange.hh
+//  XLCStream.hh
 //  XLCUtils
 //
 //  Created by Xiliang Chen on 14-4-27.
 //  Copyright (c) 2014年 Xiliang Chen. All rights reserved.
 //
 
-#ifndef XLCUtils_XLCRange_hh
-#define XLCUtils_XLCRange_hh
+#ifndef XLCUtils_XLCStream_hh
+#define XLCUtils_XLCStream_hh
 
 #if __cplusplus <= 201103L
 #error "C++1y is required to compile this code"
@@ -36,12 +36,12 @@ namespace xlc {
     namespace detail {
         
         template <class TElement, class TIterateFunc>
-        class Range;
+        class Stream;
         
         template <class TElement, class TIterateFunc>
-        auto make_range(TIterateFunc && func)
+        auto make_stream(TIterateFunc && func)
         {
-            return Range<TElement, TIterateFunc>(std::move(func));
+            return Stream<TElement, TIterateFunc>(std::move(func));
         }
         
         // from
@@ -55,7 +55,7 @@ namespace xlc {
             using std::begin;
             using TElement = typename std::iterator_traits<decltype(begin(std::declval<TContainer>()))>::value_type;
             
-            return make_range<TElement>([XLC_FORWARD_CAPTURE(container)]
+            return make_stream<TElement>([XLC_FORWARD_CAPTURE(container)]
                                         (auto && outfunc)
                                         {
                                             for(auto const & item : container) {
@@ -68,7 +68,7 @@ namespace xlc {
         template <class TElement, std::size_t N>
         auto from(TElement (&array)[N])
         {
-            return make_range<TElement>([&array]
+            return make_stream<TElement>([&array]
                                         (auto && outfunc)
                                         {
                                             for(auto const & item : array) {
@@ -89,7 +89,7 @@ namespace xlc {
         {
             using TElement = typename std::iterator_traits<TIterator>::value_type;
             
-            return make_range<TElement>([first, last]
+            return make_stream<TElement>([first, last]
                                         (auto && outfunc) mutable
                                         {
                                             for(; first != last; ++first) {
@@ -100,7 +100,7 @@ namespace xlc {
         }
         
         template <class T, class U>
-        auto from(Range<T, U> && r)
+        auto from(Stream<T, U> && r)
         {
             return std::move(r);
         }
@@ -110,7 +110,7 @@ namespace xlc {
         template <class T>
         auto range(T first, T last)
         {
-            return make_range<T>([first, last]
+            return make_stream<T>([first, last]
                                  (auto && outfunc) mutable
                                  {
                                      for(; first < last; ++first) {
@@ -129,7 +129,7 @@ namespace xlc {
         template <class T>
         auto range(T first, T last, T step)
         {
-            return make_range<T>([first, last, step]
+            return make_stream<T>([first, last, step]
                                  (auto && outfunc) mutable
                                  {
                                      for(; first < last; first += step) {
@@ -142,7 +142,7 @@ namespace xlc {
         template <class T, class TFunc>
         auto range(T first, T last, TFunc && stepFunc)
         {
-            return make_range<T>([first, last, XLC_FORWARD_CAPTURE(stepFunc)]
+            return make_stream<T>([first, last, XLC_FORWARD_CAPTURE(stepFunc)]
                                  (auto && outfunc) mutable
                                  {
                                      for(; first < last; first = stepFunc(first)) {
@@ -162,10 +162,10 @@ namespace xlc {
         typename std::enable_if_t<!std::is_void<decltype(from(std::declval<T>()))>::value>
         > : std::true_type { };
         
-        // range
+        // Stream
         
         template <class TElement, class TIterateFunc>
-        class Range
+        class Stream
         {
         public:
             using value_type = TElement;
@@ -175,16 +175,16 @@ namespace xlc {
             
         public:
             
-            Range() = delete; // no default constructor
+            Stream() = delete; // no default constructor
             
-            Range(Range const &) = delete; // no copy constructor
-            Range(Range &&) = default; // default move constructor
+            Stream(Stream const &) = delete; // no copy constructor
+            Stream(Stream &&) = default; // default move constructor
             
-            Range & operator=(Range const &) = delete; // no copy assign
-            Range & operator=(Range &&) = delete; // no move assign
+            Stream & operator=(Stream const &) = delete; // no copy assign
+            Stream & operator=(Stream &&) = delete; // no move assign
             
             template <class T>
-            explicit Range(T && func)
+            explicit Stream(T && func)
             : _iterateFunc(std::forward<T>(func))
             {}
             
@@ -215,7 +215,7 @@ namespace xlc {
             auto map(TFunc && func)
             {
                 using TNewElement = decltype(func(std::declval<TElement>()));
-                return make_range<TNewElement>
+                return make_stream<TNewElement>
                 ([XLC_FORWARD_CAPTURE(func),
                   XLC_MOVE_CAPTURE_THIS(me)]
                  (auto && outputFunc) mutable
@@ -232,7 +232,7 @@ namespace xlc {
             template <class TFunc>
             auto filter(TFunc && func)
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_FORWARD_CAPTURE(func),
                   XLC_MOVE_CAPTURE_THIS(me)]
                  (auto && outputFunc) mutable
@@ -253,7 +253,7 @@ namespace xlc {
             auto flatten()
             {
                 using TNewElement = typename decltype(from(std::declval<TElement>()))::value_type;
-                return make_range<TNewElement>
+                return make_stream<TNewElement>
                 ([XLC_MOVE_CAPTURE_THIS(me)]
                  (auto && outputFunc) mutable
                  {
@@ -271,7 +271,7 @@ namespace xlc {
                 using TMapResult = decltype(func(std::declval<TElement>()));
                 static_assert(is_rangable<TMapResult>::value, "map result is not rangable");
                 using TNewElement = typename decltype(from(std::declval<TMapResult>()))::value_type;
-                return make_range<TNewElement>
+                return make_stream<TNewElement>
                 ([XLC_FORWARD_CAPTURE(func),
                   XLC_MOVE_CAPTURE_THIS(me)]
                  (auto && outputFunc) mutable
@@ -288,7 +288,7 @@ namespace xlc {
             template <class TContainer>
             auto concat(TContainer && container)
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_MOVE_CAPTURE_THIS(me),
                   XLC_FORWARD_CAPTURE(container)]
                  (auto && outputFunc) mutable
@@ -307,7 +307,7 @@ namespace xlc {
             template <class T, std::size_t N>
             auto concat(T (&container)[N])
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_MOVE_CAPTURE_THIS(me),
                   &container]
                  (auto && outputFunc) mutable
@@ -320,7 +320,7 @@ namespace xlc {
             XLC_COMPILER_ERROR_HACK
             auto skip(std::size_t count)
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_MOVE_CAPTURE_THIS(me),
                   count]
                  (auto && outputFunc) mutable
@@ -342,7 +342,7 @@ namespace xlc {
             template <class TFunc>
             auto skip_while(TFunc && func)
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_FORWARD_CAPTURE(func),
                   XLC_MOVE_CAPTURE_THIS(me)]
                  (auto && outputFunc) mutable
@@ -365,7 +365,7 @@ namespace xlc {
             XLC_COMPILER_ERROR_HACK
             auto take(std::size_t count)
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_MOVE_CAPTURE_THIS(me),
                   count]
                  (auto && outputFunc) mutable
@@ -391,7 +391,7 @@ namespace xlc {
             template <class TFunc>
             auto take_while(TFunc && func)
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_FORWARD_CAPTURE(func),
                   XLC_MOVE_CAPTURE_THIS(me)]
                  (auto && outputFunc) mutable
@@ -558,7 +558,7 @@ namespace xlc {
             XLC_COMPILER_ERROR_HACK
             auto repeat(std::size_t count)
             {
-                return make_range<TElement>
+                return make_stream<TElement>
                 ([XLC_MOVE_CAPTURE_THIS(me),
                   count]
                  (auto && outputFunc) mutable
@@ -588,7 +588,7 @@ namespace xlc {
         };
     }
     
-    using detail::make_range;
+    using detail::make_stream;
     using detail::from;
     using detail::range;
 }

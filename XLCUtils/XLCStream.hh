@@ -152,16 +152,6 @@ namespace xlc {
                                  });
         }
         
-        // is_rangable
-        
-        template<typename T, typename V = void>
-        struct is_rangable : std::false_type { };
-        
-        template<typename T>
-        struct is_rangable<T,
-        typename std::enable_if_t<!std::is_void<decltype(from(std::declval<T>()))>::value>
-        > : std::true_type { };
-        
         // Stream
         
         template <class TElement, class TIterateFunc>
@@ -269,7 +259,6 @@ namespace xlc {
             auto flatten_map(TFunc && func)
             {
                 using TMapResult = decltype(func(std::declval<TElement>()));
-                static_assert(is_rangable<TMapResult>::value, "map result is not rangable");
                 using TNewElement = typename decltype(from(std::declval<TMapResult>()))::value_type;
                 return make_stream<TNewElement>
                 ([XLC_FORWARD_CAPTURE(func),

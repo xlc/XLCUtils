@@ -1107,15 +1107,3 @@ namespace {
 
 @end
 
-namespace test_is_rangable {
-    static_assert(!xlc::detail::is_rangable<int>::value, "");
-    static_assert(!xlc::detail::is_rangable<void>::value, "");
-    static_assert(!xlc::detail::is_rangable<id>::value, "");
-    static_assert(xlc::detail::is_rangable<std::deque<int>>::value, "");
-    static_assert(xlc::detail::is_rangable<int(&)[4]>::value, "");
-    
-    struct Foo {};
-    int *begin(Foo foo);
-    int *end(Foo foo);
-    static_assert(xlc::detail::is_rangable<Foo>::value, "");
-}

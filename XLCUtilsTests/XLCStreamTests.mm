@@ -1159,6 +1159,25 @@ namespace {
     XCTAssertTrue(called);
 }
 
+- (void)testRepeatTakeSkipConcat
+{
+    auto result = xlc::from({1,2})
+    .repeat()   // {1,2,....
+    .take(3)    // {1,2,1}
+    .repeat(2)  // {1,2,1,1,2,1}
+    .take(4)    // {1,2,1,1}
+    .concat({3,4}) // {1,2,1,1,3,4}
+    .skip(1)    // {2,1,1,3,4}
+    .repeat(2)  // {2,1,1,3,4,2,1,1,3,4}
+    .skip(2)    // {1,3,4,2,1,1,3,4}
+    .take(3)    // {1,3,4}
+    .repeat()   // {1,3,4.....
+    .take(8)    // {1,3,4,1,3,4,1,3}
+    .to_deque();
+    
+    XCTAssertEqual(result, (std::deque<int>{1,3,4,1,3,4,1,3}));
+}
+
 - (void)testRange
 {
     XCTAssertEqual(xlc::range(0).to_deque(), (std::deque<int>{}));

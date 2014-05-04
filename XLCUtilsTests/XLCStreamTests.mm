@@ -200,6 +200,19 @@ namespace {
     XCTAssertEqualObjects(xlc::from(@[@1, @2, @"test3"]).to_NSArray(), (@[@1, @2, @"test3"]));
 }
 
+- (void)testFromNSDictionary
+{
+    XCTAssertEqualObjects(xlc::from(@{@1:@"a", @"b":@2}).to_NSDictionary(), (@{@1:@"a", @"b":@2}));
+}
+
+- (void)testFromNSDictionary2
+{
+    NSDictionary *dict = xlc::from(@{@1:@"a", @"b":@2}).take(1).concat({std::make_pair(@3, @"d")}).to_NSDictionary();
+    XCTAssertEqual(dict.count, 2);
+    XCTAssertEqual(dict[@3], @"d");
+    XCTAssert([dict[@1] isEqual:@"a"] ^ [dict[@"b"] isEqual:@2], @"only one of them is true");
+}
+
 - (void)testEachStopFirst
 {
     Foo vec[] = { 2, 3, 4, 5, 6 };
@@ -1040,6 +1053,19 @@ namespace {
 {
     auto map = xlc::from(std::initializer_list<std::pair<int, std::string>>{{1,"a"},{3,"b"}}).to_map();
     XCTAssertEqual(map, (std::map<int, std::string>{{1,"a"},{3,"b"}}));
+}
+
+- (void)testToNSArray
+{
+    id vec[] = {nil, @1, nil, @2, nil};
+    XCTAssertEqualObjects(xlc::from(vec).to_NSArray(),
+                          (@[[NSNull null], @1, [NSNull null], @2, [NSNull null]]));
+}
+
+- (void)testToNSDictionary
+{
+    XCTAssertEqualObjects(xlc::from(std::deque<std::pair<id, id>>{{nil, @1}, {@2, nil}, {nil, nil}}).to_NSDictionary(),
+                          (@{[NSNull null] : @1}));
 }
 
 - (void)testCount

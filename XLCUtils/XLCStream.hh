@@ -65,7 +65,7 @@ namespace xlc {
                                              return true;
                                          });
         }
-
+        
 #ifdef __OBJC__
         XLC_COMPILER_ERROR_HACK
         auto from(id<NSFastEnumeration> container)
@@ -78,6 +78,22 @@ namespace xlc {
                                        }
                                        return true;
                                    });
+        }
+        
+        XLC_COMPILER_ERROR_HACK
+        auto from(NSDictionary * container)
+        {
+            return make_stream<std::pair<id, id>>
+            ([container]
+             (auto && outfunc)
+             {
+                 __block BOOL continue_ = true;
+                 [container enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+                  continue_ = outfunc(std::make_pair(key, value));
+                  *stop = !continue_;
+                  }];
+                 return continue_;
+             });
         }
 #endif
         
@@ -578,8 +594,22 @@ namespace xlc {
             auto to_NSArray() -> NSArray *
             {
                 NSMutableArray *array = [NSMutableArray array];
-                each([=](id item){ [array addObject:item]; });
+                each([=](id item) {
+                    [array addObject:item ?: [NSNull null]];
+                });
                 return array;
+            }
+            
+            auto to_NSDictionary() -> NSDictionary *
+            {
+                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                each([=](std::pair<id, id> const & item) {
+                    if (item.second)
+                    {
+                        dict[item.first ?: [NSNull null]] = item.second;
+                    }
+                });
+                return dict;
             }
 #endif
             

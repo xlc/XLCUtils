@@ -64,6 +64,21 @@ namespace xlc {
                                              return true;
                                          });
         }
+
+#ifdef __OBJC__
+        XLC_COMPILER_ERROR_HACK
+        auto from(id<NSFastEnumeration> container)
+        {
+            return make_stream<id>([container]
+                                   (auto && outfunc)
+                                   {
+                                       for(id item in container) {
+                                           if (!outfunc(item)) return false;
+                                       }
+                                       return true;
+                                   });
+        }
+#endif
         
         template <class TElement, std::size_t N>
         auto from(TElement (&array)[N])
@@ -548,6 +563,15 @@ namespace xlc {
             {
                 return to<std::list<TElement>>();
             }
+            
+#ifdef __OBJC__
+            auto to_NSArray() -> NSArray *
+            {
+                NSMutableArray *array = [NSMutableArray array];
+                each([=](id item){ [array addObject:item]; });
+                return array;
+            }
+#endif
             
             XLC_COMPILER_ERROR_HACK
             auto repeat(std::size_t count)

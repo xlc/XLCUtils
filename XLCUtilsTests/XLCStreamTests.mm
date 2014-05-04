@@ -195,6 +195,11 @@ namespace {
     });
 }
 
+- (void)testFromNSArray
+{
+    XCTAssertEqualObjects(xlc::from(@[@1, @2, @"test3"]).to_NSArray(), (@[@1, @2, @"test3"]));
+}
+
 - (void)testEachStopFirst
 {
     Foo vec[] = { 2, 3, 4, 5, 6 };

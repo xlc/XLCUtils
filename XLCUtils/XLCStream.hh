@@ -524,7 +524,8 @@ namespace xlc {
             auto to() -> TOutContainer
             {
                 TOutContainer container;
-                copy_to(std::inserter(container, container.end()));
+                using std::end;
+                copy_to(std::inserter(container, end(container)));
                 return container;
             }
             

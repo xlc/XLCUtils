@@ -160,5 +160,13 @@ namespace test_is_objc_class
     static_assert(!xlc::is_objc_class<void>::value, "");
 }
 
+namespace test_is_pair
+{
+    static_assert(xlc::is_pair<std::pair<int, bool>>::value, "");
+    static_assert(xlc::is_pair<std::pair<std::string, double>>::value, "");
+    static_assert(!xlc::is_pair<int>::value, "");
+    static_assert(!xlc::is_pair<void>::value, "");
+}
+
 #pragma clang diagnostic pop
 

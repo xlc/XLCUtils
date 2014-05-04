@@ -1036,6 +1036,12 @@ namespace {
     }
 }
 
+- (void)testToMap
+{
+    auto map = xlc::from(std::initializer_list<std::pair<int, std::string>>{{1,"a"},{3,"b"}}).to_map();
+    XCTAssertEqual(map, (std::map<int, std::string>{{1,"a"},{3,"b"}}));
+}
+
 - (void)testCount
 {
     XCTAssertEqual(xlc::from(std::deque<int>{}).count(), 0);

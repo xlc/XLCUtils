@@ -75,6 +75,14 @@ namespace xlc {
     {};
 #endif
     
+    // is_pair
+    
+    template <class T>
+    struct is_pair : std::false_type {};
+    
+    template <class T1, class T2>
+    struct is_pair<std::pair<T1, T2>> : std::true_type {};
+    
     // is_for_loopable
     
     namespace detail {

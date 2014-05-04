@@ -22,6 +22,7 @@
 #include <deque>
 #include <set>
 #include <list>
+#include <map>
 
 #include "XLCObjCppHelpers.hh"
 
@@ -562,6 +563,15 @@ namespace xlc {
             auto to_list() -> std::list<TElement>
             {
                 return to<std::list<TElement>>();
+            }
+            
+            template <
+            class U = TElement,
+            class = std::enable_if_t<is_pair<U>::value>
+            >
+            auto to_map() -> std::map<typename U::first_type, typename U::second_type>
+            {
+                return to<std::map<typename U::first_type, typename U::second_type>>();
             }
             
 #ifdef __OBJC__

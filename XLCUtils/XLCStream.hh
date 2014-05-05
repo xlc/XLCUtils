@@ -23,6 +23,9 @@
 #include <set>
 #include <list>
 #include <map>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #include "XLCObjCppHelpers.hh"
 
@@ -45,7 +48,7 @@ namespace xlc {
             return Stream<TElement, TIterateFunc>(std::move(func));
         }
         
-        // from
+#pragma mark - from
         
         template <
         class TContainer,
@@ -137,7 +140,7 @@ namespace xlc {
             return std::move(r);
         }
         
-        // range
+#pragma mark - range
         
         template <class T>
         auto range(T first, T last)
@@ -184,7 +187,183 @@ namespace xlc {
                                   });
         }
         
-        // Stream
+#pragma mark - StreamEvaluator
+        
+        template <class TStream>
+        class StreamEvaluator
+        {
+        private:
+            using TElement = typename TStream::value_type;
+            
+        private:
+            TStream _stream;
+            bool _started = false;
+            std::mutex _mutex {};
+            std::condition_variable _condition {};
+            std::thread _thread {};
+            TElement const *_element = nullptr;
+            bool _next = false;
+            bool _done = false;
+            bool _stop = false;
+            
+            auto start() -> TElement const *
+            {
+                if (_started) return nullptr;
+                
+                {
+                    std::lock_guard<std::mutex> lk(_mutex);
+                    if (_stop) return nullptr;
+                }
+                
+                _thread = std::thread([this](){
+                    _stream.each([this](auto const &e){
+                        {
+                            std::lock_guard<std::mutex> lk(_mutex);
+                            _element = &e;
+                            _done = true;
+                            _next = false;
+                        }
+                        // notify done
+                        _condition.notify_one();
+                        
+                        // wait for next request
+                        {
+                            std::unique_lock<std::mutex> lk(_mutex);
+                            _condition.wait(lk, [this]{return _next;});
+                            
+                            return !_stop;
+                        }
+                    });
+                    
+                    // notify no more
+                    {
+                        std::lock_guard<std::mutex> lk(_mutex);
+                        _element = nullptr;
+                        _done = true;
+                        _stop = true;
+                    }
+                    _condition.notify_one();
+                });
+                
+                _started = true;
+                
+                // wait for done
+                {
+                    std::unique_lock<std::mutex> lk(_mutex);
+                    _condition.wait(lk, [this]{return _done;});
+                    
+                    _done = false;
+                    
+                    return _element;
+                }
+            }
+            
+            auto next() -> TElement const *
+            {
+                {
+                    std::lock_guard<std::mutex> lk(_mutex);
+                    if (_stop) return nullptr;
+                }
+                
+                start();
+                
+                {
+                    std::lock_guard<std::mutex> lk(_mutex);
+                    _next = true;
+                    _done = false;
+                }
+                _condition.notify_one();
+                
+                {
+                    std::unique_lock<std::mutex> lk(_mutex);
+                    _condition.wait(lk, [this]{return _done;});
+                    
+                    return _element;
+                }
+            }
+            
+        public:
+            class StreamIterator : public std::iterator<std::input_iterator_tag, typename TStream::value_type>
+            {
+            private:
+                StreamEvaluator *_evaluator;
+                TElement const *_current = nullptr;
+                
+            public:
+                explicit StreamIterator(StreamEvaluator *evaluator) : _evaluator(evaluator)
+                {}
+                
+                auto operator* () -> TElement const &
+                {
+                    if (!_current) _current = _evaluator->start();
+                    return *_current;
+                }
+                
+                auto operator++() -> StreamIterator &
+                {
+                    _current = _evaluator->next();
+                    return *this;
+                }
+                
+                auto operator==(StreamIterator const &other) -> bool
+                {
+                    if (!_current) _current = _evaluator->start();
+                    return _current == other._current;
+                }
+                
+                auto operator!=(StreamIterator const &other) -> bool
+                {
+                    return !operator==(other);
+                }
+                
+                auto operator->() -> TElement const *
+                {
+                    if (!_current) _current = _evaluator->start();
+                    return _current;
+                }
+                
+            };
+            
+        public:
+            StreamEvaluator() = delete;
+            StreamEvaluator(StreamEvaluator const &) = delete;
+            
+            StreamEvaluator(StreamEvaluator && evaluator)
+            : _stream(std::move(evaluator._stream))
+            {};
+            
+            StreamEvaluator & operator=(StreamEvaluator const &) = delete;
+            StreamEvaluator & operator=(StreamEvaluator &&) = delete;
+            
+            explicit StreamEvaluator(TStream && stream)
+            : _stream(std::move(stream))
+            {}
+            
+            ~StreamEvaluator()
+            {
+                {
+                    std::lock_guard<std::mutex> lk(_mutex);
+                    _stop = true;
+                    _condition.notify_all();
+                }
+                
+                if (_thread.joinable()) {
+                    _thread.join();
+                }
+            }
+            
+            auto begin() -> StreamIterator
+            {
+                return StreamIterator{this};
+            }
+            
+            auto end() -> StreamIterator
+            {
+                return StreamIterator{nullptr};
+            }
+        };
+        
+#pragma mark - Stream
         
         template <class TElement, class TIterateFunc>
         class Stream
@@ -673,6 +852,12 @@ namespace xlc {
                      }
                      return false;
                  });
+            }
+            
+            // evaluate in background thread **synchronously**
+            auto evaluate() && -> StreamEvaluator<Stream>
+            {
+                return StreamEvaluator<Stream>{std::move(*this)};
             }
         };
     }

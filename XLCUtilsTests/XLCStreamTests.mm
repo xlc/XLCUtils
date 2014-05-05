@@ -1227,5 +1227,24 @@ namespace {
     XCTAssertEqual(result, (std::deque<int>{1,2,4,8,16,32}));
 }
 
+- (void)testEvaluate
+{
+    int i = 0;
+    auto stream = xlc::make_stream<Foo>([&](auto && outputFunc) {
+        for (i = 0; i < 5; ++i)
+        {
+            if (!outputFunc(Foo{i})) return false;
+        }
+        return true;
+    });
+    auto evaluator = std::move(stream).evaluate();
+    
+    for (auto it = evaluator.begin(), end = evaluator.end(); it != end; ++it) {
+        it->assertValue(self, i);
+        it->assertCopyCount(self, 0);
+        it->assertMoveCount(self, 0);
+    }
+}
+
 @end
 

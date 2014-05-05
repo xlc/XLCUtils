@@ -1246,5 +1246,50 @@ namespace {
     }
 }
 
+- (void)testEvaluate2
+{
+    std::vector<int> vec;
+    auto evaluator = xlc::from({0,1,2,3,4,5,6}).skip(2).take(2).evaluate();
+    
+    std::copy(evaluator.begin(), evaluator.end(), std::back_inserter(vec));
+    
+    XCTAssertEqual(vec, (std::vector<int>{2,3}));
+}
+
+- (void)testEvaluate3
+{
+    int count = 1;
+    for (auto i : xlc::from({0,1,2,3,4,5,6}).skip(2).take(3).evaluate())
+    {
+        XCTAssertEqual(i, ++count);
+    }
+    XCTAssertEqual(count, 4);
+}
+
+- (void)testEvaluateRethrowException
+{
+    auto stream = xlc::make_stream<int>([&](auto && outputFunc) {
+        if (!outputFunc(1)) return false;
+        if (!outputFunc(2)) return false;
+        throw std::runtime_error("test exception");
+    });
+    
+    auto evaluator = std::move(stream).evaluate();
+    
+    auto it = evaluator.begin();
+    
+    XCTAssertEqual(*it, 1);
+    ++it;
+    XCTAssertEqual(*it, 2);
+    
+    try {
+        ++it;
+        XCTFail("should throw exception");
+    } catch (std::runtime_error &e) {
+        XCTAssertEqualObjects(@(e.what()), @"test exception");
+    }
+    
+}
+
 @end
 

@@ -26,6 +26,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <exception>
 
 #include "XLCObjCppHelpers.hh"
 
@@ -205,6 +206,7 @@ namespace xlc {
             bool _next = false;
             bool _done = false;
             bool _stop = false;
+            std::exception_ptr _exception;
             
             auto start() -> TElement const *
             {
@@ -216,24 +218,29 @@ namespace xlc {
                 }
                 
                 _thread = std::thread([this](){
-                    _stream.each([this](auto const &e){
-                        {
-                            std::lock_guard<std::mutex> lk(_mutex);
-                            _element = &e;
-                            _done = true;
-                            _next = false;
-                        }
-                        // notify done
-                        _condition.notify_one();
-                        
-                        // wait for next request
-                        {
-                            std::unique_lock<std::mutex> lk(_mutex);
-                            _condition.wait(lk, [this]{return _next;});
+                    try {
+                        _stream.each([this](auto const &e){
+                            {
+                                std::lock_guard<std::mutex> lk(_mutex);
+                                _element = &e;
+                                _done = true;
+                                _next = false;
+                            }
+                            // notify done
+                            _condition.notify_one();
                             
-                            return !_stop;
-                        }
-                    });
+                            // wait for next request
+                            {
+                                std::unique_lock<std::mutex> lk(_mutex);
+                                _condition.wait(lk, [this]{return _next;});
+                                
+                                return !_stop;
+                            }
+                        });
+                    } catch (...) {
+                        std::lock_guard<std::mutex> lk(_mutex);
+                        _exception = std::current_exception();
+                    }
                     
                     // notify no more
                     {
@@ -252,7 +259,10 @@ namespace xlc {
                     std::unique_lock<std::mutex> lk(_mutex);
                     _condition.wait(lk, [this]{return _done;});
                     
-                    _done = false;
+                    if (_exception) // oops
+                    {
+                        std::rethrow_exception(_exception);
+                    }
                     
                     return _element;
                 }
@@ -277,6 +287,11 @@ namespace xlc {
                 {
                     std::unique_lock<std::mutex> lk(_mutex);
                     _condition.wait(lk, [this]{return _done;});
+                    
+                    if (_exception) // oops
+                    {
+                        std::rethrow_exception(_exception);
+                    }
                     
                     return _element;
                 }
@@ -352,12 +367,12 @@ namespace xlc {
                 }
             }
             
-            auto begin() -> StreamIterator
+            auto begin() & -> StreamIterator
             {
                 return StreamIterator{this};
             }
             
-            auto end() -> StreamIterator
+            auto end() & -> StreamIterator
             {
                 return StreamIterator{nullptr};
             }

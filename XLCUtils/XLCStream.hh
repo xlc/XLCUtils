@@ -27,6 +27,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <exception>
+#include <tuple>
 
 #include "XLCObjCppHelpers.hh"
 
@@ -516,7 +517,7 @@ namespace xlc {
             template <class T>
             auto concat(std::initializer_list<T> && container)
             {
-                return concat<std::initializer_list<T>>(std::move(container));
+                return concat<std::initializer_list<T>>(std::forward<std::initializer_list<T>>(container));
             }
             
             template <class T, std::size_t N>
@@ -869,7 +870,41 @@ namespace xlc {
                  });
             }
             
-            // evaluate in background thread **synchronously**
+            template <class TContainer>
+            auto merge(TContainer && container)
+            {
+                using TContainerElement = typename decltype(from(std::forward<TContainer>(container)))::value_type;
+                using TNewElement = std::tuple<TElement, TContainerElement>;
+                
+                return make_stream<TNewElement>
+                ([XLC_MOVE_CAPTURE_THIS(me),
+                  XLC_FORWARD_CAPTURE(container)]
+                 (auto && outputFunc) mutable
+                 {
+                     auto evaluator = from(std::forward<decltype(container)>(container)).evaluate();
+                     auto it = evaluator.begin();
+                     auto end = evaluator.end();
+                     return me.each([XLC_FORWARD_CAPTURE(outputFunc),
+                                     it, end]
+                                    (auto const &e) mutable
+                                    {
+                                        if (it == end) {
+                                            return false;
+                                        }
+                                        decltype(auto) other = *it;
+                                        ++it;
+                                        return outputFunc(TNewElement{e, other}) && it != end;
+                                    });
+                 });
+            }
+            
+            template <class T>
+            auto merge(std::initializer_list<T> && container)
+            {
+                return merge<std::initializer_list<T>>(std::forward<std::initializer_list<T>>(container));
+            }
+            
+            // evaluate in background thread
             auto evaluate() && -> StreamEvaluator<Stream>
             {
                 return StreamEvaluator<Stream>{std::move(*this)};

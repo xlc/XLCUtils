@@ -1288,7 +1288,58 @@ namespace {
     } catch (std::runtime_error &e) {
         XCTAssertEqualObjects(@(e.what()), @"test exception");
     }
+}
+
+- (void)testMergeInfiniteStream
+{
+    auto result =
+    xlc::from({1,2})
+    .repeat()
+    .merge(xlc::from({1.0, 2.0, 3.0}).repeat())
+    .take(6)
+    .to_deque();
     
+    XCTAssertEqual(result, (std::deque<std::tuple<int, double>>{{1,1.0},{2,2.0},{1,3.0},{2,1.0},{1,2.0},{2,3.0}}));
+}
+
+- (void)testMergeFiniteStream
+{
+    auto result =
+    xlc::from({1,2,3})
+    .merge({'a','b'})
+    .to_deque();
+    
+    XCTAssertEqual(result, (std::deque<std::tuple<int, char>>{{1,'a'},{2,'b'}}));
+}
+
+- (void)testMergeFiniteStream2
+{
+    auto result =
+    xlc::from({1,2})
+    .merge({'a','b','c'})
+    .to_deque();
+    
+    XCTAssertEqual(result, (std::deque<std::tuple<int, char>>{{1,'a'},{2,'b'}}));
+}
+
+- (void)testMergeEmptyStream
+{
+    auto result =
+    xlc::from(std::deque<int>{})
+    .merge({'a','b'})
+    .to_deque();
+    
+    XCTAssertEqual(result, (std::deque<std::tuple<int, char>>{}));
+}
+
+- (void)testMergeEmptyStream2
+{
+    auto result =
+    xlc::from({1,2})
+    .merge(std::deque<char>{})
+    .to_deque();
+    
+    XCTAssertEqual(result, (std::deque<std::tuple<int, char>>{}));
 }
 
 @end

@@ -233,7 +233,7 @@ namespace xlc {
                             // wait for next request
                             {
                                 std::unique_lock<std::mutex> lk(_mutex);
-                                _condition.wait(lk, [this]{return _next;});
+                                _condition.wait(lk, [this]{return _stop || _next;});
                                 
                                 return !_stop;
                             }

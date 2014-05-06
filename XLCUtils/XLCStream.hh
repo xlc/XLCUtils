@@ -189,6 +189,19 @@ namespace xlc {
                                   });
         }
         
+        template <class T, class TFunc>
+        auto range(T first, TFunc && stepFunc)
+        {
+            return make_stream<T>([first, XLC_FORWARD_CAPTURE(stepFunc)]
+                                  (auto && outfunc) mutable
+                                  {
+                                      for(;; first = stepFunc(first)) {
+                                          if (!outfunc(first)) return false;
+                                      }
+                                      return true;
+                                  });
+        }
+        
 #pragma mark - StreamEvaluator
         
         template <class TStream>

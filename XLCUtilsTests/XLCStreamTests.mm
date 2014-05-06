@@ -1227,6 +1227,12 @@ namespace {
     XCTAssertEqual(result, (std::deque<int>{1,2,4,8,16,32}));
 }
 
+- (void)testRange2
+{
+    auto result = xlc::range(1, [](int i){return i*2;}).take(5).to_deque();
+    XCTAssertEqual(result, (std::deque<int>{1,2,4,8,16}));
+}
+
 - (void)testEvaluate
 {
     int i = 0;

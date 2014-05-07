@@ -229,8 +229,6 @@ static void mergeAttribute(NSMutableDictionary *dict)
 
 #pragma mark - NSObject XLCXMLCreation
 
-extern NSString *NSUnknownUserInfoKey;
-
 static void XLCSetValueForKey(id obj, id value, id key, BOOL useKeyPath)
 {
     value = value == [NSNull null] ? nil : value;
@@ -248,7 +246,7 @@ static void XLCSetValueForKey(id obj, id value, id key, BOOL useKeyPath)
         if ([[exception name] isEqualToString:NSUndefinedKeyException]) {
 
             NSDictionary *info = [exception userInfo];
-            NSString *key = info[NSUnknownUserInfoKey];
+            NSString *key = info[@"NSUnknownUserInfoKey"];
 
             XILOG(@"Unable to set value '%@' for key path '%@' on object '%@'", value, key, obj);
 

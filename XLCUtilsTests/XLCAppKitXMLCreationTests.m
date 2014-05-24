@@ -1,5 +1,5 @@
 //
-//  XLCXMLCreationTests.m
+//  XLCAppKitXMLCreationTests.m
 //  XLCUtils
 //
 //  Created by Xiliang Chen on 14-4-20.
@@ -12,11 +12,11 @@
 
 #import "XLCXMLObject.h"
 
-@interface XLCXMLCreationTests : XCTestCase
+@interface XLCAppKitXMLCreationTests : XCTestCase
 
 @end
 
-@implementation XLCXMLCreationTests
+@implementation XLCAppKitXMLCreationTests
 
 - (void)setUp
 {

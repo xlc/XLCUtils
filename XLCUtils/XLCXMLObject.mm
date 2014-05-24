@@ -43,6 +43,7 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
     std::unordered_map<NSString *, std::stack<NSString *>, XLCNSStringHash, XLCNSStringCompare> _namespaces;
     std::stack<NSMutableDictionary *> _current;
     std::stack<NSMutableArray *> _parent;
+    NSUInteger _index;
 }
 
 @synthesize root = _root;
@@ -109,6 +110,7 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
     _parent.push([NSMutableArray array]);
+    _index = 0;
 }
 
 static void mergeAttribute(NSMutableDictionary *dict)
@@ -177,6 +179,7 @@ static void mergeAttribute(NSMutableDictionary *dict)
 
     dict[@"#name"] = elementName;
     dict[@"#namespace"] = namespaceURI;
+    dict[@"#index"] = @(_index++);
 
     [attributeDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
         NSArray *arr = [key componentsSeparatedByString:@":"];
@@ -328,7 +331,31 @@ static void XLCSetValueForKey(id obj, id value, id key, BOOL useKeyPath)
 static NSDictionary * XLCEvaluateDictionary(NSDictionary *dict, NSMutableDictionary *outputDict)
 {
     NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:dict.count];
-    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id child, BOOL *stop) {
+    
+    std::deque<std::pair<id, id>> dict_deque;
+    
+    for (id key in [dict allKeys]) {
+        dict_deque.emplace_back(key, dict[key]);
+    }
+    
+    std::stable_sort(dict_deque.begin(), dict_deque.end(), [](std::pair<id, id> const &p1, std::pair<id, id> const &p2) {
+        id v1 = p1.second;
+        id v2 = p2.second;
+        bool isdict = [v1 isKindOfClass:[NSDictionary class]];
+        bool isdict2 = [v2 isKindOfClass:[NSDictionary class]];
+        if (isdict && isdict2) { // both dict, use index
+            return [v1[@"#index"] integerValue] < [v2[@"#index"] integerValue];
+        }
+        if (isdict || isdict2) { // one dict, dict first
+            return isdict;
+        }
+        return false; // no dict, equal
+    });
+    
+    for (auto &pair : dict_deque)
+    {
+        id key = pair.first;
+        id child = pair.second;
         id newchild = child;
         if ([child isKindOfClass:[NSDictionary class]]) {
             newchild = XLCCreateObjectFromDictionary(child, outputDict);
@@ -336,7 +363,7 @@ static NSDictionary * XLCEvaluateDictionary(NSDictionary *dict, NSMutableDiction
         if (newchild) {
             result[key] = newchild;
         }
-    }];
+    }
     
     NSArray *contents = dict[@"#contents"];
     NSMutableArray *newcontents = [NSMutableArray arrayWithCapacity:contents.count];
@@ -519,7 +546,30 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
 
                 NSMutableDictionary *props = [NSMutableDictionary dictionaryWithCapacity:dict.count];
                 
-                [dict enumerateKeysAndObjectsUsingBlock:^(id key, id child, BOOL *stop) {
+                std::deque<std::pair<id, id>> dict_deque;
+                
+                for (id key in [dict allKeys]) {
+                    dict_deque.emplace_back(key, dict[key]);
+                }
+                
+                std::stable_sort(dict_deque.begin(), dict_deque.end(), [](std::pair<id, id> const &p1, std::pair<id, id> const &p2) {
+                    id v1 = p1.second;
+                    id v2 = p2.second;
+                    bool isdict = [v1 isKindOfClass:[NSDictionary class]];
+                    bool isdict2 = [v2 isKindOfClass:[NSDictionary class]];
+                    if (isdict && isdict2) { // both dict, use index
+                        return [v1[@"#index"] integerValue] < [v2[@"#index"] integerValue];
+                    }
+                    if (isdict || isdict2) { // one dict, dict first
+                        return isdict;
+                    }
+                    return false; // no dict, equal
+                });
+                
+                for (auto &pair : dict_deque)
+                {
+                    id key = pair.first;
+                    id child = pair.second;
                     id newchild = child;
                     if ([key isKindOfClass:[NSString class]] && ([key hasPrefix:XLCNamespaceURI] || [key hasPrefix:@"#"])) {
                         newchild = nil;
@@ -529,7 +579,7 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                     if (newchild) {
                         props[key] = newchild;
                     }
-                }];
+                }
                 
                 XLCXMLObjectProperties *objectProps = [[XLCXMLObjectProperties alloc] initWithDictionary:props];
                 if ([cls respondsToSelector:@selector(xlc_createWithProperties:andContents:)]) {

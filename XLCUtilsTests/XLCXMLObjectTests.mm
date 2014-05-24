@@ -73,12 +73,14 @@
     @{
       @"#name" : @"test",
       @"#namespace" : @"",
+      @"#index" : @0,
       @"#contents" :
           @[
               @"something!!",
               @{
                   @"#name" : @"t2",
                   @"#namespace" : @"https://github.com/xlc/XLCUtils",
+                  @"#index" : @1,
                   @"https://github.com/xlc/XLCUtils:t3" : @"t4",
                   @"https://github.com/xlc:t3" : @"t5",
                   @"t3" : @"t6"
@@ -86,36 +88,42 @@
               @{
                   @"#name" : @"foo",
                   @"#namespace" : @"https://example.com",
+                  @"#index" : @2,
                   @"#contents" :
                       @[
                           @{
                               @"#name": @"bar",
                               @"#namespace" : @"https://github.com/xlc/XLCUtils",
+                              @"#index" : @3,
                               @"a" : @"b",
-                              @"https://github.com/xlc/XLCUtils:a" : @"c"
-                              },
-                          @{
-                              @"#name" : @"bar",
-                              @"#namespace" : @"https://example.com"
+                              @"https://github.com/xlc/XLCUtils:a" : @"c",
                               },
                           @{
                               @"#name" : @"bar",
                               @"#namespace" : @"https://example.com",
-                              @"value" : @"42"
+                              @"#index" : @4,
+                              },
+                          @{
+                              @"#name" : @"bar",
+                              @"#namespace" : @"https://example.com",
+                              @"#index" : @5,
+                              @"value" : @"42",
                               },
                           @{
                               @"#name" : @"foo",
                               @"#namespace" : @"https://github.com/xlc",
+                              @"#index" : @6,
                               @"https://github.com/xlc/XLCUtils:bar" : @"b",
-                              @"#contents" : @[@"lol"]
+                              @"#contents" : @[@"lol"],
                               }
                           ]
                   },
               @{
                   @"#name" : @"bar",
-                  @"#namespace" : @""
+                  @"#namespace" : @"",
+                  @"#index" : @7,
                   },
-              @"this is some string in xml file."
+              @"this is some string in xml file.",
               ]
       };
 
@@ -160,10 +168,12 @@
     @{
       @"#name" : @"test",
       @"#namespace" : @"",
+      @"#index" : @0,
       @"attr" : @"42",
       @"value" : @{
               @"#name" : @"object",
-              @"#namespace" : @""
+              @"#namespace" : @"",
+              @"#index" : @2,
               },
       @"empty" : [NSNull null],
       @"otherValue" : @"some string",
@@ -171,21 +181,25 @@
           @[
               @{
                   @"#name" : @"abc",
-                  @"#namespace" : @""
+                  @"#namespace" : @"",
+                  @"#index" : @7,
                   },
               @{
                   @"#name" : @"obj",
                   @"#namespace" : @"",
+                  @"#index" : @8,
                   @"string" : @"text string",
                   @"text" : @"string text",
                   @"someValue" :
                       @{
                           @"#name" : @"obj",
                           @"#namespace" : @"",
+                          @"#index" : @11,
                           @"someValue" :
                               @{
                                   @"#name" : @"test",
                                   @"#namespace" : @"",
+                                  @"#index" : @13,
                                   @"test" : @"42"
                                   }
                           }
@@ -582,7 +596,7 @@
             "</XLCXMLObjectTestDummy.stringValue>"
         "</XLCXMLObjectTestDummy>"
     "</NSArray>";
-;
+
     NSError *error;
     XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
     XCTAssertNil(error, "no error");

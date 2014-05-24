@@ -16,6 +16,26 @@
 		0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */; };
 		0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */; };
 		062538F0190CDB88007FD1C4 /* XLCStreamTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 062538EF190CDB88007FD1C4 /* XLCStreamTests.mm */; };
+		068EED0C1930B71B00E58689 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068EED0B1930B71B00E58689 /* Foundation.framework */; };
+		068EED191930B71C00E58689 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC2C17D75723009BFC18 /* XCTest.framework */; };
+		068EED1A1930B71C00E58689 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068EED0B1930B71B00E58689 /* Foundation.framework */; };
+		068EED1C1930B71C00E58689 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068EED1B1930B71C00E58689 /* UIKit.framework */; };
+		068EED1F1930B71C00E58689 /* libXLCUtils-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 068EED0A1930B71B00E58689 /* libXLCUtils-ios.a */; };
+		068EED2E1930B75700E58689 /* XLCRunloop.m in Sources */ = {isa = PBXBuildFile; fileRef = 06208BD017E1C4EC00F60D39 /* XLCRunloop.m */; };
+		068EED2F1930B75800E58689 /* XLCNoCopyMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5117D897FE009BFC18 /* XLCNoCopyMutableDictionary.m */; };
+		068EED301930B75A00E58689 /* NSObject+XLCDelayedPerform.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */; };
+		068EED311930B75B00E58689 /* NSObject+XLCUtilsMemoryDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 06208BD417E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		068EED321930B75D00E58689 /* NSString+XLCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */; };
+		068EED331930B76400E58689 /* XLCAssertion.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC4917D87851009BFC18 /* XLCAssertion.m */; };
+		068EED341930B76900E58689 /* XLCLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC4417D873CF009BFC18 /* XLCLogging.m */; };
+		068EED351930B76C00E58689 /* UIKit+XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 068EED031930B63600E58689 /* UIKit+XLCXMLCreation.m */; };
+		068EED361930B76F00E58689 /* XLCXMLObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */; };
+		068EED371930B77100E58689 /* XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */; };
+		068EED3B1930B8DE00E58689 /* XLCXMLObjectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */; };
+		068EED3D1930B8DE00E58689 /* XLCAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */; };
+		068EED3E1930B8DE00E58689 /* XLCObjCppHelpersTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */; };
+		068EED3F1930B8DE00E58689 /* XLCStreamTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 062538EF190CDB88007FD1C4 /* XLCStreamTests.mm */; };
+		068EED411930C5D600E58689 /* XLCUIKitXMLCreationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 068EED401930C5D600E58689 /* XLCUIKitXMLCreationTests.m */; };
 		0692BC1C17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
 		0692BC2D17D75723009BFC18 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC2C17D75723009BFC18 /* XCTest.framework */; };
 		0692BC2E17D75723009BFC18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC1B17D75723009BFC18 /* Cocoa.framework */; };
@@ -30,7 +50,7 @@
 		0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */ = {isa = PBXBuildFile; fileRef = 0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */; };
 		0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */; };
 		06B443A0190384A5006F7245 /* AppKit+XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */; };
-		06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B443A219039932006F7245 /* XLCXMLCreationTests.m */; };
+		06B443A319039932006F7245 /* XLCAppKitXMLCreationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B443A219039932006F7245 /* XLCAppKitXMLCreationTests.m */; };
 		06F50AA619068C06000E5D58 /* NSString+XLCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */; };
 		06F50AA719068C06000E5D58 /* NSString+XLCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */; };
 		06F50AAB1907C167000E5D58 /* XLCAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */; };
@@ -38,6 +58,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		068EED1D1930B71C00E58689 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0692BC1017D75723009BFC18 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 068EED091930B71B00E58689;
+			remoteInfo = "XLCUtils-ios";
+		};
 		0692BC2F17D75723009BFC18 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0692BC1017D75723009BFC18 /* Project object */;
@@ -46,6 +73,18 @@
 			remoteInfo = XLCUtils;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		068EED081930B71B00E58689 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		06208BCF17E1C4EC00F60D39 /* XLCRunloop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCRunloop.h; sourceTree = "<group>"; };
@@ -61,6 +100,14 @@
 		062538EE190CDAEF007FD1C4 /* XLCStream.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XLCStream.hh; sourceTree = "<group>"; };
 		062538EF190CDB88007FD1C4 /* XLCStreamTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCStreamTests.mm; sourceTree = "<group>"; };
 		0674ACDB1852CDA0004491AD /* XLCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
+		068EED031930B63600E58689 /* UIKit+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIKit+XLCXMLCreation.m"; path = "ios/UIKit+XLCXMLCreation.m"; sourceTree = "<group>"; };
+		068EED0A1930B71B00E58689 /* libXLCUtils-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libXLCUtils-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		068EED0B1930B71B00E58689 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		068EED181930B71C00E58689 /* XLCUtils-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XLCUtils-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		068EED1B1930B71C00E58689 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		068EED381930B7B300E58689 /* XLCUtils-ios-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XLCUtils-ios-Prefix.pch"; sourceTree = "<group>"; };
+		068EED391930B7CC00E58689 /* XLCUtils-iosTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "XLCUtils-iosTests-Info.plist"; path = "XLCUtils/XLCUtils-iosTests-Info.plist"; sourceTree = SOURCE_ROOT; };
+		068EED401930C5D600E58689 /* XLCUIKitXMLCreationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCUIKitXMLCreationTests.m; sourceTree = "<group>"; };
 		0692BC1817D75723009BFC18 /* libXLCUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXLCUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0692BC1B17D75723009BFC18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0692BC1E17D75723009BFC18 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -80,7 +127,7 @@
 		0692BC5417D8993A009BFC18 /* NSObject+XLCDelayedPerform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+XLCDelayedPerform.h"; sourceTree = "<group>"; };
 		0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XLCDelayedPerform.m"; sourceTree = "<group>"; };
 		06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppKit+XLCXMLCreation.m"; path = "osx/AppKit+XLCXMLCreation.m"; sourceTree = "<group>"; };
-		06B443A219039932006F7245 /* XLCXMLCreationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCXMLCreationTests.m; sourceTree = "<group>"; };
+		06B443A219039932006F7245 /* XLCAppKitXMLCreationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAppKitXMLCreationTests.m; sourceTree = "<group>"; };
 		06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XLCAdditions.h"; sourceTree = "<group>"; };
 		06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XLCAdditions.m"; sourceTree = "<group>"; };
 		06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAdditionsTests.m; sourceTree = "<group>"; };
@@ -88,6 +135,25 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		068EED071930B71B00E58689 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				068EED0C1930B71B00E58689 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		068EED151930B71C00E58689 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				068EED191930B71C00E58689 /* XCTest.framework in Frameworks */,
+				068EED1C1930B71C00E58689 /* UIKit.framework in Frameworks */,
+				068EED1A1930B71C00E58689 /* Foundation.framework in Frameworks */,
+				068EED1F1930B71C00E58689 /* libXLCUtils-ios.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0692BC1517D75723009BFC18 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -112,6 +178,7 @@
 		0622A51B18E7F9AF008E2A93 /* XMLObject */ = {
 			isa = PBXGroup;
 			children = (
+				068EED011930B5F400E58689 /* iOS */,
 				06B443941903821B006F7245 /* OSX */,
 				0622A51C18E805B7008E2A93 /* XLCXMLObject.h */,
 				0622A51D18E805B7008E2A93 /* XLCXMLObject.mm */,
@@ -119,6 +186,14 @@
 				0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */,
 			);
 			name = XMLObject;
+			sourceTree = "<group>";
+		};
+		068EED011930B5F400E58689 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				068EED031930B63600E58689 /* UIKit+XLCXMLCreation.m */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		0692BC0F17D75723009BFC18 = {
@@ -136,6 +211,8 @@
 			children = (
 				0692BC1817D75723009BFC18 /* libXLCUtils.a */,
 				0692BC2B17D75723009BFC18 /* XLCUtilsTests.xctest */,
+				068EED0A1930B71B00E58689 /* libXLCUtils-ios.a */,
+				068EED181930B71C00E58689 /* XLCUtils-iosTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -145,6 +222,8 @@
 			children = (
 				0692BC1B17D75723009BFC18 /* Cocoa.framework */,
 				0692BC2C17D75723009BFC18 /* XCTest.framework */,
+				068EED0B1930B71B00E58689 /* Foundation.framework */,
+				068EED1B1930B71C00E58689 /* UIKit.framework */,
 				0692BC1D17D75723009BFC18 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -178,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				0692BC2317D75723009BFC18 /* XLCUtils-Prefix.pch */,
+				068EED381930B7B300E58689 /* XLCUtils-ios-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -186,7 +266,8 @@
 			isa = PBXGroup;
 			children = (
 				0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */,
-				06B443A219039932006F7245 /* XLCXMLCreationTests.m */,
+				06B443A219039932006F7245 /* XLCAppKitXMLCreationTests.m */,
+				068EED401930C5D600E58689 /* XLCUIKitXMLCreationTests.m */,
 				06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */,
 				06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */,
 				062538EF190CDB88007FD1C4 /* XLCStreamTests.mm */,
@@ -199,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				0692BC3417D75723009BFC18 /* XLCUtilsTests-Info.plist */,
+				068EED391930B7CC00E58689 /* XLCUtils-iosTests-Info.plist */,
 				0692BC3517D75723009BFC18 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -277,6 +359,41 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		068EED091930B71B00E58689 /* XLCUtils-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 068EED281930B71C00E58689 /* Build configuration list for PBXNativeTarget "XLCUtils-ios" */;
+			buildPhases = (
+				068EED061930B71B00E58689 /* Sources */,
+				068EED071930B71B00E58689 /* Frameworks */,
+				068EED081930B71B00E58689 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "XLCUtils-ios";
+			productName = "XLCUtils-ios";
+			productReference = 068EED0A1930B71B00E58689 /* libXLCUtils-ios.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		068EED171930B71C00E58689 /* XLCUtils-iosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 068EED2B1930B71C00E58689 /* Build configuration list for PBXNativeTarget "XLCUtils-iosTests" */;
+			buildPhases = (
+				068EED141930B71C00E58689 /* Sources */,
+				068EED151930B71C00E58689 /* Frameworks */,
+				068EED161930B71C00E58689 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				068EED1E1930B71C00E58689 /* PBXTargetDependency */,
+			);
+			name = "XLCUtils-iosTests";
+			productName = "XLCUtils-iosTests";
+			productReference = 068EED181930B71C00E58689 /* XLCUtils-iosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		0692BC1717D75723009BFC18 /* XLCUtils */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0692BC3C17D75723009BFC18 /* Build configuration list for PBXNativeTarget "XLCUtils" */;
@@ -335,11 +452,20 @@
 			targets = (
 				0692BC1717D75723009BFC18 /* XLCUtils */,
 				0692BC2A17D75723009BFC18 /* XLCUtilsTests */,
+				068EED091930B71B00E58689 /* XLCUtils-ios */,
+				068EED171930B71C00E58689 /* XLCUtils-iosTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		068EED161930B71C00E58689 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0692BC2917D75723009BFC18 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -351,6 +477,35 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		068EED061930B71B00E58689 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				068EED371930B77100E58689 /* XLCXMLCreation.m in Sources */,
+				068EED2E1930B75700E58689 /* XLCRunloop.m in Sources */,
+				068EED2F1930B75800E58689 /* XLCNoCopyMutableDictionary.m in Sources */,
+				068EED301930B75A00E58689 /* NSObject+XLCDelayedPerform.m in Sources */,
+				068EED311930B75B00E58689 /* NSObject+XLCUtilsMemoryDebug.m in Sources */,
+				068EED321930B75D00E58689 /* NSString+XLCAdditions.m in Sources */,
+				068EED341930B76900E58689 /* XLCLogging.m in Sources */,
+				068EED331930B76400E58689 /* XLCAssertion.m in Sources */,
+				068EED351930B76C00E58689 /* UIKit+XLCXMLCreation.m in Sources */,
+				068EED361930B76F00E58689 /* XLCXMLObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		068EED141930B71C00E58689 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				068EED411930C5D600E58689 /* XLCUIKitXMLCreationTests.m in Sources */,
+				068EED3B1930B8DE00E58689 /* XLCXMLObjectTests.mm in Sources */,
+				068EED3D1930B8DE00E58689 /* XLCAdditionsTests.m in Sources */,
+				068EED3E1930B8DE00E58689 /* XLCObjCppHelpersTests.mm in Sources */,
+				068EED3F1930B8DE00E58689 /* XLCStreamTests.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0692BC1417D75723009BFC18 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -373,7 +528,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06F50AAB1907C167000E5D58 /* XLCAdditionsTests.m in Sources */,
-				06B443A319039932006F7245 /* XLCXMLCreationTests.m in Sources */,
+				06B443A319039932006F7245 /* XLCAppKitXMLCreationTests.m in Sources */,
 				0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */,
 				06F50AB1190A9D08000E5D58 /* XLCObjCppHelpersTests.mm in Sources */,
 				062538F0190CDB88007FD1C4 /* XLCStreamTests.mm in Sources */,
@@ -383,6 +538,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		068EED1E1930B71C00E58689 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 068EED091930B71B00E58689 /* XLCUtils-ios */;
+			targetProxy = 068EED1D1930B71C00E58689 /* PBXContainerItemProxy */;
+		};
 		0692BC3017D75723009BFC18 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0692BC1717D75723009BFC18 /* XLCUtils */;
@@ -402,6 +562,100 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		068EED291930B71C00E58689 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				DSTROOT = /tmp/XLCUtils_ios.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-ios-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		068EED2A1930B71C00E58689 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				DSTROOT = /tmp/XLCUtils_ios.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-ios-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		068EED2C1930B71C00E58689 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-ios-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "XLCUtils/XLCUtils-iosTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		068EED2D1930B71C00E58689 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-ios-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "XLCUtils/XLCUtils-iosTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
 		0692BC3A17D75723009BFC18 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -475,6 +729,7 @@
 		0692BC3D17D75723009BFC18 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -485,6 +740,7 @@
 		0692BC3E17D75723009BFC18 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -547,6 +803,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		068EED281930B71C00E58689 /* Build configuration list for PBXNativeTarget "XLCUtils-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				068EED291930B71C00E58689 /* Debug */,
+				068EED2A1930B71C00E58689 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		068EED2B1930B71C00E58689 /* Build configuration list for PBXNativeTarget "XLCUtils-iosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				068EED2C1930B71C00E58689 /* Debug */,
+				068EED2D1930B71C00E58689 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		0692BC1317D75723009BFC18 /* Build configuration list for PBXProject "XLCUtils" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -569,8 +569,8 @@
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
 
-    NSDictionary *dict;
-    [obj createWithOutputDictionary:&dict];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [obj createWithContextDictionary:dict];
 
     XCTAssertEqualObjects(dict, (@{ @"string" : @"nsstring", @"number" : @42.5, @"array" : @[@"nsstring", @0, @[@42.5]] }));
 }
@@ -705,10 +705,10 @@
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
 
-    NSDictionary *output;
-    id result = [obj createWithOutputDictionary:&output];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    id result = [obj createWithContextDictionary:dict];
     XCTAssertEqualObjects(result, @[], "should not add NSNull");
-    XCTAssertEqualObjects(output[@"num"], @42, "side effect should be evaluated");
+    XCTAssertEqualObjects(dict[@"num"], @42, "side effect should be evaluated");
 }
 
 - (void)testSet {
@@ -734,8 +734,7 @@
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
 
-    NSDictionary *output;
-    id result = [obj createWithOutputDictionary:&output];
+    id result = [obj createWithContextDictionary:nil];
     XCTAssertEqualObjects(result, (@[@{ @"dict2" : @{ @"key" : @42 }, @"str" : @"val" }]));
 }
 
@@ -763,8 +762,7 @@
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
 
-    NSDictionary *output;
-    id result = [obj createWithOutputDictionary:&output];
+    id result = [obj createWithContextDictionary:nil];
     XCTAssertEqualObjects(result, (@[ @"1", @"2", @"3" ]));
 }
 
@@ -792,8 +790,7 @@
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
 
-    NSDictionary *output;
-    id result = [obj createWithOutputDictionary:&output];
+    id result = [obj createWithContextDictionary:nil];
     XCTAssertEqualObjects(result, (@{ @"dict2" : @{ @"key" : @42 }, @"str" : @"val" }));
 }
 
@@ -807,8 +804,7 @@
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
     
-    NSDictionary *output;
-    id result = [obj createWithOutputDictionary:&output];
+    id result = [obj createWithContextDictionary:nil];
     XCTAssertEqualObjects(result, NSFontAttributeName);
 }
 
@@ -832,13 +828,53 @@
     XCTAssertNil(error, "no error");
     XCTAssertNotNil(obj, "have obj");
     
-    NSDictionary *output;
-    [obj createWithOutputDictionary:&output];
+    NSMutableDictionary *output = [NSMutableDictionary dictionary];
+    [obj createWithContextDictionary:output];
     XCTAssertEqualObjects(output[@"str"], @"test");
     XCTAssertEqualObjects(output[@"str1"], [NSNull null]);
     XCTAssertEqualObjects(output[@"str2"], @"test");
     XCTAssertEqualObjects(output[@"str3"], @"test");
     XCTAssertEqualObjects(output[@"str4"], [NSNull null]);
+}
+
+- (void)testTakeInput
+{
+    NSString *xml =
+    @"<x:void xmlns:x='https://github.com/xlc/XLCUtils' >"
+        "<x:Set key='a' value='b' />"
+        "<x:Set key='c' value='2' />"
+    "</x:void>";
+    
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *context = [@{ @"#self" : dict } mutableCopy];
+    [obj createWithContextDictionary:context];
+    XCTAssertEqualObjects(dict, (@{@"a" : @"b", @"c" : @"2"}));
+}
+
+- (void)testTakeInput2
+{
+    NSString *xml =
+    @"<x:void xmlns:x='https://github.com/xlc/XLCUtils' >"
+        "<x:Set object='dict' key='a' value='b' />"
+        "<x:Set object='dict' key='c' value='2' />"
+    "</x:void>";
+    
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *context = [@{ @"dict" : dict } mutableCopy];
+    [obj createWithContextDictionary:context];
+    XCTAssertEqualObjects(dict, (@{@"a" : @"b", @"c" : @"2"}));
 }
 
 @end

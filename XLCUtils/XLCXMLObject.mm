@@ -89,16 +89,15 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
 
 - (id)create
 {
-    return [self createWithOutputDictionary:NULL];
+    return [self createWithContextDictionary:nil];
 }
 
-- (id)createWithOutputDictionary:(NSDictionary **)outputDict
+- (id)createWithContextDictionary:(NSMutableDictionary *)dict;
 {
     XASSERT_NOTNULL(_root);
 
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if (outputDict) {
-        *outputDict = dict;
+    if (!dict) {
+        dict = [NSMutableDictionary dictionary];
     }
 
     id result = XLCCreateObjectFromDictionary(_root, dict);
@@ -432,7 +431,6 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
         
         {@"void", ^id(NSDictionary *dict, NSMutableDictionary *outputDict){
             XLCEvaluateDictionary(dict, outputDict);
-            
             return nil;
         }},
         

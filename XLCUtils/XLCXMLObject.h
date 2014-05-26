@@ -18,6 +18,6 @@
 + (instancetype)objectWithDictionary:(NSDictionary *)dict;
 
 - (id)create;
-- (id)createWithOutputDictionary:(NSDictionary **)dict;
+- (id)createWithContextDictionary:(NSMutableDictionary *)dict;
 
 @end

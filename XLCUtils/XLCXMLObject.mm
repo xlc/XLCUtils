@@ -332,50 +332,58 @@ static NSDictionary * XLCEvaluateDictionary(NSDictionary *dict, NSMutableDiction
 {
     NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:dict.count];
     
-    std::deque<std::pair<id, id>> dict_deque;
-    
-    for (id key in [dict allKeys]) {
-        dict_deque.emplace_back(key, dict[key]);
-    }
-    
-    std::stable_sort(dict_deque.begin(), dict_deque.end(), [](std::pair<id, id> const &p1, std::pair<id, id> const &p2) {
-        id v1 = p1.second;
-        id v2 = p2.second;
-        bool isdict = [v1 isKindOfClass:[NSDictionary class]];
-        bool isdict2 = [v2 isKindOfClass:[NSDictionary class]];
-        if (isdict && isdict2) { // both dict, use index
-            return [v1[@"#index"] integerValue] < [v2[@"#index"] integerValue];
-        }
-        if (isdict || isdict2) { // one dict, dict first
-            return isdict;
-        }
-        return false; // no dict, equal
-    });
-    
-    for (auto &pair : dict_deque)
-    {
-        id key = pair.first;
-        id child = pair.second;
-        id newchild = child;
-        if ([child isKindOfClass:[NSDictionary class]]) {
-            newchild = XLCCreateObjectFromDictionary(child, outputDict);
-        }
-        if (newchild) {
-            result[key] = newchild;
-        }
-    }
-    
     NSArray *contents = dict[@"#contents"];
     NSMutableArray *newcontents = [NSMutableArray arrayWithCapacity:contents.count];
-    for (id child in contents) {
+    
+    std::deque<std::tuple<int, id, id>> items;
+    
+    for (id key in [dict allKeys]) {
+        id val = dict[key];
+        int index = -1;
+        if ([val isKindOfClass:[NSDictionary class]]) {
+            index = [val[@"#index"] integerValue];
+        }
+        items.emplace_back(index, key, dict[key]);
+    }
+    
+    int prevIndex = -1;
+    for (id val in contents) {
+        if ([val isKindOfClass:[NSDictionary class]]) {
+            prevIndex = [val[@"#index"] integerValue];
+        }
+        items.emplace_back(prevIndex, (id)nil, val);
+    }
+    
+    std::stable_sort(items.begin(), items.end(), [](std::tuple<int, id, id> const &p1, std::tuple<int, id, id> const &p2) {
+        return std::get<0>(p1) < std::get<0>(p2);
+    });
+    
+    for (auto &tuple : items)
+    {
+        id key = std::get<1>(tuple);
+        id child = std::get<2>(tuple);
         id newchild = child;
-        if ([child isKindOfClass:[NSDictionary class]]) {
-            newchild = XLCCreateObjectFromDictionary(child, outputDict);
+        if ([key isKindOfClass:[NSString class]] && ([key hasPrefix:XLCNamespaceURI] || [key hasPrefix:@"#"])) {
+            newchild = nil;
+        } else if ([child isKindOfClass:[NSDictionary class]]) {
+            if ([child[@"#name"] caseInsensitiveCompare:@"postaction"] == NSOrderedSame) {
+                XWLOG(@"object ignored: %@", child);
+            } else {
+                newchild = XLCCreateObjectFromDictionary(child, outputDict);
+                if (key && !newchild) {
+                    newchild = [NSNull null];
+                }
+            }
         }
         if (newchild) {
-            [newcontents addObject:newchild];
+            if (key) {
+                result[key] = newchild;
+            } else {
+                [newcontents addObject:newchild];
+            }
         }
     }
+    
     if (newcontents.count) {
         result[@"#contents"] = newcontents;
     } else {
@@ -530,54 +538,54 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                 NSMutableArray *postactions = [NSMutableArray array];
                 
                 NSMutableArray *objectContents = [NSMutableArray array];
-                for (id child in contents) {
-                    id newchild = child;
-                    if ([child isKindOfClass:[NSDictionary class]]) {
-                        if ([child[@"#name"] caseInsensitiveCompare:@"postaction"] == NSOrderedSame) {
-                            [postactions addObjectsFromArray:child[@"#contents"]];
-                        } else {
-                            newchild = XLCCreateObjectFromDictionary(child, outputDict);
-                        }
-                    }
-                    if (newchild) {
-                        [objectContents addObject:newchild];
-                    }
-                }
-
                 NSMutableDictionary *props = [NSMutableDictionary dictionaryWithCapacity:dict.count];
                 
-                std::deque<std::pair<id, id>> dict_deque;
+                std::deque<std::tuple<int, id, id>> items;
                 
                 for (id key in [dict allKeys]) {
-                    dict_deque.emplace_back(key, dict[key]);
+                    id val = dict[key];
+                    int index = -1;
+                    if ([val isKindOfClass:[NSDictionary class]]) {
+                        index = [val[@"#index"] integerValue];
+                    }
+                    items.emplace_back(index, key, dict[key]);
                 }
                 
-                std::stable_sort(dict_deque.begin(), dict_deque.end(), [](std::pair<id, id> const &p1, std::pair<id, id> const &p2) {
-                    id v1 = p1.second;
-                    id v2 = p2.second;
-                    bool isdict = [v1 isKindOfClass:[NSDictionary class]];
-                    bool isdict2 = [v2 isKindOfClass:[NSDictionary class]];
-                    if (isdict && isdict2) { // both dict, use index
-                        return [v1[@"#index"] integerValue] < [v2[@"#index"] integerValue];
+                int prevIndex = -1;
+                for (id val in contents) {
+                    if ([val isKindOfClass:[NSDictionary class]]) {
+                        prevIndex = [val[@"#index"] integerValue];
                     }
-                    if (isdict || isdict2) { // one dict, dict first
-                        return isdict;
-                    }
-                    return false; // no dict, equal
+                    items.emplace_back(prevIndex, (id)nil, val);
+                }
+                
+                std::stable_sort(items.begin(), items.end(), [](std::tuple<int, id, id> const &p1, std::tuple<int, id, id> const &p2) {
+                    return std::get<0>(p1) < std::get<0>(p2);
                 });
                 
-                for (auto &pair : dict_deque)
+                for (auto &tuple : items)
                 {
-                    id key = pair.first;
-                    id child = pair.second;
+                    id key = std::get<1>(tuple);
+                    id child = std::get<2>(tuple);
                     id newchild = child;
                     if ([key isKindOfClass:[NSString class]] && ([key hasPrefix:XLCNamespaceURI] || [key hasPrefix:@"#"])) {
                         newchild = nil;
                     } else if ([child isKindOfClass:[NSDictionary class]]) {
-                        newchild = XLCCreateObjectFromDictionary(child, outputDict) ?: [NSNull null];
+                        if ([child[@"#name"] caseInsensitiveCompare:@"postaction"] == NSOrderedSame) {
+                            [postactions addObjectsFromArray:child[@"#contents"]];
+                        } else {
+                            newchild = XLCCreateObjectFromDictionary(child, outputDict);
+                            if (key && !newchild) {
+                                newchild = [NSNull null];
+                            }
+                        }
                     }
                     if (newchild) {
-                        props[key] = newchild;
+                        if (key) {
+                            props[key] = newchild;
+                        } else {
+                            [objectContents addObject:newchild];
+                        }
                     }
                 }
                 

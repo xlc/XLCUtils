@@ -810,7 +810,35 @@
     NSDictionary *output;
     id result = [obj createWithOutputDictionary:&output];
     XCTAssertEqualObjects(result, NSFontAttributeName);
+}
 
+- (void)testEvaluationOrder
+{
+    NSString *xml =
+    @"<x:void xmlns:x='https://github.com/xlc/XLCUtils' >"
+        "<x:Ref name='str' x:name='str1' />"
+        "<x:void.a>"
+            "<NSString value='test' x:name='str' />"
+        "</x:void.a>"
+        "<x:Ref name='str' x:name='str2' />"
+        "<x:Ref name='str3' x:name='str4' />"
+        "<x:void.b>"
+            "<x:Ref name='str2' x:name='str3' />"
+        "</x:void.b>"
+    "</x:void>";
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+    
+    NSDictionary *output;
+    [obj createWithOutputDictionary:&output];
+    XCTAssertEqualObjects(output[@"str"], @"test");
+    XCTAssertEqualObjects(output[@"str1"], [NSNull null]);
+    XCTAssertEqualObjects(output[@"str2"], @"test");
+    XCTAssertEqualObjects(output[@"str3"], @"test");
+    XCTAssertEqualObjects(output[@"str4"], [NSNull null]);
 }
 
 @end

@@ -338,14 +338,14 @@ static NSDictionary * XLCEvaluateDictionary(NSDictionary *dict, NSMutableDiction
     
     for (id key in [dict allKeys]) {
         id val = dict[key];
-        int index = -1;
+        NSInteger index = -1;
         if ([val isKindOfClass:[NSDictionary class]]) {
             index = [val[@"#index"] integerValue];
         }
         items.emplace_back(index, key, dict[key]);
     }
     
-    int prevIndex = -1;
+    NSInteger prevIndex = -1;
     for (id val in contents) {
         if ([val isKindOfClass:[NSDictionary class]]) {
             prevIndex = [val[@"#index"] integerValue];
@@ -471,13 +471,6 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
                 obj = outputDict[obj];
             }
             if (obj && obj != [NSNull null]) {
-                id value = dict[@"value"];
-                if (!value) {
-                    NSArray *content = dict[@"#contents"];
-                    if ([content count]) {
-                        value = content[0];
-                    }
-                }
                 NSString *key = dict[@"key"];
                 NSString *keyPath = dict[@"keyPath"];
                 if (key) {
@@ -542,14 +535,14 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                 
                 for (id key in [dict allKeys]) {
                     id val = dict[key];
-                    int index = -1;
+                    NSInteger index = -1;
                     if ([val isKindOfClass:[NSDictionary class]]) {
                         index = [val[@"#index"] integerValue];
                     }
                     items.emplace_back(index, key, dict[key]);
                 }
                 
-                int prevIndex = -1;
+                NSInteger prevIndex = -1;
                 for (id val in contents) {
                     if ([val isKindOfClass:[NSDictionary class]]) {
                         prevIndex = [val[@"#index"] integerValue];

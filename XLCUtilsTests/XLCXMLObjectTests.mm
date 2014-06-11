@@ -216,6 +216,46 @@
 
 }
 
+- (void)testParseXMLMergeAttributeWithKeyNamespace
+{
+    NSString *xml =
+    @"<foo xmlns:k='https://github.com/xlc/XLCUtils/key'>"
+        "<k:a />"
+        "<k:b>"
+            "test"
+        "</k:b>"
+        "<k:obj>"
+            "<foo>"
+                "<k:bar>"
+                    "test2"
+                "</k:bar>"
+            "</foo>"
+        "</k:obj>"
+    "</foo>";
+    
+    NSDictionary *expected =
+    @{
+      @"#name" : @"foo",
+      @"#namespace" : @"",
+      @"#index" : @0,
+      @"a" : [NSNull null],
+      @"b" : @"test",
+      @"obj" : @{
+              @"#name" : @"foo",
+              @"#namespace" : @"",
+              @"#index" : @4,
+              @"bar" : @"test2",
+              },
+      };
+    
+    NSError *error;
+    XLCXMLObject *obj = [XLCXMLObject objectWithXMLString:xml error:&error];
+    
+    XCTAssertNil(error, "no error");
+    XCTAssertNotNil(obj, "have obj");
+    XCTAssertEqualObjects(obj.root, expected);
+}
+
 - (void)testCreateNSObject
 {
     NSString *xml = @"<NSObject />";

@@ -17,7 +17,8 @@
 #import "XLCAssertion.h"
 #import "XLCXMLCreation.h"
 
-static NSString * const XLCNamespaceURI     = @"https://github.com/xlc/XLCUtils";
+static NSString * const XLCNamespaceURI = @"https://github.com/xlc/XLCUtils";
+static NSString * const XLCKeyNamespaceURI = @"https://github.com/xlc/XLCUtils/key";
 static NSString * const XLCXMLAttributeName = @"https://github.com/xlc/XLCUtils:name";
 
 struct XLCNSStringHash {
@@ -129,14 +130,22 @@ static void mergeAttribute(NSMutableDictionary *dict)
 
             NSString *childName = child[@"#name"];
             NSString *childNs = child[@"#namespace"];
+            
+            NSString *attName;
+            
             if ([childName hasPrefix:prefix] && [ns isEqualToString:childNs]) {
-                NSString *attName = [childName substringFromIndex:prefix.length];
+                attName = [childName substringFromIndex:prefix.length];
+            } else if ([childNs isEqualToString:XLCKeyNamespaceURI]) {
+                attName = childName;
+            }
+            
+            if (attName) {
                 NSMutableArray *contents = child[@"#contents"];
                 switch (contents.count) {
                     case 0:
                         dict[attName] = [NSNull null];
                         break;
-
+                        
                     default:
                         XILOG(@"Element property contains more than one object, only first one used. %@", child);
                         // no break

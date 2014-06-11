@@ -102,7 +102,8 @@
 {
     NSString *xml = @"<NSFont weight='15' />";
     NSFont *font = [self createFromXML:xml];
-    XCTAssertEqualObjects(font, [[NSFontManager sharedFontManager] convertFont:[NSFont systemFontOfSize:[NSFont systemFontSize]] toHaveTrait:NSBoldFontMask]);
+    
+    XCTAssertEqualObjects(font, [[NSFontManager sharedFontManager] fontWithFamily:[[NSFont systemFontOfSize:0] familyName] traits:0 weight:15 size:[NSFont systemFontSize]]);
 }
 
 - (void)testCreateNSFontWithBold

@@ -48,21 +48,21 @@
     }
     
     {
-        NSString *xml = @"<UIColor green='0.4' />";
+        NSString *xml = @"<UIColor green='0.25' />";
         id color = [self createFromXML:xml];
-        XCTAssertEqualObjects(color, [[UIColor alloc] initWithRed:0 green:0.4 blue:0 alpha:1]);
+        XCTAssertEqualObjects(color, [[UIColor alloc] initWithRed:0 green:0.25 blue:0 alpha:1]);
     }
     
     {
-        NSString *xml = @"<UIColor blue='0.3' />";
+        NSString *xml = @"<UIColor blue='0.75' />";
         id color = [self createFromXML:xml];
-        XCTAssertEqualObjects(color, [[UIColor alloc] initWithRed:0 green:0 blue:0.3 alpha:1]);
+        XCTAssertEqualObjects(color, [[UIColor alloc] initWithRed:0 green:0 blue:0.75 alpha:1]);
     }
     
     {
-        NSString *xml = @"<UIColor red='0.1' blue='1' green='0.2' alpha='0.7' />";
+        NSString *xml = @"<UIColor red='0.25' blue='1' green='0.5' alpha='0.75' />";
         id color = [self createFromXML:xml];
-        XCTAssertEqualObjects(color, [[UIColor alloc] initWithRed:0.1 green:0.2 blue:1 alpha:0.7]);
+        XCTAssertEqualObjects(color, [[UIColor alloc] initWithRed:0.25 green:0.5 blue:1 alpha:0.75]);
     }
 }
 
@@ -75,9 +75,9 @@
 
 - (void)testCreateUIColorWhite
 {
-    NSString *xml = @"<UIColor white='0.2' alpha='0.4' />";
+    NSString *xml = @"<UIColor white='0.25' alpha='0.5' />";
     id color = [self createFromXML:xml];
-    XCTAssertEqualObjects(color, [[UIColor alloc] initWithWhite:0.2 alpha:0.4]);
+    XCTAssertEqualObjects(color, [[UIColor alloc] initWithWhite:0.25 alpha:0.5]);
 }
 
 - (void)testCreateUIColorName
@@ -99,7 +99,7 @@
 {
     NSString *xml = @"<UIColor value='#123456' />";
     id color = [self createFromXML:xml];
-    float ff = 0xFF;
+    double ff = 0xFF;
     XCTAssertEqualObjects(color, [[UIColor alloc] initWithRed:0x12/ff green:0x34/ff blue:0x56/ff alpha:1]);
 }
 

@@ -14,6 +14,7 @@
 #include <utility>
 #include <string>
 #include <typeinfo>
+#include <memory>
 
 #include <cxxabi.h>
 
@@ -139,7 +140,7 @@ namespace xlc {
         }
         
         return str;
-    };
+    }
 }
 
 #ifdef __OBJC__

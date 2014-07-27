@@ -10,6 +10,8 @@ Pod::Spec.new do |s|
   s.source_files = 'XLCUtils/**/*.{h,hh,m,mm}'
   s.exclude_files = 'XLCUtils/NSObject+XLCUtilsMemoryDebug.{h,m}'
  
+  s.dependency 'CocoaLumberjack'
+
   s.ios.exclude_files = '**/osx/**'
   s.osx.exclude_files = '**/ios/**'
   s.private_header_files = '**/*Private.h'

@@ -10,6 +10,9 @@
 
 #import "XLCXMLObject.h"
 
+#import "XLCLogging.h"
+#import "XLCAssertion.h"
+
 @interface XLCXMLObjectTestDummy : NSObject
 
 @property NSString *stringValue;

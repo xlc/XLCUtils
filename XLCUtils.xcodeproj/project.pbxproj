@@ -714,6 +714,7 @@
 		};
 		068EED2C1930B71C00E58689 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -744,6 +745,7 @@
 		};
 		068EED2D1930B71C00E58689 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -865,6 +867,7 @@
 		};
 		0692BC4017D75723009BFC18 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -893,6 +896,7 @@
 		};
 		0692BC4117D75723009BFC18 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				COMBINE_HIDPI_IMAGES = YES;

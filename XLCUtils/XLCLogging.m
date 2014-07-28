@@ -8,61 +8,45 @@
 
 #import "XLCLogging.h"
 
-const char * const XLCLogLevelNames[] = {
-    "Debug",
-    "Info",
-    "Warn",
-    "Error",
-};
+#import "XLCAssertion.h"
 
-static NSMutableDictionary *loggerDict;
+#ifdef DEBUG
 
-@implementation XLCLogger
+int XLCLogLevel = LOG_LEVEL_ALL;
 
-+ (void)initialize {
-    if (self == [XLCLogger class]) {
-        loggerDict = [NSMutableDictionary dictionary];
-    }
+#else
+
+int XLCLogLevel = LOG_LEVEL_WARN;
+
+#endif
+
+@implementation XLCDefaultLogFormatter {
+    NSDateFormatter *_dateFormatter;
 }
 
-+ (void)addLogger:(XLCLoggerBlock)logger {
-    logger = [logger copy];
-    @synchronized(loggerDict) {
-        loggerDict[(id)logger] = logger;
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     }
+    return self;
 }
 
-+ (void)setLogger:(XLCLoggerBlock)logger forKey:(id<NSCopying>)key {
-    logger = [logger copy];
-    @synchronized(loggerDict) {
-        loggerDict[key] = logger;
+- (NSString *)formatLogMessage:(DDLogMessage *)logMessage
+{
+    const char *level;
+    switch (logMessage->logFlag) {
+        case LOG_FLAG_ERROR:    level = "Error";    break;
+        case LOG_FLAG_WARN:     level = "Warn";     break;
+        case LOG_FLAG_INFO:     level = "Info";     break;
+        case LOG_FLAG_DEBUG:    level = "Debug";    break;
+        case LOG_FLAG_VERBOSE:  level = "Verbose";  break;
+        default:                level = "????";     break;
     }
-}
-
-+ (void)removeLoggerForKey:(id<NSCopying>)key {
-    @synchronized(loggerDict) {
-        [loggerDict removeObjectForKey:key];
-    }
-}
-
-+ (void)logWithLevel:(XLCLoggingLevel)level function:(const char *)function line:(int)line message:(NSString *)format, ... {
-    va_list ap;
-    va_start(ap, format);
-    
-    NSString *message = [[NSString alloc] initWithFormat:format arguments:ap];
-    
-    va_end(ap);
-    
-    NSLog(@" %s\t %s:%d\t- %@", XLCLogLevelNames[level], function, line, message);
-
-    NSArray *allLoggers;
-    @synchronized(loggerDict) {
-        allLoggers = [[loggerDict allValues] copy];
-    }
-    
-    for (XLCLoggerBlock logger in allLoggers) {
-        logger(level, function, line, message);
-    }
+    NSString *time = [_dateFormatter stringFromDate:logMessage->timestamp];
+    return [NSString stringWithFormat:@"%@ [%x]  %s\t %s:%d\t- %@", time, logMessage->machThreadID, level, logMessage->function, logMessage->lineNumber, logMessage->logMsg];
 }
 
 @end

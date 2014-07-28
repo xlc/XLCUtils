@@ -55,3 +55,13 @@ void _XLCBreakIfInDebugger() {
 }
 
 #endif
+
+void _XLCAssertionFailedCritical(NSString *format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    
+    [NSException raise:NSInternalInconsistencyException format:format arguments:ap];
+    
+    va_end(ap);
+}

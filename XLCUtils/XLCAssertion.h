@@ -9,9 +9,41 @@
 #import <Foundation/Foundation.h>
 #import "XLCLogging.h"
 
-__BEGIN_DECLS
+#define XLCAssertCritical(e, format...)             _XLCAssertCritical(e, format)
+#define XLCAssert(e, format...)                     _XLCAssert(e, format)
+
+#define XLCFailCritical(format...)                  _XLCFailCritical(format)
+#define XLCFail(format...)                          _XLCFail(format)
+
+#define XLCAssertNotNullCritical(ptr, format...)    _XLCAssertNotNullCritical(ptr, format)
+#define XLCAssertNotNull(ptr, format...)            _XLCAssertNotNull(ptr, format)
+
+#define XLCAssertKernCritical(e, format...)         _XLCAssertKernCritical(e, format)
+#define XLCAssertKern(e, format...)                 _XLCAssertKern(e, format)
+
+#define XLCObjectCast(obj, cls)                     _XLCObjectCast(obj, cls)
 
 #ifdef DEBUG
+
+#define XLCAssertDebug(e, format...)                _XLCAssertDebug(e, format)
+#define XLCAssertNotNullDebug(ptr, format...)       _XLCAssertNotNullDebug(ptr, format)
+#define XLCAssertKernDebug(e, format...)            _XLCAssertKernDebug(e, format)
+
+#else
+
+#define XLCAssertDebug(e, format...)                (void)0
+#define XLCAssertNotNullDebug(ptr, format...)       (void)0
+#define XLCAssertKernDebug(e, format...)            (void)0
+
+#endif
+
+// implementation details below
+
+__BEGIN_DECLS
+
+void _XLCAssertionFailedCritical(NSString *format, ...);
+
+#if DEBUG
 void _XLCBreakIfInDebugger(void);
 #else
 static inline void _XLCBreakIfInDebugger(void) {}
@@ -19,57 +51,103 @@ static inline void _XLCBreakIfInDebugger(void) {}
 
 __END_DECLS
 
-#define XLCFAIL(format...) \
+#define _XLCFailCritical(format...) \
 do { \
-    XLCELOG(format); \
+    XLCLogError(format); \
+    _XLCBreakIfInDebugger(); \
+    _XLCAssertionFailedCritical(@"" format); \
+} while (0)
+
+#define _XLCFail(format...) \
+do { \
+    XLCLogWarn(format); \
     _XLCBreakIfInDebugger(); \
 } while (0)
 
-#define XLCASSERT(e, format...) \
+#define _XLCFailDebug(format...) \
 do { \
-    if (!(e)) { \
-        XLCFAIL(@"failed assertion: '%s', %@", #e, [NSString stringWithFormat:@"" format]); \
-    }   \
+    XLCLogDebug(format); \
+    _XLCBreakIfInDebugger(); \
 } while (0)
 
-#define XLCASSERT_SOFT(e)\
+#define _XLCAssertCritical(expr, format...) \
 do { \
-    if (!(e)) { \
-        XLCWLOG(@"failed soft assertion: '%s'", #e); \
+    if (!(expr)) { \
+        _XLCFailCritical("Assertion failure: '%s' %@", #expr, [NSString stringWithFormat:@"" format]); \
     } \
 } while (0)
 
-#define XLCASSERT_KERN(e)\
+#define _XLCAssert(expr, format...) \
 do { \
-    kern_return_t __kr = (e);\
+    if (!(expr)) { \
+        _XLCFail("Assertion failure: '%s' %@", #expr, [NSString stringWithFormat:@"" format]); \
+    } \
+} while (0)
+
+#define _XLCAssertDebug(expr, format...) \
+do { \
+    if (!(expr)) { \
+        _XLCFailDebug("Assertion failure: '%s' %@", #expr, [NSString stringWithFormat:@"" format]); \
+    } \
+} while (0)
+
+#define _XLCAssertNotNullCritical(ptr, format...) \
+do { \
+    if (!(ptr)) { \
+        _XLCFailCritical("Assertion failure: '%s != NULL' %@", #ptr, [NSString stringWithFormat:@"" format]); \
+    } \
+} while (0)
+
+#define _XLCAssertNotNull(ptr, format...) \
+do { \
+    if (!(ptr)) { \
+        _XLCFail("Assertion failure: '%s != NULL' %@", #ptr, [NSString stringWithFormat:@"" format]); \
+    } \
+} while (0)
+
+#define _XLCAssertNotNullDebug(ptr, format...) \
+do { \
+    if (!(ptr)) { \
+        _XLCFailDebug("Assertion failure: '%s != NULL' %@", #ptr, [NSString stringWithFormat:@"" format]); \
+    } \
+} while (0)
+
+#define _XLCAssertKernCritical(expr, format...) \
+do { \
+    kern_return_t __kr = (expr); \
     if (__kr != KERN_SUCCESS) { \
-        XLCFAIL(@"kernal function: '%s' returned with error: %s", #e, mach_error_string(__kr)); \
+        _XLCFailCritical("Assertion failure: '%s == KERN_SUCCESS' %s %@", #expr, mach_error_string(__kr), [NSString stringWithFormat:@"" format]); \
     } \
 } while (0)
 
-#define XLCASSERT_CLASS(obj, cls) \
+#define _XLCAssertKern(expr, format...) \
 do { \
-    id __obj = (obj); \
-    Class __cls = (cls); \
-    if (!([__obj isKindOfClass:[__cls class]])) { \
-        XLCFAIL(@"failed assertion: '[%s isKindOfClass:[%s class]]', expected class: %@, actual class: %@, object: %@",\
-            #obj, #cls, __cls, [__obj class], __obj); \
-    }   \
+    kern_return_t __kr = (expr); \
+    if (__kr != KERN_SUCCESS) { \
+        _XLCFail("Assertion failure: '%s == KERN_SUCCESS' %s %@", #expr, mach_error_string(__kr), [NSString stringWithFormat:@"" format]); \
+    } \
 } while (0)
 
-#define XLCASSERT_NOTNULL(ptr) \
+#define _XLCAssertKernDebug(expr, format...) \
 do { \
-    __typeof__(ptr) __ptr = (ptr); \
-    if (!__ptr) { \
-        XLCFAIL(@"failed assertion: '%s != NULL'", #ptr); \
-    }   \
-} while (0) \
+    kern_return_t __kr = (expr); \
+    if (__kr != KERN_SUCCESS) { \
+        _XLCFailDebug("Assertion failure: '%s == KERN_SUCCESS' %s %@", #expr, mach_error_string(__kr), [NSString stringWithFormat:@"" format]); \
+    } \
+} while (0)
+
+static inline id __XLCObjectCast(id obj, Class cls, const char *objexpr, const char *clsexpr)
+{
+    if (obj && ![obj isKindOfClass:cls])
+    {
+        _XLCFail("Assertion failure: '[%s isKindOfClass:[%s class]]', expected class: %@, actual class: %@, object: %@", objexpr, clsexpr, cls, [obj class], obj);
+        return nil;
+    }
+    return obj;
+}
+
+#define _XLCObjectCast(obj, cls) __XLCObjectCast((obj), ([cls class]), #obj, #cls)
 
 
-// save some typing
-#define XASSERT(e, format...)   XLCASSERT(e, format)
-#define XFAIL(format...)        XLCFAIL(format)
-#define XASSERT_SOFT(e)         XLCASSERT_SOFT(e)
-#define XASSERT_KERN(e)         XLCASSERT_KERN(e)
-#define XASSERT_CLASS(obj, cls) XLCASSERT_CLASS(obj, cls)
-#define XASSERT_NOTNULL(ptr)    XLCASSERT_NOTNULL(ptr)
+
+

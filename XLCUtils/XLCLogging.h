@@ -8,53 +8,36 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSUInteger, XLCLoggingLevel) {
-    XLCLoggingLevelDebug = 0,
-    XLCLoggingLevelInfo,
-    XLCLoggingLevelWarning,
-    XLCLoggingLevelError,
-    XLCLoggingLevelCount
-};
+#import <CocoaLumberjack/DDLog.h>
 
-#define XLCLOG(level, format...) [XLCLogger logWithLevel:level function:__PRETTY_FUNCTION__ line:__LINE__ message:@"" format]
+#undef LOG_OBJC_MAYBE
+#define LOG_OBJC_MAYBE(async, lvl, flg, ctx, format...) \
+        LOG_MAYBE(async, lvl, flg, ctx, __PRETTY_FUNCTION__, @"" format)
+
+#undef LOG_C_MAYBE
+#define LOG_C_MAYBE LOG_OBJC_MAYBE
+
+#define XLCLogError(format...) DDLogError(format)
+#define XLCLogWarn(format...) DDLogWarn(format)
+#define XLCLogInfo(format...) DDLogInfo(format)
 
 #ifdef DEBUG
-// debug log
-#define XLCDLOG(format...) XLCLOG(XLCLoggingLevelDebug, format)
+
+#define XLCLogDebug(format...) DDLogDebug(format)
+#define XLCLogVerbose(format...) DDLogVerbose(format)
+
 #else
-// which removed completely in release build
-#define XLCDLOG(format...) ((void)0)
+
+#define XLCLogDebug(format...) (void)0
+#define XLCLogVerbose(format...) (void)0
+
 #endif
 
-// info log
-#define XLCILOG(format...) XLCLOG(XLCLoggingLevelInfo, format)
+#undef LOG_LEVEL_DEF
+#define LOG_LEVEL_DEF XLCLogLevel
 
-// warn log
-#define XLCWLOG(format...) XLCLOG(XLCLoggingLevelWarning, format)
+extern int XLCLogLevel;
 
-// error log
-#define XLCELOG(format...) XLCLOG(XLCLoggingLevelError, format)
-
-// condition log
-#define XLCCLOG(condition, format...) do { if (condition) XLCILOG(format); } while (0)
-
-// save some typing
-#define XDLOG(format...) XLCDLOG(format)
-#define XILOG(format...) XLCILOG(format)
-#define XWLOG(format...) XLCWLOG(format)
-#define XELOG(format...) XLCELOG(format)
-#define XCLOG(condition, format...) XLCCLOG(condition, format)
-
-extern const char * const XLCLogLevelNames[];
-
-typedef void (^XLCLoggerBlock) (XLCLoggingLevel level, const char *function, int lineno, NSString *message);
-
-@interface XLCLogger : NSObject
-
-+ (void)addLogger:(XLCLoggerBlock)logger;
-+ (void)setLogger:(XLCLoggerBlock)logger forKey:(id<NSCopying>)key;
-+ (void)removeLoggerForKey:(id<NSCopying>)key;
-
-+ (void)logWithLevel:(XLCLoggingLevel)level function:(const char *)function line:(int)line message:(NSString *)format, ... NS_FORMAT_FUNCTION(4,5);
+@interface XLCDefaultLogFormatter : NSObject <DDLogFormatter>
 
 @end

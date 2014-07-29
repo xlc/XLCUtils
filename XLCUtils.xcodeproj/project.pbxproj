@@ -98,6 +98,7 @@
 
 /* Begin PBXFileReference section */
 		00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLCUtils-ios.xcconfig"; path = "Pods/Pods-XLCUtils-ios.xcconfig"; sourceTree = "<group>"; };
+		060FE27E19878466007539BA /* XLCUtilsLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtilsLog.h; sourceTree = "<group>"; };
 		06208BCF17E1C4EC00F60D39 /* XLCRunloop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCRunloop.h; sourceTree = "<group>"; };
 		06208BD017E1C4EC00F60D39 /* XLCRunloop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCRunloop.m; sourceTree = "<group>"; };
 		06208BD317E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+XLCUtilsMemoryDebug.h"; sourceTree = "<group>"; };
@@ -318,6 +319,7 @@
 			children = (
 				0692BC4317D873CF009BFC18 /* XLCLogging.h */,
 				0692BC4417D873CF009BFC18 /* XLCLogging.m */,
+				060FE27E19878466007539BA /* XLCUtilsLog.h */,
 				06E7887B19752316004AD435 /* XLCTrace.h */,
 				06E7887C19752316004AD435 /* XLCTrace.mm */,
 			);

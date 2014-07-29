@@ -8,14 +8,14 @@
 
 #import "XLCLogging.h"
 
-#import "XLCAssertion.h"
-
 #ifdef DEBUG
 
+int XLCUtilsLogLevel = LOG_LEVEL_ALL;
 int XLCLogLevel = LOG_LEVEL_ALL;
 
 #else
 
+int XLCUtilsLogLevel = LOG_LEVEL_WARN;
 int XLCLogLevel = LOG_LEVEL_WARN;
 
 #endif

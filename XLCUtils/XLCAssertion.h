@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "XLCLogging.h"
+#import "XLCTrace.h"
 
 #define XLCAssertCritical(e, format...)             _XLCAssertCritical(e, format)
 #define XLCAssert(e, format...)                     _XLCAssert(e, format)
@@ -44,9 +45,10 @@ __BEGIN_DECLS
 void _XLCAssertionFailedCritical(NSString *format, ...);
 
 #if DEBUG
-void _XLCBreakIfInDebugger(void);
+void _XLCBreakIfInDebugger();
+static inline void _XLCPanic(void) { [XLCTrace panic]; _XLCBreakIfInDebugger(); }
 #else
-static inline void _XLCBreakIfInDebugger(void) {}
+static inline void _XLCPanic(void) { [XLCTrace panic]; }
 #endif
 
 __END_DECLS
@@ -54,20 +56,20 @@ __END_DECLS
 #define _XLCFailCritical(format...) \
 do { \
     XLCLogError(format); \
-    _XLCBreakIfInDebugger(); \
+    _XLCPanic(); \
     _XLCAssertionFailedCritical(@"" format); \
 } while (0)
 
 #define _XLCFail(format...) \
 do { \
     XLCLogWarn(format); \
-    _XLCBreakIfInDebugger(); \
+    _XLCPanic(); \
 } while (0)
 
 #define _XLCFailDebug(format...) \
 do { \
     XLCLogDebug(format); \
-    _XLCBreakIfInDebugger(); \
+    _XLCPanic(); \
 } while (0)
 
 #define _XLCAssertCritical(expr, format...) \

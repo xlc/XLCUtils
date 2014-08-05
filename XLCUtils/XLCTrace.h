@@ -35,6 +35,8 @@ static const NSUInteger XLCTraceInfoDataSize = sizeof(uint64_t) * 5;
 - (void)didAddToTrace:(XLCTrace *)trace;
 - (void)didRemoveFromTrace;
 
+- (void)panic;
+
 @end
 
 @interface XLCTrace : NSObject
@@ -51,6 +53,9 @@ static const NSUInteger XLCTraceInfoDataSize = sizeof(uint64_t) * 5;
 
 - (void)addOutput:(id<XLCTraceOutput>)output forKey:(id<NSCopying>)key;
 - (void)removeOutputForKey:(id<NSCopying>)key;
+
++ (void)panic; // [[XLCTrace defaultTrace] panic]
+- (void)panic;
 
 @end
 
@@ -77,6 +82,8 @@ XLCTrace *XLCTraceGetDefault();
 
 + (instancetype)outputWithPath:(NSString *)path;
 - (instancetype)initWithPath:(NSString *)path;
+
+- (void)sync;
 
 @end
 

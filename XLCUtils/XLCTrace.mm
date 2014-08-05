@@ -13,6 +13,8 @@
 
 #include <unordered_set>
 
+const int kPanicCount = 100;
+
 @implementation XLCTrace {
 @public
     NSMutableDictionary *_outputs;
@@ -61,6 +63,23 @@
         [_outputs removeObjectForKey:key];
         if ([output respondsToSelector:@selector(didRemoveFromTrace)]) {
             [output didRemoveFromTrace];
+        }
+    });
+}
+
++ (void)panic
+{
+    [XLCTraceGetDefault() panic];
+}
+
+
+- (void)panic
+{
+    dispatch_barrier_sync(_queue, ^{
+        for (id<XLCTraceOutput> output in [_outputs allValues]) {
+            if ([output respondsToSelector:@selector(panic)]) {
+                [output panic];
+            }
         }
     });
 }
@@ -126,6 +145,8 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
 @implementation XLCTraceInMemoryBufferOutput {
     NSMutableArray *_buffer;
     NSUInteger _current;
+    XLCTraceFileSystemOutput *_fsOutput;
+    int _panicCount;
 }
 
 - (instancetype)init
@@ -196,6 +217,13 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     } else {
         [_buffer addObject:info];
     }
+    if (--_panicCount >= 0) {
+        [_fsOutput processInfo:info];
+        [_fsOutput sync];
+    } else {
+        [_fsOutput didRemoveFromTrace];
+        _fsOutput = nil;
+    }
 }
 
 - (void)didAddToTrace:(XLCTrace *)trace
@@ -210,6 +238,19 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     self.trace = nil;
 }
 
+- (void)panic
+{
+    _panicCount = kPanicCount;
+    if (!_fsOutput) {
+        _fsOutput = [[XLCTraceFileSystemOutput alloc] init];
+        [_fsOutput didAddToTrace:_trace];
+        for (XLCTraceInfo *info in self.buffer) {
+            [_fsOutput processInfo:info];
+        }
+        [_fsOutput sync];
+    }
+}
+
 @end
 
 @implementation XLCTraceFileSystemOutput {
@@ -220,6 +261,7 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     NSFileHandle *_filenameFile;
     NSFileHandle *_functionFile;
     NSFileHandle *_traceOutputFile;
+    int _panicCount;
 }
 
 + (instancetype)outputWithLogDirectoryPath
@@ -363,11 +405,17 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     if (_storedFilenames.insert(info->filename).second) {
         NSString *str = [NSString stringWithFormat:@"%p:%s\n", info->filename, info->filename];
         [_filenameFile writeData:[str dataUsingEncoding:NSUTF8StringEncoding]];
+        [_filenameFile synchronizeFile];
     }
     
     if (_storedFunctions.insert(info->function).second) {
         NSString *str = [NSString stringWithFormat:@"%p:%s\n", info->function, info->function];
         [_functionFile writeData:[str dataUsingEncoding:NSUTF8StringEncoding]];
+        [_functionFile synchronizeFile];
+    }
+    
+    if (--_panicCount >= 0) {
+        [_traceOutputFile synchronizeFile];
     }
 }
 
@@ -393,6 +441,17 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     _filenameFile = nil;
     [_traceOutputFile closeFile];
     _traceOutputFile = nil;
+}
+
+- (void)sync
+{
+    [_traceOutputFile synchronizeFile];
+}
+
+- (void)panic
+{
+    _panicCount = kPanicCount;
+    [self sync];
 }
 
 @end

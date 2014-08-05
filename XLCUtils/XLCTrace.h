@@ -59,8 +59,6 @@ static const NSUInteger XLCTraceInfoDataSize = sizeof(uint64_t) * 5;
 
 @end
 
-XLCTrace *XLCTraceGetDefault();
-
 @interface XLCTraceInMemoryBufferOutput : NSObject <XLCTraceOutput>
 
 @property XLCTrace *trace;
@@ -87,7 +85,13 @@ XLCTrace *XLCTraceGetDefault();
 
 @end
 
+__BEGIN_DECLS
+
+XLCTrace *XLCTraceGetDefault();
+
 void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned lineno);
+
+__END_DECLS
 
 #define _XLC_TRACE_0() _XLCTrace(XLCTraceGetDefault(), __FILE__, __PRETTY_FUNCTION__, __LINE__)
 #define _XLC_TRACE_1(t) _XLCTrace(t, __FILE__, __PRETTY_FUNCTION__, __LINE__)
@@ -100,4 +104,4 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
 /// or:
 ///     XLCTRACE *dbgTrace = [XLCTrace traceWithName:@"DEBUG"]; // global variable
 ///     XLCTRACE(dbgTrace);
-#define XLC_TRACE(...) _XLC_TRACE(__VA_ARGS__)
+#define XLCTRACE(...) _XLC_TRACE(__VA_ARGS__)

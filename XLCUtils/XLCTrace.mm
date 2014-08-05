@@ -43,7 +43,9 @@ const int kPanicCount = 100;
 
 - (void)sync
 {
-    dispatch_barrier_sync(_queue, ^{});
+    if (dispatch_get_current_queue() != _queue) {
+        dispatch_barrier_sync(_queue, ^{});
+    }
 }
 
 - (void)addOutput:(id<XLCTraceOutput>)output forKey:(id<NSCopying>)key
@@ -75,13 +77,19 @@ const int kPanicCount = 100;
 
 - (void)panic
 {
-    dispatch_barrier_sync(_queue, ^{
+    dispatch_block_t block = ^{
         for (id<XLCTraceOutput> output in [_outputs allValues]) {
             if ([output respondsToSelector:@selector(panic)]) {
                 [output panic];
             }
         }
-    });
+    };
+    if (dispatch_get_current_queue() == _queue) {
+        block();
+    } else {
+        dispatch_barrier_sync(_queue, block);
+    }
+    
 }
 
 #pragma mark - private method
@@ -184,10 +192,15 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     if (!queue) {
         return nil;
     }
-    dispatch_sync(queue, ^{
+    if (dispatch_get_current_queue() == queue) {
         buffer = [_buffer mutableCopy];
         current = _current;
-    });
+    } else {
+        dispatch_sync(queue, ^{
+            buffer = [_buffer mutableCopy];
+            current = _current;
+        });
+    }
     
     if (current == 0) {
         return buffer;
@@ -330,13 +343,13 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
 - (BOOL)createOutputFolderAndFiles
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd-HH-mm-ss"];
+    [dateFormatter setDateFormat:@"yyyyMMdd-HHmmss"];
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
     
     NSCharacterSet *allowedCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:"] invertedSet];
     NSString *traceName = [_trace.name stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet] ?: @"";
     
-    NSString *baseFolderPath = [_path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", dateString, traceName]];
+    NSString *baseFolderPath = [_path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-%@", dateString, traceName]];
     
     _folderPath = baseFolderPath;
     

@@ -7,45 +7,47 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CocoaLumberjack/DDLog.h>
 
-__BEGIN_DECLS
+static const NSUInteger XLCTraceInfoDataSize = sizeof(uint64_t) * 5;
 
-typedef struct XLCTraceInfo {
+@interface XLCTraceInfo : NSObject {
+@public
     const char * filename;
-    const char * func;
-    unsigned lineno;
+    const char * function;
+    uint64_t lineno;
     uint64_t time;
-} XLCTraceInfo;
+    mach_port_t threadId;
+}
 
-@interface XLCTraceInfoArray : NSObject
-
-@property (nonatomic, readonly) XLCTraceInfo *data;
-@property (nonatomic, readonly) NSUInteger count;
-@property (nonatomic, readonly) pthread_t threadId;
+- (NSData *)data;
 
 @end
 
+@class XLCTrace;
+
 @protocol XLCTraceOutput <NSObject>
 
-- (void)processInfos:(XLCTraceInfoArray *)infos;
+- (void)processInfo:(XLCTraceInfo *)info;
 
-- (void)startSession;
-- (void)flush;
+@optional
+
+- (void)didAddToTrace:(XLCTrace *)trace;
+- (void)didRemoveFromTrace;
 
 @end
 
 @interface XLCTrace : NSObject
 
 @property (readonly) NSString *name;
-@property NSUInteger batchSize; // (1 ... 1000000)
+@property (readonly) dispatch_queue_t queue;
 
 + (instancetype)defaultTrace;
 
 + (instancetype)traceWithName:(NSString *)name;
 - (instancetype)initWithName:(NSString *)name;
 
-- (void)startSession;
-- (void)flush;
+- (void)sync; // block until all messages are processed
 
 - (void)addOutput:(id<XLCTraceOutput>)output forKey:(id<NSCopying>)key;
 - (void)removeOutputForKey:(id<NSCopying>)key;
@@ -54,8 +56,41 @@ typedef struct XLCTraceInfo {
 
 XLCTrace *XLCTraceGetDefault();
 
+@interface XLCTraceInMemoryBufferOutput : NSObject <XLCTraceOutput>
+
+@property XLCTrace *trace;
+@property NSUInteger capacity; // default ios 500, osx 2000
+
+- (void)dumpToFileSystem;
+- (NSArray *)buffer;
+
+@end
+
+@interface XLCTraceFileSystemOutput : NSObject <XLCTraceOutput>
+
+@property XLCTrace *trace;
+@property (readonly) NSString *path;
+
+// On Mac, this is in ~/Library/Logs/<Application Name>.
+// On iPhone, this is in ~/Library/Caches/Logs.
++ (instancetype)outputWithLogDirectoryPath;
+
++ (instancetype)outputWithPath:(NSString *)path;
+- (instancetype)initWithPath:(NSString *)path;
+
+@end
+
 void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned lineno);
 
-#define XLCTRACE() _XLCTrace(XLCTraceGetDefault(), __FILE__, __PRETTY_FUNCTION__, __LINE__)
+#define _XLC_TRACE_0() _XLCTrace(XLCTraceGetDefault(), __FILE__, __PRETTY_FUNCTION__, __LINE__)
+#define _XLC_TRACE_1(t) _XLCTrace(t, __FILE__, __PRETTY_FUNCTION__, __LINE__)
 
-__END_DECLS
+#define _XLC_TRACE_CHOOSE(_0, _1, NAME, ...) NAME
+#define _XLC_TRACE(...) _XLC_TRACE_CHOOSE(_0, ##__VA_ARGS__, _XLC_TRACE_1, _XLC_TRACE_0)(__VA_ARGS__)
+
+/// usage:
+///     XLCTRACE();
+/// or:
+///     XLCTRACE *dbgTrace = [XLCTrace traceWithName:@"DEBUG"]; // global variable
+///     XLCTRACE(dbgTrace);
+#define XLC_TRACE(...) _XLC_TRACE(__VA_ARGS__)

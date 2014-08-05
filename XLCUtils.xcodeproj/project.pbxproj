@@ -51,6 +51,8 @@
 		0692BC5717D8993A009BFC18 /* NSObject+XLCDelayedPerform.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */; };
 		06B443A0190384A5006F7245 /* AppKit+XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */; };
 		06B443A319039932006F7245 /* XLCAppKitXMLCreationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B443A219039932006F7245 /* XLCAppKitXMLCreationTests.m */; };
+		06C259ED198C8B1000A13BDA /* XLCTraceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C259EC198C8B1000A13BDA /* XLCTraceTests.m */; };
+		06C259EE198C8B1000A13BDA /* XLCTraceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C259EC198C8B1000A13BDA /* XLCTraceTests.m */; };
 		06DB5B9D1949971200F0D6AC /* XLCPrototype.h in Headers */ = {isa = PBXBuildFile; fileRef = 06DB5B9B1949971200F0D6AC /* XLCPrototype.h */; };
 		06DB5B9E1949971200F0D6AC /* XLCPrototype.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB5B9C1949971200F0D6AC /* XLCPrototype.m */; };
 		06DB5B9F1949971200F0D6AC /* XLCPrototype.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB5B9C1949971200F0D6AC /* XLCPrototype.m */; };
@@ -140,6 +142,7 @@
 		0692BC5517D8993A009BFC18 /* NSObject+XLCDelayedPerform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XLCDelayedPerform.m"; sourceTree = "<group>"; };
 		06B4439E190384A5006F7245 /* AppKit+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppKit+XLCXMLCreation.m"; path = "osx/AppKit+XLCXMLCreation.m"; sourceTree = "<group>"; };
 		06B443A219039932006F7245 /* XLCAppKitXMLCreationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAppKitXMLCreationTests.m; sourceTree = "<group>"; };
+		06C259EC198C8B1000A13BDA /* XLCTraceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCTraceTests.m; sourceTree = "<group>"; };
 		06DB5B9B1949971200F0D6AC /* XLCPrototype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCPrototype.h; sourceTree = "<group>"; };
 		06DB5B9C1949971200F0D6AC /* XLCPrototype.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCPrototype.m; sourceTree = "<group>"; };
 		06DB5BA01949C8A600F0D6AC /* XLCPrototypeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCPrototypeTests.m; sourceTree = "<group>"; };
@@ -299,6 +302,7 @@
 				06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */,
 				062538EF190CDB88007FD1C4 /* XLCStreamTests.mm */,
 				06DB5BA01949C8A600F0D6AC /* XLCPrototypeTests.m */,
+				06C259EC198C8B1000A13BDA /* XLCTraceTests.m */,
 				0692BC3317D75723009BFC18 /* Supporting Files */,
 			);
 			path = XLCUtilsTests;
@@ -613,6 +617,7 @@
 				068EED411930C5D600E58689 /* XLCUIKitXMLCreationTests.m in Sources */,
 				068EED3B1930B8DE00E58689 /* XLCXMLObjectTests.mm in Sources */,
 				068EED3D1930B8DE00E58689 /* XLCAdditionsTests.m in Sources */,
+				06C259EE198C8B1000A13BDA /* XLCTraceTests.m in Sources */,
 				068EED3E1930B8DE00E58689 /* XLCObjCppHelpersTests.mm in Sources */,
 				068EED3F1930B8DE00E58689 /* XLCStreamTests.mm in Sources */,
 			);
@@ -645,6 +650,7 @@
 				06F50AAB1907C167000E5D58 /* XLCAdditionsTests.m in Sources */,
 				06B443A319039932006F7245 /* XLCAppKitXMLCreationTests.m in Sources */,
 				0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */,
+				06C259ED198C8B1000A13BDA /* XLCTraceTests.m in Sources */,
 				06F50AB1190A9D08000E5D58 /* XLCObjCppHelpersTests.mm in Sources */,
 				062538F0190CDB88007FD1C4 /* XLCStreamTests.mm in Sources */,
 			);

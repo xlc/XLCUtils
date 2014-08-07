@@ -13,6 +13,8 @@
 
 #include <dlfcn.h>
 
+#import "XLCUtilsLog.h"
+
 #import "XLCAssertion.h"
 #import "XLCXMLCreation.h"
 

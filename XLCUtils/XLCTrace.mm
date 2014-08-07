@@ -13,6 +13,8 @@
 
 #include <unordered_set>
 
+#import "XLCUtilsLog.h"
+
 const int kPanicCount = 100;
 
 @implementation XLCTrace {

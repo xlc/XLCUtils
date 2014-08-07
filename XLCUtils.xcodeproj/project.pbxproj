@@ -16,6 +16,9 @@
 		0622A54918E8144C008E2A93 /* XLCXMLObjectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54818E8144C008E2A93 /* XLCXMLObjectTests.mm */; };
 		0622A55018F6911A008E2A93 /* XLCXMLCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0622A54E18F6911A008E2A93 /* XLCXMLCreation.m */; };
 		062538F0190CDB88007FD1C4 /* XLCStreamTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 062538EF190CDB88007FD1C4 /* XLCStreamTests.mm */; };
+		068500301990DC6D0049F386 /* XLCRandom.h in Headers */ = {isa = PBXBuildFile; fileRef = 0685002E1990DC6D0049F386 /* XLCRandom.h */; };
+		068500311990DC6D0049F386 /* XLCRandom.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0685002F1990DC6D0049F386 /* XLCRandom.mm */; };
+		068500321990DC6D0049F386 /* XLCRandom.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0685002F1990DC6D0049F386 /* XLCRandom.mm */; };
 		068EED0C1930B71B00E58689 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068EED0B1930B71B00E58689 /* Foundation.framework */; };
 		068EED191930B71C00E58689 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0692BC2C17D75723009BFC18 /* XCTest.framework */; };
 		068EED1A1930B71C00E58689 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068EED0B1930B71B00E58689 /* Foundation.framework */; };
@@ -114,6 +117,8 @@
 		062538EE190CDAEF007FD1C4 /* XLCStream.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XLCStream.hh; sourceTree = "<group>"; };
 		062538EF190CDB88007FD1C4 /* XLCStreamTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCStreamTests.mm; sourceTree = "<group>"; };
 		0674ACDB1852CDA0004491AD /* XLCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtils.h; sourceTree = "<group>"; };
+		0685002E1990DC6D0049F386 /* XLCRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCRandom.h; sourceTree = "<group>"; };
+		0685002F1990DC6D0049F386 /* XLCRandom.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCRandom.mm; sourceTree = "<group>"; };
 		068EED031930B63600E58689 /* UIKit+XLCXMLCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIKit+XLCXMLCreation.m"; path = "ios/UIKit+XLCXMLCreation.m"; sourceTree = "<group>"; };
 		068EED0A1930B71B00E58689 /* libXLCUtils-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libXLCUtils-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		068EED0B1930B71B00E58689 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -352,6 +357,8 @@
 				06208BD417E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m */,
 				06F50AA419068C06000E5D58 /* NSString+XLCAdditions.h */,
 				06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */,
+				0685002E1990DC6D0049F386 /* XLCRandom.h */,
+				0685002F1990DC6D0049F386 /* XLCRandom.mm */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -397,6 +404,7 @@
 				0692BC5217D897FE009BFC18 /* XLCNoCopyMutableDictionary.h in Headers */,
 				06F50AA619068C06000E5D58 /* NSString+XLCAdditions.h in Headers */,
 				06DB5B9D1949971200F0D6AC /* XLCPrototype.h in Headers */,
+				068500301990DC6D0049F386 /* XLCRandom.h in Headers */,
 				06E7887D19752316004AD435 /* XLCTrace.h in Headers */,
 				0692BC5617D8993A009BFC18 /* NSObject+XLCDelayedPerform.h in Headers */,
 			);
@@ -603,6 +611,7 @@
 				06DB5B9F1949971200F0D6AC /* XLCPrototype.m in Sources */,
 				068EED321930B75D00E58689 /* NSString+XLCAdditions.m in Sources */,
 				068EED341930B76900E58689 /* XLCLogging.m in Sources */,
+				068500321990DC6D0049F386 /* XLCRandom.mm in Sources */,
 				068EED331930B76400E58689 /* XLCAssertion.m in Sources */,
 				068EED351930B76C00E58689 /* UIKit+XLCXMLCreation.m in Sources */,
 				068EED361930B76F00E58689 /* XLCXMLObject.mm in Sources */,
@@ -636,6 +645,7 @@
 				06DB5B9E1949971200F0D6AC /* XLCPrototype.m in Sources */,
 				06208BD217E1C4EC00F60D39 /* XLCRunloop.m in Sources */,
 				0692BC4B17D87851009BFC18 /* XLCAssertion.m in Sources */,
+				068500311990DC6D0049F386 /* XLCRandom.mm in Sources */,
 				06208BD617E1C53D00F60D39 /* NSObject+XLCUtilsMemoryDebug.m in Sources */,
 				0692BC4617D873CF009BFC18 /* XLCLogging.m in Sources */,
 				0622A51F18E805B7008E2A93 /* XLCXMLObject.mm in Sources */,

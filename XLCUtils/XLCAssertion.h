@@ -42,7 +42,7 @@
 
 __BEGIN_DECLS
 
-void _XLCAssertionFailedCritical(NSString *format, ...);
+void _XLCAssertionFailedCritical(NSString *format, ...) __attribute__((noreturn));
 
 #if DEBUG
 void _XLCBreakIfInDebugger();

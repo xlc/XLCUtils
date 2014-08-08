@@ -61,7 +61,9 @@ void _XLCAssertionFailedCritical(NSString *format, ...)
     va_list ap;
     va_start(ap, format);
     
-    [NSException raise:NSInternalInconsistencyException format:format arguments:ap];
+    NSException *ex = [NSException exceptionWithName:NSInternalInconsistencyException reason:[[NSString alloc] initWithFormat:format arguments:ap] userInfo:nil];
     
     va_end(ap);
+    
+    @throw ex;
 }

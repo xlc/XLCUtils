@@ -13,7 +13,7 @@
 
 #include <dlfcn.h>
 
-#import "XLCUtilsLog.h"
+#import "XLCUtilsLogPrivate.h"
 
 #import "XLCAssertion.h"
 #import "XLCXMLCreation.h"
@@ -148,7 +148,7 @@ static void mergeAttribute(NSMutableDictionary *dict)
                         break;
                         
                     default:
-                        XLCLogInfo(@"Element property contains more than one object, only first one used. %@", child);
+                        XLCUtilsLogInfo(@"Element property contains more than one object, only first one used. %@", child);
                         // no break
                     case 1:
                         dict[attName] = [contents objectAtIndex:0];
@@ -260,7 +260,7 @@ static void XLCSetValueForKey(id obj, id value, id key, BOOL useKeyPath)
             NSDictionary *info = [exception userInfo];
             NSString *key = info[@"NSUnknownUserInfoKey"];
 
-            XLCLogInfo(@"Unable to set value '%@' for key path '%@' on object '%@'", value, key, obj);
+            XLCUtilsLogInfo(@"Unable to set value '%@' for key path '%@' on object '%@'", value, key, obj);
 
             handled = YES;
 
@@ -376,7 +376,7 @@ static NSDictionary * XLCEvaluateDictionary(NSDictionary *dict, NSMutableDiction
             newchild = nil;
         } else if ([child isKindOfClass:[NSDictionary class]]) {
             if ([child[@"#name"] caseInsensitiveCompare:@"postaction"] == NSOrderedSame) {
-                XLCLogInfo(@"object ignored: %@", child);
+                XLCUtilsLogInfo(@"object ignored: %@", child);
             } else {
                 newchild = XLCCreateObjectFromDictionary(child, outputDict);
                 if (key && !newchild) {
@@ -511,7 +511,7 @@ static id XLCCreateNamespacedObject(NSDictionary *dict, NSMutableDictionary *out
         return it->second(dict, outputDict);
     }
     
-    XLCLogInfo(@"Unknown element '%@'. %@", name, dict);
+    XLCUtilsLogInfo(@"Unknown element '%@'. %@", name, dict);
     
     return nil;
 }
@@ -595,7 +595,7 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                     obj = [cls xlc_createWithProperties:objectProps andContents:objectContents];
                 } else {
                     if (objectContents.count) {
-                        XLCLogInfo(@"Element '%@' contains contents but ignored. Contents: %@", name, contents);
+                        XLCUtilsLogInfo(@"Element '%@' contains contents but ignored. Contents: %@", name, contents);
                     }
                     
                     obj = [[cls alloc] init];
@@ -625,14 +625,14 @@ static id XLCCreateObjectFromDictionary(NSDictionary *dict, NSMutableDictionary 
                     }
                     
                 } else {
-                    XLCLogInfo(@"Unable to create object from class %@ with properties %@", cls, dict);
+                    XLCUtilsLogInfo(@"Unable to create object from class %@ with properties %@", cls, dict);
                     obj = [NSNull null];
                 }
                 
             }
 
         } else {
-            XLCLogInfo(@"Class '%@' not found", name);
+            XLCUtilsLogInfo(@"Class '%@' not found", name);
         }
         
     } else if ([namespace_ isEqualToString:XLCNamespaceURI]) {

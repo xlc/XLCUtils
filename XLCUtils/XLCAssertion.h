@@ -55,20 +55,20 @@ __END_DECLS
 
 #define _XLCFailCritical(format...) \
 do { \
-    XLCLogError(format); \
+    XLCLogCError(format); \
     _XLCPanic(); \
     _XLCAssertionFailedCritical(@"" format); \
 } while (0)
 
 #define _XLCFail(format...) \
 do { \
-    XLCLogWarn(format); \
+    XLCLogCWarn(format); \
     _XLCPanic(); \
 } while (0)
 
 #define _XLCFailDebug(format...) \
 do { \
-    XLCLogDebug(format); \
+    XLCLogCDebug(format); \
     _XLCPanic(); \
 } while (0)
 
@@ -138,18 +138,15 @@ do { \
     } \
 } while (0)
 
-static inline id __XLCObjectCast(id obj, Class cls, const char *objexpr, const char *clsexpr)
-{
-    if (obj && ![obj isKindOfClass:cls])
-    {
-        _XLCFail("Assertion failure: '[%s isKindOfClass:[%s class]]', expected class: %@, actual class: %@, object: %@", objexpr, clsexpr, cls, [obj class], obj);
-        return nil;
-    }
-    return obj;
-}
-
-#define _XLCObjectCast(obj, cls) __XLCObjectCast((obj), ([cls class]), #obj, #cls)
-
-
-
+#define _XLCObjectCast(obj, cls) \
+({ \
+    id __obj = (obj); \
+    Class __cls = [(cls) class]; \
+    if (__obj && ![__obj isKindOfClass:__cls]) \
+    { \
+        _XLCFail("Assertion failure: '[%s isKindOfClass:[%s class]]', expected class: %@, actual class: %@, object: %@", #obj, #cls, __cls, [__obj class], __obj); \
+        __obj = nil; \
+    } \
+    __obj; \
+})
 

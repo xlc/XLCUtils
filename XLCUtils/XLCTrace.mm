@@ -13,7 +13,7 @@
 
 #include <unordered_set>
 
-#import "XLCUtilsLog.h"
+#import "XLCUtilsLogPrivate.h"
 
 const int kPanicCount = 100;
 
@@ -79,6 +79,7 @@ const int kPanicCount = 100;
 
 - (void)panic
 {
+    XLCLogLevel = LOG_LEVEL_INFO;
     dispatch_block_t block = ^{
         for (id<XLCTraceOutput> output in [_outputs allValues]) {
             if ([output respondsToSelector:@selector(panic)]) {
@@ -326,14 +327,14 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
 {
     if (![_fileManager fileExistsAtPath:filepath]) {
         if (![_fileManager createFileAtPath:filepath contents:[NSData data] attributes:nil]) {
-            XLCLogWarn(@"Unable to create file at %@", filepath);
+            XLCUtilsLogWarn(@"Unable to create file at %@", filepath);
             return nil;
         }
     }
     
     NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath:filepath];
     if (!handle) {
-        XLCLogWarn(@"Unable to write to file at %@", filepath);
+        XLCUtilsLogWarn(@"Unable to write to file at %@", filepath);
         return nil;
     }
     
@@ -379,13 +380,13 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
         if (success) {
             break;
         } else {
-            XLCLogInfo(@"%@: Unable to create folder at path: %@; error: %@", self, _folderPath, error);
+            XLCUtilsLogInfo(@"%@: Unable to create folder at path: %@; error: %@", self, _folderPath, error);
         }
         
     }
     
     if (!success) {
-        XLCLogWarn(@"%@: Failed to create log folder, will not working", self);
+        XLCUtilsLogWarn(@"%@: Failed to create log folder, will not working", self);
         return NO;
     }
     
@@ -401,7 +402,7 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     if (functionFilePath && filenameFilePath && traceFilePath) {
         return YES;
     } else {
-        XLCLogWarn(@"%@: Failed open files, will not working", self);
+        XLCUtilsLogWarn(@"%@: Failed open files, will not working", self);
         return NO;
     }
 }
@@ -411,7 +412,7 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
 - (void)processInfo:(XLCTraceInfo *)info
 {
     if (!_folderPath) {
-        XLCLogDebug(@"%@: unable to process trace info: %@", self, info);
+        XLCUtilsLogDebug(@"%@: unable to process trace info: %@", self, info);
         return;
     }
     

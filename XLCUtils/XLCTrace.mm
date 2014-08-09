@@ -17,6 +17,8 @@
 
 const int kPanicCount = 100;
 
+static void *XLCDispatchQueueID = &XLCDispatchQueueID;
+
 @implementation XLCTrace {
 @public
     NSMutableDictionary *_outputs;
@@ -38,6 +40,7 @@ const int kPanicCount = 100;
     if (self) {
         _name = name;
         _queue = dispatch_queue_create([name UTF8String], DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_set_specific(_queue, XLCDispatchQueueID, XLCDispatchQueueID, nil);
         _outputs = [NSMutableDictionary dictionary];
     }
     return self;
@@ -45,7 +48,7 @@ const int kPanicCount = 100;
 
 - (void)sync
 {
-    if (dispatch_get_current_queue() != _queue) {
+    if (dispatch_get_specific(XLCDispatchQueueID) == XLCDispatchQueueID) {
         dispatch_barrier_sync(_queue, ^{});
     }
 }
@@ -87,7 +90,7 @@ const int kPanicCount = 100;
             }
         }
     };
-    if (dispatch_get_current_queue() == _queue) {
+    if (dispatch_get_specific(XLCDispatchQueueID) == XLCDispatchQueueID) {
         block();
     } else {
         dispatch_barrier_sync(_queue, block);
@@ -195,7 +198,7 @@ void _XLCTrace(XLCTrace *trace, const char *filename, const char *func, unsigned
     if (!queue) {
         return nil;
     }
-    if (dispatch_get_current_queue() == queue) {
+    if (dispatch_get_specific(XLCDispatchQueueID) == XLCDispatchQueueID) {
         buffer = [_buffer mutableCopy];
         current = _current;
     } else {

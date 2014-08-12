@@ -9,6 +9,7 @@
 #import <XLCUtils/XLCRunloop.h>
 #import <XLCUtils/XLCLogging.h>
 #import <XLCUtils/XLCAssertion.h>
+#import <XLCUtils/XLCTrace.h>
 #import <XLCUtils/XLCNoCopyMutableDictionary.h>
 #import <XLCUtils/XLCXMLObject.h>
 

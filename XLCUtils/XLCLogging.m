@@ -48,7 +48,7 @@ int XLCLogLevel = LOG_LEVEL_WARN;
         default:                level = "????   "; break;
     }
     NSString *time = [_dateFormatter stringFromDate:logMessage->timestamp];
-    NSString *loggerName = nil;
+    NSString *loggerName = @"";
     if ([logMessage->tag isKindOfClass:[XLCLogger class]]) {
         XLCLogger *logger = logMessage->tag;
         if ((logMessage->logFlag & logger.level) == 0) {

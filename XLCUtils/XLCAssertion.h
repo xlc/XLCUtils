@@ -141,7 +141,7 @@ do { \
 #define _XLCObjectCast(obj, cls) \
 ({ \
     id __obj = (obj); \
-    Class __cls = [(cls) class]; \
+    Class __cls = [cls class]; \
     if (__obj && ![__obj isKindOfClass:__cls]) \
     { \
         _XLCFail("Assertion failure: '[%s isKindOfClass:[%s class]]', expected class: %@, actual class: %@, object: %@", #obj, #cls, __cls, [__obj class], __obj); \

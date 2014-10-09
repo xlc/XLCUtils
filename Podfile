@@ -12,7 +12,7 @@ target "XLCUtils" do
     platform :osx, '10.9'
     import_pods
     
-    target "XLCUtilsTests", :exclusive => true do
+    target "XLCUtilsTests" do
         import_pods_test
     end
 end
@@ -22,7 +22,7 @@ target "XLCUtils-ios" do
     platform :ios, '7.0'
     import_pods
 
-    target "XLCUtils-iosTests", :exclusive => true do
+    target "XLCUtils-iosTests" do
         import_pods_test
     end
 end

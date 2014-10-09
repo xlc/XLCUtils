@@ -6,7 +6,6 @@
 //  Copyright (c) 2014年 Xiliang Chen. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
 #import <XCTest/XCTest.h>
 
 #import "XLCTrace.h"

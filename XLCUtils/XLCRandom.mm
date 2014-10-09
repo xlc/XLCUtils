@@ -98,7 +98,7 @@
     if ([array count] == 0) {
         return nil;
     }
-    return array[[self nextIntWithUpperBound:[array count]]];
+    return array[(NSUInteger)[self nextIntWithUpperBound:[array count]]];
 }
 
 - (NSArray *)shuffle:(NSArray *)array

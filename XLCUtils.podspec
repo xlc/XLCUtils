@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = "XLCUtils"
-  s.version      = "0.0.1"
+  s.version      = "0.1"
   s.summary      = "Some Objective-C Utilities"
   s.homepage     = "https://github.com/xlc/XLCUtils"
   s.license      = 'MIT'
   s.author       = { "Xiliang Chen" => "xlchen1291@gmail.com" }
-  s.source       = { :git => "https://github.com/xlc/XLCUtils.git", :commit => "3e8fbc5a4389e8bde0c9d570c62597d870181c31" }
+  s.source       = { :git => "https://github.com/xlc/XLCUtils.git", :tag => "0.1" }
  
   s.source_files = 'XLCUtils/**/*.{h,hh,m,mm}'
   s.exclude_files = 'XLCUtils/NSObject+XLCUtilsMemoryDebug.{h,m}'

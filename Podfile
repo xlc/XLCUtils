@@ -1,5 +1,4 @@
 source 'https://github.com/CocoaPods/Specs.git'
-source 'git@github.com:xlc/Specs.git'
 
 def import_pods
     pod 'CocoaLumberjack'

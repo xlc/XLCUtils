@@ -102,7 +102,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLCUtils-ios.xcconfig"; path = "Pods/Pods-XLCUtils-ios.xcconfig"; sourceTree = "<group>"; };
 		060FE27E19878466007539BA /* XLCUtilsLogPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCUtilsLogPrivate.h; sourceTree = "<group>"; };
 		06208BCF17E1C4EC00F60D39 /* XLCRunloop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCRunloop.h; sourceTree = "<group>"; };
 		06208BD017E1C4EC00F60D39 /* XLCRunloop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCRunloop.m; sourceTree = "<group>"; };
@@ -157,9 +156,12 @@
 		06F50AA519068C06000E5D58 /* NSString+XLCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XLCAdditions.m"; sourceTree = "<group>"; };
 		06F50AAA1907C167000E5D58 /* XLCAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCAdditionsTests.m; sourceTree = "<group>"; };
 		06F50AB0190A9D08000E5D58 /* XLCObjCppHelpersTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XLCObjCppHelpersTests.mm; sourceTree = "<group>"; };
+		1BA67931938AB76627DA6C36 /* Pods-XLCUtils-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLCUtils-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XLCUtils-ios/Pods-XLCUtils-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		3E013B9FC4C64759AEE208D7 /* libPods-XLCUtils-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-XLCUtils-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		598831F8A59F47BC946C830D /* libPods-XLCUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-XLCUtils.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLCUtils.xcconfig"; path = "Pods/Pods-XLCUtils.xcconfig"; sourceTree = "<group>"; };
+		694D6A8A731B623E3716A3B1 /* Pods-XLCUtils-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLCUtils-ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-XLCUtils-ios/Pods-XLCUtils-ios.release.xcconfig"; sourceTree = "<group>"; };
+		7A582856DF29D20B1971AFB2 /* Pods-XLCUtils.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLCUtils.release.xcconfig"; path = "Pods/Target Support Files/Pods-XLCUtils/Pods-XLCUtils.release.xcconfig"; sourceTree = "<group>"; };
+		DF169924FF04AB5A2B6C8659 /* Pods-XLCUtils.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLCUtils.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XLCUtils/Pods-XLCUtils.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,8 +235,7 @@
 				0692BC3217D75723009BFC18 /* XLCUtilsTests */,
 				0692BC1A17D75723009BFC18 /* Frameworks */,
 				0692BC1917D75723009BFC18 /* Products */,
-				C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */,
-				00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */,
+				E04418457ADC8629275288D9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -389,6 +390,17 @@
 			name = "C++";
 			sourceTree = "<group>";
 		};
+		E04418457ADC8629275288D9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DF169924FF04AB5A2B6C8659 /* Pods-XLCUtils.debug.xcconfig */,
+				7A582856DF29D20B1971AFB2 /* Pods-XLCUtils.release.xcconfig */,
+				1BA67931938AB76627DA6C36 /* Pods-XLCUtils-ios.debug.xcconfig */,
+				694D6A8A731B623E3716A3B1 /* Pods-XLCUtils-ios.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -493,7 +505,7 @@
 		0692BC1017D75723009BFC18 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Xiliang Chen";
 			};
 			buildConfigurationList = 0692BC1317D75723009BFC18 /* Build configuration list for PBXProject "XLCUtils" */;
@@ -547,7 +559,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-XLCUtils-ios-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-XLCUtils-ios/Pods-XLCUtils-ios-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7C7161B250764CBAB4130C98 /* Copy Pods Resources */ = {
@@ -562,7 +574,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-XLCUtils-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-XLCUtils/Pods-XLCUtils-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		841C5D35D0504B8C8FC882F7 /* Check Pods Manifest.lock */ = {
@@ -695,7 +707,7 @@
 /* Begin XCBuildConfiguration section */
 		068EED291930B71C00E58689 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */;
+			baseConfigurationReference = 1BA67931938AB76627DA6C36 /* Pods-XLCUtils-ios.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				DSTROOT = /tmp/XLCUtils_ios.dst;
@@ -715,7 +727,7 @@
 		};
 		068EED2A1930B71C00E58689 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */;
+			baseConfigurationReference = 694D6A8A731B623E3716A3B1 /* Pods-XLCUtils-ios.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				DSTROOT = /tmp/XLCUtils_ios.dst;
@@ -732,7 +744,6 @@
 		};
 		068EED2C1930B71C00E58689 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -763,7 +774,6 @@
 		};
 		068EED2D1930B71C00E58689 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 00A59658D0A9423D97EF0FA0 /* Pods-XLCUtils-ios.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -861,9 +871,10 @@
 		};
 		0692BC3D17D75723009BFC18 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */;
+			baseConfigurationReference = DF169924FF04AB5A2B6C8659 /* Pods-XLCUtils.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -873,9 +884,10 @@
 		};
 		0692BC3E17D75723009BFC18 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */;
+			baseConfigurationReference = 7A582856DF29D20B1971AFB2 /* Pods-XLCUtils.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLCUtils/XLCUtils-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -885,7 +897,6 @@
 		};
 		0692BC4017D75723009BFC18 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -914,7 +925,6 @@
 		};
 		0692BC4117D75723009BFC18 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C444C43F471F43809BFFF0BB /* Pods-XLCUtils.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				COMBINE_HIDPI_IMAGES = YES;

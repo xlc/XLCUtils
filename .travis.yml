@@ -1,5 +1,5 @@
 language: objective-c
 xcode_workspace: XLCUtils.xcworkspace
-xcode_scheme: [XLCUtilsTests, XLCUtils-iosTests]
+xcode_scheme: [XLCUtils, XLCUtils-ios]
 before_install:
       - gem install cocoapods

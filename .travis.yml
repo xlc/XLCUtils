@@ -1,0 +1,3 @@
+language: objective-c
+xcode_workspace: XLCUtils.xcworkspace
+xcode_scheme: [XLCUtilsTests, XLCUtils-iosTests]

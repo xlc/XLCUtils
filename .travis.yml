@@ -1,7 +1,5 @@
 language: objective-c
 xcode_workspace: XLCUtils.xcworkspace
-xcode_scheme: [XLCUtils, XLCUtils-ios]
-xcode_sdk: [iphonesimulator7.1]
 before_install:
       - gem install cocoapods
 matrix:

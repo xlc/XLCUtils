@@ -1,4 +1,3 @@
-source 'https://github.com/CocoaPods/Specs.git'
 
 def import_pods
     pod 'CocoaLumberjack'

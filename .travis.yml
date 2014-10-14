@@ -1,8 +1,8 @@
 language: objective-c
 xcode_workspace: XLCUtils.xcworkspace
 before_install:
-      - gem install cocoapods
-      - pod repo update --verbose
+      - gem install cocoapods --no-rdoc --no-ri --no-document --quiet 
+      - pod repo update
       - brew update
       - if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 matrix:

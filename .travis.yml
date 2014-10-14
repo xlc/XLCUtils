@@ -2,9 +2,11 @@ language: objective-c
 xcode_workspace: XLCUtils.xcworkspace
 before_install:
       - gem install cocoapods
+      - brew update
+      - if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 matrix:
     include:
-        - xcode_sdk: macosx10.9
+        - xcode_sdk: macosx
           xcode_scheme: XLCUtils
-        - xcode_sdk: iphonesimulator7.1
+        - xcode_sdk: iphonesimulator
           xcode_scheme: XLCUtils-ios

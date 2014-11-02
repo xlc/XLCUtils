@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CocoaLumberjack/DDLog.h>
 
 static const NSUInteger XLCTraceInfoDataSize = sizeof(uint64_t) * 5;
 

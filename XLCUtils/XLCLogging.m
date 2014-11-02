@@ -14,11 +14,11 @@
 
 #ifdef DEBUG
 
-int XLCLogLevel = LOG_LEVEL_ALL;
+DDLogLevel XLCLogLevel = LOG_LEVEL_ALL;
 
 #else
 
-int XLCLogLevel = LOG_LEVEL_WARN;
+DDLogLevel XLCLogLevel = LOG_LEVEL_WARN;
 
 #endif
 

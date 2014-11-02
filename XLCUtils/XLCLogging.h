@@ -10,7 +10,7 @@
 
 #import <CocoaLumberjack/DDLog.h>
 
-extern int XLCLogLevel;
+extern DDLogLevel XLCLogLevel;
 
 #define XLCLog(sync, logger, lvl, fmt...) \
         [DDLog log:sync \
@@ -55,7 +55,7 @@ do { \
 @interface XLCLogger : NSObject
 
 @property NSString *name;
-@property int level; //default: LOG_LEVEL_ALL
+@property DDLogLevel level; //default: LOG_LEVEL_ALL
 
 + (instancetype)logger;
 + (instancetype)loggerWithName:(NSString *)name;

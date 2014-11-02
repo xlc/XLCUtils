@@ -13,6 +13,8 @@
 
 #include <unordered_set>
 
+#import <CocoaLumberjack/DDLog.h>
+
 #import "XLCUtilsLogPrivate.h"
 
 const int kPanicCount = 100;

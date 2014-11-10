@@ -39,7 +39,7 @@ DDLogLevel XLCLogLevel = LOG_LEVEL_WARN;
 - (NSString *)formatLogMessage:(DDLogMessage *)logMessage
 {
     const char *level;
-    switch (logMessage->logFlag) {
+    switch (logMessage.flag) {
         case LOG_FLAG_ERROR:    level = "Error  "; break;
         case LOG_FLAG_WARN:     level = "Warn   "; break;
         case LOG_FLAG_INFO:     level = "Info   "; break;
@@ -47,11 +47,11 @@ DDLogLevel XLCLogLevel = LOG_LEVEL_WARN;
         case LOG_FLAG_VERBOSE:  level = "Verbose"; break;
         default:                level = "????   "; break;
     }
-    NSString *time = [_dateFormatter stringFromDate:logMessage->timestamp];
+    NSString *time = [_dateFormatter stringFromDate:logMessage.timestamp];
     NSString *loggerName = @"";
-    if ([logMessage->tag isKindOfClass:[XLCLogger class]]) {
-        XLCLogger *logger = logMessage->tag;
-        if ((logMessage->logFlag & logger.level) == 0) {
+    if ([logMessage.tag isKindOfClass:[XLCLogger class]]) {
+        XLCLogger *logger = logMessage.tag;
+        if ((logMessage.flag & logger.level) == 0) {
             return nil;
         }
         loggerName = logger.name;
@@ -60,7 +60,7 @@ DDLogLevel XLCLogLevel = LOG_LEVEL_WARN;
         loggerName = [loggerName stringByAppendingString:@": "];
     }
     // 01-23 12:34:56[4x] Error  -[MyClass method]:54: XLCUtils: log message
-    return [NSString stringWithFormat:@"%@[%x] %s %s:%d\t: %@%@", time, logMessage->machThreadID, level, logMessage->function, logMessage->lineNumber, loggerName, logMessage->logMsg];
+    return [NSString stringWithFormat:@"%@[%@] %s %@:%lu\t: %@%@", time, logMessage.threadID, level, logMessage.function, (unsigned long)logMessage.line, loggerName, logMessage.message];
 }
 
 @end

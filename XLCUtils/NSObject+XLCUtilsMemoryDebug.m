@@ -84,13 +84,13 @@ static NSString * const classSuffix = @"_XLCTestUtilsMemoryDebug";
 - (id)xlc_retain
 {
     struct objc_super superstruct = { self, objc_getAssociatedObject(self, originalIsaKey) };
-    return objc_msgSendSuper(&superstruct, @selector(retain));
+    return ((id (*)(struct objc_super *super, SEL op))objc_msgSendSuper)(&superstruct, @selector(retain));
 }
 
 - (void)xlc_release
 {
     struct objc_super superstruct = { self, objc_getAssociatedObject(self, originalIsaKey) };
-    objc_msgSendSuper(&superstruct, @selector(release));
+    ((id (*)(struct objc_super *super, SEL op))objc_msgSendSuper)(&superstruct, @selector(release));
 }
 
 - (id)xlc_autorelease
@@ -100,7 +100,7 @@ static NSString * const classSuffix = @"_XLCTestUtilsMemoryDebug";
         objc_setAssociatedObject(self, autoreleaseCountKey, @(count), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     struct objc_super superstruct = { self, [NSObject class] };
-    return objc_msgSendSuper(&superstruct, @selector(autorelease));
+    return ((id (*)(struct objc_super *super, SEL op))objc_msgSendSuper)(&superstruct, @selector(autorelease));
 }
 
 - (Class)xlc_class
@@ -111,7 +111,7 @@ static NSString * const classSuffix = @"_XLCTestUtilsMemoryDebug";
 - (void)xlc_dealloc
 {
     struct objc_super superstruct = { self, objc_getAssociatedObject(self, originalIsaKey) };
-    objc_msgSendSuper(&superstruct, @selector(release));
+    ((id (*)(struct objc_super *super, SEL op))objc_msgSendSuper)(&superstruct, @selector(release));
 }
 
 - (NSUInteger)xlc_retainCount
